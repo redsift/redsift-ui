@@ -8,6 +8,7 @@ checkout:
   post: 
     - git fetch --tags
     - npm install
+    - ./node_modules/bower/bin/bower install
   pre:
     - sudo pip install awscli
 

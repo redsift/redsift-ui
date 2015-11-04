@@ -6,7 +6,11 @@ responsive-type($fontNormal, $fontHighlight, $fontCode
 				$fontSizeXLarge = 2.625em, $fontSizeXXLarge = 4.25em, $fontSizeHuge = 6.875em) {
 
 	$spacingHighlight = 0.1em
-	$lineSpacing = 1.5 * 16px
+	
+	$padding = 16px
+	$lineSpacing = 1.45
+	$codeRadius = 3px
+	$codePadding = 0.2em
 	
 	large-screen(bp = $widthBreakpoint) {
 		@media all and (min-width: bp) {
@@ -16,7 +20,7 @@ responsive-type($fontNormal, $fontHighlight, $fontCode
 	
 	body {
 		font-family: $fontNormal;
-		font-weight: 300;
+		font-weight: 300; 
 	}
 
 	rule--small(p) {
@@ -24,7 +28,7 @@ responsive-type($fontNormal, $fontHighlight, $fontCode
 		font-weight: 300;
 		line-height: $lineSpacing;
 		if p {
-			padding-top: @line-height;
+			padding-top: $padding;
 			padding-bottom: 0;
 		}
 	}
@@ -34,7 +38,7 @@ responsive-type($fontNormal, $fontHighlight, $fontCode
 		font-weight: 300;
 		line-height: $lineSpacing;
 		if p {
-			padding-top: @line-height;
+			padding-top: $padding;
 			padding-bottom: 0;
 		}
 	}
@@ -44,7 +48,7 @@ responsive-type($fontNormal, $fontHighlight, $fontCode
 		font-weight: 300;
 		line-height: $lineSpacing;
 		if p {
-			padding-top: @line-height;
+			padding-top: $padding;
 			padding-bottom: 0;
 		}
 	}
@@ -54,7 +58,7 @@ responsive-type($fontNormal, $fontHighlight, $fontCode
 		font-weight: 300;
 		line-height: $lineSpacing;
 		if p {
-			padding-top: @line-height;
+			padding-top: $padding;
 			padding-bottom: 0;
 		}
 	}
@@ -64,7 +68,7 @@ responsive-type($fontNormal, $fontHighlight, $fontCode
 		font-weight: 300;
 		line-height: $lineSpacing;
 		if p {
-			padding-top: @line-height;
+			padding-top: $padding;
 			padding-bottom: 0;
 		}
 	}
@@ -74,7 +78,7 @@ responsive-type($fontNormal, $fontHighlight, $fontCode
 		font-weight: 300;
 		line-height: $lineSpacing;
 		if p {
-			padding-top: @line-height;
+			padding-top: $padding;
 			padding-bottom: 0;
 		}
 	}
@@ -84,7 +88,7 @@ responsive-type($fontNormal, $fontHighlight, $fontCode
 		font-weight: 300;
 		line-height: $lineSpacing;
 		if p {
-			padding-top: @line-height;
+			padding-top: $padding;
 			padding-bottom: 0;
 		}
 	}
@@ -179,9 +183,30 @@ responsive-type($fontNormal, $fontHighlight, $fontCode
 		type--huge()
 	}
 	
-	.code {
+	code {
 		font-family: $fontCode;
 		white-space: nowrap;
 	}
-
+	
+	pre code {
+		white-space: pre-wrap;
+	}
+	
+	p code {
+		padding: 0;
+		padding-top: $codePadding;
+		padding-bottom: $codePadding;
+		border-radius: $codeRadius;
+	}
+	
+	p code::before,
+	p code::after {
+		letter-spacing: (-$codePadding);
+		content: "\00a0";
+	}
+	
+	pre {
+		border-radius: $codeRadius;
+		padding: 1em;
+	}
 }

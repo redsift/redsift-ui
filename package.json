@@ -4,20 +4,32 @@
   "description": "Common CSS and JS for Sifts and Apps",
   "repository": "https://github.com/Redsift/redsift-ui",
   "dependencies": {
+    "del": "*",
     "gulp": "^3.9.0",
-    "gulp-jshint": "*",
-    "gulp-sass": "*",
-    "gulp-stylus": "*",
-    "gulp-concat": "*",
-    "gulp-uglify": "*",
-    "gulp-rename": "*",
-    "gulp-minify-css": "*",
-    "gulp-sourcemaps": "*",
     "gulp-autoprefixer": "*",
+    "gulp-concat": "*",
+    "gulp-jshint": "*",
+    "gulp-minify-css": "*",
     "gulp-notify": "*",
-    "del": "*"
+    "gulp-rename": "*",
+    "gulp-sass": "*",
+    "gulp-sourcemaps": "*",
+    "gulp-stylus": "*",
+    "gulp-uglify": "*",
+    "normalize.css": "^3.0.3",
+    "vinyl-source-stream": "*",
+    "browserify": "*",
+    "gulp-babel": "*",
+    "babel-preset-es2015": "*",
+    "gulp-closure-compiler": "*",
+    "vinyl-buffer": "*",
+    "bower": "*",
+    "browser-sync": "^2.9.11"
   },
   "scripts": {
     "test": "echo \"No test specified\" && exit 0"
+  },
+  "devDependencies": {
+
   }
 }
