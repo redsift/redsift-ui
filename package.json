@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Common CSS and JS for Sifts and Apps",
   "main": "gulpfile.js",
+  "repository": "https://github.com/Redsift/redsift-ui",
   "dependencies": {
   },
   "devDependencies": {
