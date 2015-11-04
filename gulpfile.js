@@ -16,6 +16,7 @@ gulp.task('clean', function() {
 
 gulp.task('css', function () {
     return gulp.src([
+            './node_modules/normalize.css/**.css',      
             './css/**.styl',
             './css/**.css'
         ])
