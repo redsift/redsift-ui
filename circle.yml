@@ -14,7 +14,7 @@ dependencies:
   override:
     - gulp 
     - cp ./distribution/* ${CIRCLE_ARTIFACTS}/distribution
-		
+        
 deployment:
   production:
     branch: /release-.*/
