@@ -1,4 +1,6 @@
 machine: 
+  node:
+    version: 4.1.0
   environment: 
     S3_BUCKET: redsift-static
 
