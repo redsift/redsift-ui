@@ -1,0 +1,18 @@
+
+create-cards($className, $grows = true) {
+	div.{$className} {
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+	}
+	
+	div.{$className} >div {
+		if $grows {
+			flex-grow: 1;
+		} else {
+			flex-grow: 0;
+		}
+		flex-shrink: 0;
+		flex-basis: auto;
+	}
+}

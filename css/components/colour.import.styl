@@ -1,0 +1,29 @@
+
+colour-system($textColour, $linkColour, $hoverColour, $visitedColour, $selectionColour) {
+
+	body {
+		color: $textColour;
+	}
+	
+	::selection {
+		background: $selectionColour; /* WebKit/Blink Browsers */
+	}
+	
+	a {
+  		color: $linkColour;
+	}
+	
+	a:active,
+	a:hover {
+		color: $hoverColour;
+	}
+	
+	a:visited {
+		color: $visitedColour;
+	}
+	
+	a:focus {
+		outline: none;
+		color: $hoverColour;
+	}
+}

@@ -1,0 +1,25 @@
+{
+  "name": "redsift-ui",
+  "version": "1.0.0",
+  "description": "Common CSS and JS for Sifts and Apps",
+  "main": "gulpfile.js",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jshint": "*",
+    "gulp-sass": "*",
+    "gulp-stylus": "*",
+    "gulp-concat": "*",
+    "gulp-uglify": "*",
+    "gulp-rename": "*",
+    "gulp-minify-css": "*",
+    "gulp-sourcemaps": "*",
+    "gulp-autoprefixer": "*",
+    "gulp-notify": "*",
+    "del": "*"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}

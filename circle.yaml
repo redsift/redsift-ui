@@ -1,0 +1,25 @@
+machine: 
+  environment: 
+    S3_BUCKET: redsift-static
+
+checkout: 
+  post: 
+    - git fetch --tags
+  pre:
+    - sudo pip install awscli
+
+dependencies: 
+  override:
+    - gulp 
+    - cp ./distribution/* ${CIRCLE_ARTIFACTS}/distribution
+		
+deployment:
+  production:
+    branch: /release-.*/
+    commands:
+      - echo "Uploading to S3 bucket..."
+      - aws s3 cp ${CIRCLE_ARTIFACTS}/distribution s3://$S3_BUCKET/ui/latest --recursive --acl public-read
+      - |
+         VERSION=$(git describe --exact-match --tags 2>/dev/null || git rev-parse --short HEAD)
+         aws s3 cp ${CIRCLE_ARTIFACTS}/distribution s3://$S3_BUCKET/ui/$VERSION --recursive --acl public-read
+      - echo "S3 upload complete."

@@ -1,0 +1,24 @@
+/* Heading font */
+@import url("https://fonts.googleapis.com/css?family=Electrolize");
+
+/* Code font */
+@import url("https://fonts.googleapis.com/css?family=Source+Code+Pro:400,700");
+
+@import 'components/type.import' 
+@import 'components/colour.import' 
+@import 'components/cards.import' 
+
+$fontNormal = 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif
+$fontHighlight = 'Electrolize', sans-serif
+$fontCode = 'Source Code Pro', monospace
+
+responsive-type($fontNormal, $fontHighlight, $fontCode)
+
+$textColour = white
+$linkColour = white
+$hoverColour = #ed1651
+$visitedColour = $linkColour
+
+colour-system($textColour, $linkColour, $hoverColour, $visitedColour, $hoverColour)
+
+create-cards('cards', true)
