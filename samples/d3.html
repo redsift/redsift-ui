@@ -1,0 +1,70 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
+  <link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
+  <style>
+    div.chart {
+		display: flex;
+		flex-direction: column;
+	}
+	div.chart h3 {
+		text-align: center;
+	}	
+  </style>
+  </head>
+
+  <body>
+	<div class="cards">
+		<div class="chart">
+			<div id="one"></div>
+			<h3>One</h3>
+		</div>
+		<div class="chart">
+			<div id="two"></div>
+			<h3>Two</h3>
+		</div>
+		<div class="chart">
+			<div id="three"></div>
+			<h3>Three</h3>
+		</div>
+  	</div>
+    
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="/js/redsift-global.es5.min.js"></script>
+    <script>
+		function _dummyData(range) {
+			var color = d3.scale.ordinal().range(["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f"]);
+			return Redsift.Lang.localShortMonths().map(function(m) {
+				return {
+				name: m,
+				value: Math.random() * range,
+				color: color(m)
+				};
+			});
+		}
+      
+	  	var radialChart = Redsift.D3.Reusable.radialChart;
+		  
+		var delay = 50;
+		var chart1 = radialChart()
+			.width(400)
+			.prefix('£')
+			.animationSegmentDelay(delay);
+		
+		var data1 = _dummyData(200);
+		d3.select('#one').datum(data1).call(chart1);
+		
+		var chart2 = radialChart()
+			.width(400)
+			.prefix('£')
+			.animationSegmentDelay(delay)
+			.animationDelay(chart1.animationDuration() * 0.56);
+		
+		var data2 = _dummyData(100);
+		d3.select('#two').datum(data2).call(chart2);
+		
+		d3.select('#three').datum(data2).call(chart2);
+    </script>
+  </body>
+
+</html>
