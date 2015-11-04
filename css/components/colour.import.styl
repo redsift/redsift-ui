@@ -1,12 +1,14 @@
 
-colour-system($textColour, $linkColour, $hoverColour, $visitedColour, $selectionColour) {
+colour-system($textColour, $bodyColour, $linkColour, $hoverColour, $visitedColour, $selectionColour, $codeBg) {
 
 	body {
 		color: $textColour;
+		background: $bodyColour; 
 	}
 	
 	::selection {
-		background: $selectionColour; /* WebKit/Blink Browsers */
+		background: $selectionColour; 
+		color: white;
 	}
 	
 	a {
@@ -26,4 +28,13 @@ colour-system($textColour, $linkColour, $hoverColour, $visitedColour, $selection
 		outline: none;
 		color: $hoverColour;
 	}
+	
+	p code {
+		background-color: $codeBg;
+	}	
+
+	pre {
+		background-color: $codeBg;
+	}
+	
 }

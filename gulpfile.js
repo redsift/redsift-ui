@@ -63,15 +63,15 @@ function fixPipe(stream) {
     return stream;
 }
 
-gulp.task('css', function () {
+function makeCss(name) {
     return gulp.src([
             './node_modules/normalize.css/**.css',      
-            './css/**.styl',
+            './css/' + name + '.styl',
             './css/**.css'
         ])
         .pipe(sourcemaps.init())
         .pipe(stylus())
-        .pipe(concat('redsift.css'))
+        .pipe(concat(name + '.css'))
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
@@ -86,7 +86,17 @@ gulp.task('css', function () {
         .on('error', function (e) {
             console.error(e.message);
         });
+}
+
+gulp.task('css-light', function () {
+    return makeCss('redsift-light');
 });
+
+gulp.task('css-dark', function () {
+    return makeCss('redsift-dark');
+});
+
+gulp.task('css', ['css-light', 'css-dark']);
 
 gulp.task('browser-sync', function() {
     browserSync.init({
