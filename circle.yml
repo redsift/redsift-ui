@@ -7,6 +7,7 @@ machine:
 checkout: 
   post: 
     - git fetch --tags
+    - npm install
   pre:
     - sudo pip install awscli
 
