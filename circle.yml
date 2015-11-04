@@ -14,7 +14,7 @@ checkout:
 dependencies: 
   override:
     - node node_modules/gulp/bin/gulp.js 
-    - cp ./distribution/* ${CIRCLE_ARTIFACTS}/distribution
+    - mv ./distribution ${CIRCLE_ARTIFACTS}/distribution
         
 deployment:
   production:
