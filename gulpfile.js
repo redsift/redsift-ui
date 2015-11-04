@@ -6,7 +6,6 @@ var concat = require('gulp-concat');
 var minifyCss = require('gulp-minify-css');
 var sourcemaps = require('gulp-sourcemaps');
 var autoprefixer = require('gulp-autoprefixer');
-var notify = require('gulp-notify');
 var rename = require('gulp-rename');
 var del = require('del');
 
@@ -32,8 +31,7 @@ gulp.task('css', function () {
         .pipe(rename({suffix: '.min'}))
         .pipe(minifyCss({compatibility: '*', roundingPrecision: 4}))
         .pipe(sourcemaps.write('../../distribution/maps'))
-        .pipe(gulp.dest('./distribution/css'))
-        .pipe(notify({ message: 'Styles task complete' }));
+        .pipe(gulp.dest('./distribution/css'));
 });
 
-gulp.task('default', [ 'clean', 'css' ]);
+gulp.task('default', [ 'css' ]);
