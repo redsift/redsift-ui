@@ -1,0 +1,24 @@
+{
+  "name": "redsift-ui",
+  "description": "Common CSS and JS for Sifts and Apps",
+    "dependencies": {
+    "closure-compiler": "http://dl.google.com/closure-compiler/compiler-latest.zip"
+  },
+  "main": "",
+  "authors": [
+    "Rahul Powar <rahul@redsift.io>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/Redsift/redsift-ui",
+  "moduleType": [
+    "globals"
+  ],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

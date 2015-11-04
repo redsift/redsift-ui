@@ -16,9 +16,20 @@
     "gulp-sourcemaps": "*",
     "gulp-stylus": "*",
     "gulp-uglify": "*",
-    "normalize.css": "^3.0.3"
+    "normalize.css": "^3.0.3",
+    "vinyl-source-stream": "*",
+    "browserify": "*",
+    "gulp-babel": "*",
+    "babel-preset-es2015": "*",
+    "gulp-closure-compiler": "*",
+    "vinyl-buffer": "*",
+    "bower": "*",
+    "browser-sync": "^2.9.11"
   },
   "scripts": {
     "test": "echo \"No test specified\" && exit 0"
+  },
+  "devDependencies": {
+
   }
 }
