@@ -27,17 +27,21 @@
 	.d3-rc .segment-bg:hover {
 		opacity: 1.0;
 	}
-	
+	/*
 	.overlayed,
 	.d3-rc .axis text {
     	filter: url(#text-bg);
 	}
-	 	
-	.band circle {
+	 */	
+	.d3-rc .band circle {
 		fill: none;
 		stroke: #7fcdbb;
 		stroke-width: 16px;
 		stroke-opacity: 0.4;
+	}
+	
+	.d3-rc .tick-line {
+		visibility: hidden;
 	}
 	
   </style>
@@ -134,7 +138,6 @@
 		d3.select('#three').datum(data2).call(chart2);
     	
 		var defs = Redsift.D3.Tools.createDefs();
-		console.log(defs);
 		Redsift.D3.Tools.createDiagonal(defs, 'pattern-stripe', 45, 1, 2, 5);
 		Redsift.D3.Tools.createMask(defs, 'mask-stripe', 'url(#pattern-stripe)');
 	    Redsift.D3.Tools.createShadowFilter(defs, 'text-bg', 1.0, 'rgba(230,230,230,0.25)', 2.5);
