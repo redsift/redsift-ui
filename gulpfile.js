@@ -16,6 +16,7 @@ var uglify = require('gulp-uglify');
 var closureCompiler = require('gulp-closure-compiler');
 var browserSync = require('browser-sync').create();
 var plumber = require('gulp-plumber');
+var streamqueue = require('streamqueue');
 
 // Clean
 gulp.task('clean', function() {
@@ -23,9 +24,11 @@ gulp.task('clean', function() {
 });
 
 gulp.task('js', function() {
-    return browserify(['./js/redsift.js']).bundle()
-        .pipe(source('redsift-global.js'))
+    return streamqueue({ objectMode: true },
+            gulp.src('./node_modules/babel-polyfill/browser.js'),
+            browserify(['./js/redsift.js']).bundle().pipe(source('./js/redsift-browserify.js')))
         .pipe(buffer())
+        .pipe(concat('redsift-global.js'))
         .pipe(plumber())
         .pipe(gulp.dest('./distribution/js'))
         .pipe(babel({
@@ -35,7 +38,8 @@ gulp.task('js', function() {
         .pipe(gulp.dest('./distribution/js'))
         .pipe(closureCompiler({
             compilerPath: 'bower_components/closure-compiler/compiler.jar',
-            fileName: 'redsift-global.es5.min.js'
+            fileName: 'redsift-global.es5.min.js',
+            continueWithWarnings: true
         }))
         .pipe(gulp.dest('./distribution/js'));
 });

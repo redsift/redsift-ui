@@ -4,6 +4,7 @@
   "description": "Common CSS and JS for Sifts and Apps",
   "repository": "https://github.com/Redsift/redsift-ui",
   "dependencies": {
+    "babel-polyfill": "^6.0.16",
     "babel-preset-es2015": "*",
     "bezier-easing": "*",
     "bower": "*",
@@ -26,6 +27,7 @@
     "gulp-uglify": "*",
     "gulp-util": "^3.0.7",
     "normalize.css": "^3.0.3",
+    "streamqueue": "^1.1.1",
     "through2": "^2.0.0",
     "vinyl-buffer": "*",
     "vinyl-source-stream": "*"
