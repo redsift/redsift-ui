@@ -38,7 +38,8 @@ gulp.task('js', function() {
         .pipe(gulp.dest('./distribution/js'))
         .pipe(closureCompiler({
             compilerPath: 'bower_components/closure-compiler/compiler.jar',
-            fileName: './distribution/js/redsift-global.es5.min.js'
+            fileName: 'redsift-global.es5.min.js',
+            continueWithWarnings: true
         }))
         .pipe(gulp.dest('./distribution/js'));
 });
