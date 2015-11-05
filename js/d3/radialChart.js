@@ -113,11 +113,6 @@ function radialChart() {
           
           return d.color;
         });
-        
-                      
-      segments.append("title")
-        .attr('class', 'tooltip')
-        .text(function(d) { return prefix + formatNumber(d.value); });
       
       segments.transition().ease(animation).duration(animationDuration).delay(function(d, i) {
           return animationDelay + (i * animationSegmentDelay);
