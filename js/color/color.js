@@ -82,6 +82,24 @@ var ColorTools = {
       return TEXT_WHITE;
     }
     return TEXT_BLACK;
+  },
+  lightnessSort: function(colors) {
+    var lab = colors.map(function(c) {
+      var a = c;
+      if (!Array.isArray(c)) {
+        a = hexToRgb(c);
+      }
+      
+      return [rgb2lab(a), c];
+    });
+    
+    var sort = lab.sort(function(a, b) {
+      if (a[0][0] < b[0][0]) return -1;
+      if (a[0][0] > b[0][0]) return -1;
+      return 0;
+    });
+    
+    return sort.map(function (a) { return a[1]; });
   }
 };
 

@@ -6,13 +6,14 @@ var tools = require('./tools.js');
 // Adapted from: http://bl.ocks.org/bricedev/8aaef92e64007f882267
 // Uses Bostock's Reusable Chart Convention http://bost.ocks.org/mike/chart/ 
 function radialChart() {
+  
   var width = 300,
     height = width,
     labelDistance = 1.04,
     animationDelay = 0,
     animationSegmentDelay = 100,
-    animationDuration = 1000,
-    animation = "elastic",
+    animationDuration = tools.redsiftDuration(),
+    animation = tools.redsiftEasing(),
     prefix = "",
     labelTicks = 3,
     minorTicks = 3,
@@ -20,9 +21,12 @@ function radialChart() {
     labelOrient = "left",
     barHeight = height / 2,
     animationEnd = null,
-    cpfx = 'd3-rc';
+    cpfx = 'd3-rc',
+    band = null,
+    bandLabel = null,
+    inset = 0;
 
-  var formatNumber = d3.format("s");
+  var formatNumber = d3.format(".0f");
 
   function impl(selection) {
     selection.each(function(data) {
@@ -48,9 +52,6 @@ function radialChart() {
         .domain(extent)
         .range([0, -barHeight]);
 
-      g.append("circle")
-        .attr("r", barHeight)
-        .classed("outer-line", true);
 
       var circles = g.selectAll("circle")
         .data(x.ticks(minorTicks))
@@ -68,40 +69,7 @@ function radialChart() {
           return ((i + 1) * 2 * Math.PI) / numBars;
         })
         .innerRadius(0);
-
-      var segments = g.selectAll("path")
-        .data(data)
-        .enter().append("path")
-        .each(function(d) {
-          d.outerRadius = 0;
-        })
-        .attr("d", arc)
-        .attr('class', function(d) {
-          return 'segment '+ (d.classed ? d.classed : '');
-        })
-        .style("fill", function(d) {
-          return d.color;
-        });
-
-      if (animation) {
-        //TODO: Does not work when null
-        segments.transition().ease(animation).duration(animationDuration).delay(function(d, i) {
-            return animationDelay + (i * animationSegmentDelay);
-          })
-          .attrTween("d", function(d, index) {
-            var i = d3.interpolate(d.outerRadius, barScale(+d.value));
-            return function(t) {
-              d.outerRadius = i(t);
-              return arc(d, index);
-            };
-          })
-          .each("end", function() {
-            if (animationEnd) {
-              animationEnd();
-            }
-          });
-      }
-
+      
       var lines = g.selectAll("line")
         .data(keys)
         .enter().append("line")
@@ -110,6 +78,95 @@ function radialChart() {
         .attr("transform", function(d, i) {
           return "rotate(" + (i * 360 / numBars) + ")";
         });
+
+      g.selectAll(".segment-bg")
+        .data(data)
+        .enter()
+        .append("path")
+        .attr("class", "segment-bg")
+        .each(function(d) {
+          d.outerRadius = barHeight + (2*spokeOverhang);
+        })
+        .attr("d", arc)
+        .on('mouseover', function(d, i) {
+            var t = prefix + formatNumber(d.value);
+            g.select("#segment-label-" + i).classed('hover', true).text(t);
+        })
+        .on("mouseout",function(d, i) {
+            var t = keys[i];
+            g.select("#segment-label-" + i).classed('hover', false).text(t);
+        });
+      
+      var segments = g.selectAll(".segment")
+        .data(data)
+        .enter()
+        .append("path")
+        .each(function(d) {
+          d.outerRadius = 0;
+        })
+        .attr("d", arc)
+        .attr('class', function(d) {
+          return 'segment '+ (d.classed ? d.classed : '');
+        })
+        .style("fill", function(d) {
+          if (typeof(d.color) === 'function') return d.color();
+          
+          return d.color;
+        });
+        
+                      
+      segments.append("title")
+        .attr('class', 'tooltip')
+        .text(function(d) { return prefix + formatNumber(d.value); });
+      
+      segments.transition().ease(animation).duration(animationDuration).delay(function(d, i) {
+          return animationDelay + (i * animationSegmentDelay);
+        })
+        .attrTween("d", function(d, index) {
+          var i = d3.interpolate(d.outerRadius, barScale(+d.value));
+          return function(t) {
+            d.outerRadius = i(t);
+            return arc(d, index);
+          };
+        })
+        .each("end", function() {
+          if (animationEnd) {
+            animationEnd();
+          }
+        });
+
+      if (band) {
+        var bnd = g.append("g")
+                .attr('class', "band");
+        
+        bnd.append("circle")
+          .attr("r", band);
+        var l = bandLabel;
+        if (l == null) 
+        {
+          l = prefix + formatNumber(band);
+        }  
+        
+        var bandRadius = band - inset;
+        
+        bnd.append("def")
+          .append("path")
+          .attr("id", "band-path")
+          .attr("d", "m0 " + bandRadius + " a" + bandRadius + " " + bandRadius + " 0 1,0 -0.01 0");
+        
+        var bl = bnd.append("text")
+          .attr("class", "label overlayed")
+          .style("text-anchor", "start")
+          .append("textPath")
+          .attr("xlink:href", "#band-path")
+          .text(l);
+      }  
+      
+
+
+      g.append("circle")
+        .attr("r", barHeight)
+        .classed("outer-line", true);
 
       var vals = g.append("g")
         .attr("class", "x axis label");
@@ -138,6 +195,7 @@ function radialChart() {
         .enter().append("text")
         .style("text-anchor", "middle")
         .append("textPath")
+        .attr("id", function(d, i) { return "segment-label-" + i; })
         .attr("xlink:href", "#label-path")
         .attr("startOffset", function(d, i) {
           return i * 100 / numBars + 50 / numBars + '%';
@@ -148,6 +206,14 @@ function radialChart() {
 
     });
   }
+
+  impl.band = function(value, label, i) {
+    if (!arguments.length) return band;
+    band = value;
+    bandLabel = label;
+    inset = i;
+    return impl;
+  };
 
   impl.width = function(value) {
     if (!arguments.length) return width;

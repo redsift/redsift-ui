@@ -10,12 +10,36 @@
 	div.chart h3 {
 		text-align: center;
 	}	
+	
 	.stripe {
   		mask: url(#mask-stripe);
 	}
+	
+	.d3-rc .segment-bg {
+  		fill: #FFDE00;
+		transition: opacity cubic-bezier(0.175, 0.885, 0.335, 1.155) 800ms;  
+	}
+
+	.d3-rc .segment-bg:not(:hover) {
+		opacity: 0.0;  	
+	}
+	
+	.d3-rc .segment-bg:hover {
+		opacity: 1.0;
+	}
+	
+	.overlayed,
 	.d3-rc .axis text {
-      filter: url(#text-bg);
-	} 
+    	filter: url(#text-bg);
+	}
+	 	
+	.band circle {
+		fill: none;
+		stroke: #7fcdbb;
+		stroke-width: 16px;
+		stroke-opacity: 0.4;
+	}
+	
   </style>
   </head>
 
@@ -23,29 +47,60 @@
 	<div class="cards">
 		<div class="chart">
 			<div id="one"></div>
-			<h3 id="one-label" class="hidden animate-opacity">One</h3>
+			<h3 id="one-label" class="hidden animate-opacity">2015</h3>
 		</div>
 		<div class="chart">
 			<div id="two"></div>
-			<h3 class="hidden animate-opacity">Two</h3>
+			<h3 class="hidden animate-opacity">2014</h3>
 		</div>
 		<div class="chart">
 			<div id="three"></div>
-			<h3 class="hidden animate-opacity">Three</h3>
+			<h3 class="hidden animate-opacity">2013</h3>
 		</div>
   	</div>
     
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="/js/redsift-global.es5.min.js"></script>
     <script>
+		var fmt = d3.format(",.0f");
+		
+		var data1 = _dummyData(200);
+		var total = data1.reduce(function(p, d) { return p + d.value }, 0);
+		var avg = total/data1.length;
+		var data1Band = "£" + fmt(total) + "/y £" + fmt(avg) + "/m";	
+
+		var data2 = _dummyData(100);
+
+		var max = d3.max(data1.concat(data2), function(d) { return d.value; });
+		
+		/*
+		var C = Redsift.ColorTools.lightnessSort(["#36B8FE",
+												"#84B4D8",
+												"#7AB5EF",
+												"#8ACCF9",
+												"#69B8EA",
+												"#5EB3FB",
+												"#5DBCF8",
+												"#98C4EF",
+												"#7EB5E7",
+												"#81C3ED",
+												"#86BBF0",
+												"#5FB7F0"]);
+		var color = d3.scale.ordinal().range(C);
+		*/
+		var color = d3.scale.linear()
+			.domain([0, (max/2), max])
+			.range(["#edf8b1", "#7fcdbb", "#2c7fb8"]);
+						
+		// ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f"]
 		function _dummyData(range) {
-			var color = d3.scale.ordinal().range(["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f"]);
 			return Redsift.Lang.localShortMonths().map(function(m, i) {
+				var v = Math.random() * range;
 				return {
-				name: m,
-				value: Math.random() * range,
-				color: color(m),
-				classed: (i === 1) ? undefined : 'stripe'
+					name: m,
+					value: v,
+					color: function () { return color(v) },
+					classed: (i !== 1) ? undefined : 'stripe'
 				};
 			});
 		}
@@ -56,12 +111,13 @@
 		var chart1 = radialChart()
 			.width(400)
 			.prefix('£')
+			.band(max / 2, data1Band, -3)
 			.animationSegmentDelay(delay)
 			.animationEnd(function() {
 				d3.select('#one-label').classed('hidden', false);
 			});
 		
-		var data1 = _dummyData(200);
+		
 		d3.select('#one').datum(data1).call(chart1);
 		
 		var chart2 = radialChart()
@@ -73,14 +129,13 @@
 				d3.select('.hidden').classed('hidden', false);
 			});
 		
-		var data2 = _dummyData(100);
 		d3.select('#two').datum(data2).call(chart2);
 		
 		d3.select('#three').datum(data2).call(chart2);
     	
 		var defs = Redsift.D3.Tools.createDefs();
 		console.log(defs);
-		Redsift.D3.Tools.createDiagonal(defs, 'pattern-stripe');
+		Redsift.D3.Tools.createDiagonal(defs, 'pattern-stripe', 45, 1, 2, 5);
 		Redsift.D3.Tools.createMask(defs, 'mask-stripe', 'url(#pattern-stripe)');
 	    Redsift.D3.Tools.createShadowFilter(defs, 'text-bg', 1.0, 'rgba(230,230,230,0.25)', 2.5);
 

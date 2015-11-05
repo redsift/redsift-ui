@@ -1,15 +1,51 @@
 
 radial-chart($labelColour = #3e3e3e, $tickColour = black) {
   .d3-rc {
+    
+    text {
+      fill: $labelColour;
+      pointer-events: none;
+    }
+    
+    .tooltip {
+      font-size: 2em;
+    }
+    
     .segment-label {
       text-transform: uppercase;
       fill: $labelColour;
     }
+     
+     .segment-label :not(.hover) {
+      transition: font-size $curveRedsift $timeRedsift;
+     }
+     
+     .segment-label .hover {
+      font-size: 1.8em;
+      transition: font-size $curveRedsift $timeRedsift;
+	   }
     
     .outer-line {
       stroke: $tickColour;
-      stroke-width: 1.5px;
+      stroke-width: 2.0px;
       fill: none;
+    }
+    
+    .band {
+      fill: rgba(200,200,200,0.2)
+    }
+    
+    .band circle {
+      pointer-events: none;
+    }
+    
+    .segment {
+      pointer-events: none;
+    }
+    
+    .segment-bg {
+      fill: none;
+      pointer-events: visible;
     }
     
     .tick-line {
@@ -31,11 +67,11 @@ radial-chart($labelColour = #3e3e3e, $tickColour = black) {
       stroke-width: 2.5px;
       shape-rendering: crispEdges;
     }
-  
-    .axis text {
-      fill: $labelColour;
-    }
     
+    .axis text {
+      @extend .overlayed;
+    }
+   
     .x.axis path {
       display: none;
     }

@@ -1,5 +1,7 @@
 'use strict';
 
+var BezierEasing = require('../../node_modules/bezier-easing/index.js');
+
 var Tools = {
   svgRoot: function (parent, width, height) {
     var svg = d3.select(parent).append("svg")
@@ -12,6 +14,18 @@ var Tools = {
     svg.node().setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
     
     return svg;
+  },
+  redsiftDuration: function() {
+    return 400;  
+  },
+  redsiftEasing: function() {
+    var f = this.redsiftBezier();
+    return function(t) {
+      return f.get(t);
+    }
+  },
+  redsiftBezier: function() {
+    return BezierEasing(0.175, 0.885, 0.335, 1.155);  
   },
   createShadowFilter: function (defs, fname, morphRadius, shadowColour, blurRadius, padding) {
     if (morphRadius === undefined) {
@@ -82,7 +96,7 @@ var Tools = {
     
     return m;    
   },
-  createDiagonal: function(defs, id, ang, w, h) {
+  createDiagonal: function(defs, id, ang, w, h, s) {
     if (ang === undefined) {
       ang = 45;
     }
@@ -92,10 +106,13 @@ var Tools = {
     if (h === undefined) {
       h = 3;
     }
+    if (s === undefined) {
+      s = 4;
+    }
     var p = defs.append('pattern')
             .attr('id', id)
-            .attr('width', 4)
-            .attr('height', 4)
+            .attr('width', s)
+            .attr('height', s)
             .attr('patternUnits', 'userSpaceOnUse')
             .attr('patternTransform', 'rotate('+ ang + ')');
     

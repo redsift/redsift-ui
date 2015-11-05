@@ -184,6 +184,17 @@ responsive-type($fontNormal, $fontHighlight, $fontCode
 		type--huge()
 	}
 	
+	.label {
+		font-family: $fontCode;	
+		/* required to remove thin fonts on rotation */
+		-webkit-font-smoothing: antialiased;
+		font-weight: 300;
+	}
+	
+	.overlayed {
+		font-weight: 400;
+	}
+	
 	code {
 		font-family: $fontCode;
 		white-space: nowrap;

@@ -4,34 +4,35 @@
   "description": "Common CSS and JS for Sifts and Apps",
   "repository": "https://github.com/Redsift/redsift-ui",
   "dependencies": {
+    "babel-preset-es2015": "*",
+    "bezier-easing": "*",
+    "bower": "*",
+    "browser-sync": "^2.9.11",
+    "browserify": "*",
     "del": "*",
     "gulp": "^3.9.0",
     "gulp-autoprefixer": "*",
+    "gulp-babel": "*",
+    "gulp-closure-compiler": "*",
     "gulp-concat": "*",
     "gulp-jshint": "*",
     "gulp-minify-css": "*",
     "gulp-notify": "*",
+    "gulp-plumber": "^1.0.1",
     "gulp-rename": "*",
     "gulp-sass": "*",
     "gulp-sourcemaps": "*",
     "gulp-stylus": "*",
     "gulp-uglify": "*",
+    "gulp-util": "^3.0.7",
     "normalize.css": "^3.0.3",
-    "vinyl-source-stream": "*",
-    "browserify": "*",
-    "gulp-babel": "*",
-    "babel-preset-es2015": "*",
-    "gulp-closure-compiler": "*",
+    "through2": "^2.0.0",
     "vinyl-buffer": "*",
-    "bower": "*",
-    "browser-sync": "^2.9.11"
+    "vinyl-source-stream": "*"
   },
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
-    "postinstall" : "./node_modules/bower/bin/bower install",
-    "serve": "node node_modules/gulp/bin/gulp.js serve"      
-  },
-  "devDependencies": {
-
+    "postinstall": "./node_modules/bower/bin/bower install",
+    "serve": "node node_modules/gulp/bin/gulp.js serve"
   }
 }
