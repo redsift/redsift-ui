@@ -10,6 +10,12 @@
 	div.chart h3 {
 		text-align: center;
 	}	
+	.stripe {
+  		mask: url(#mask-stripe);
+	}
+	.d3-rc .axis text {
+      filter: url(#text-bg);
+	} 
   </style>
   </head>
 
@@ -34,11 +40,12 @@
     <script>
 		function _dummyData(range) {
 			var color = d3.scale.ordinal().range(["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f"]);
-			return Redsift.Lang.localShortMonths().map(function(m) {
+			return Redsift.Lang.localShortMonths().map(function(m, i) {
 				return {
 				name: m,
 				value: Math.random() * range,
-				color: color(m)
+				color: color(m),
+				classed: (i === 1) ? undefined : 'stripe'
 				};
 			});
 		}
@@ -64,7 +71,15 @@
 		d3.select('#two').datum(data2).call(chart2);
 		
 		d3.select('#three').datum(data2).call(chart2);
-    </script>
+    	
+		var defs = Redsift.D3.Tools.createDefs();
+		console.log(defs);
+		Redsift.D3.Tools.createDiagonal(defs, 'pattern-stripe');
+		Redsift.D3.Tools.createMask(defs, 'mask-stripe', 'url(#pattern-stripe)');
+	    Redsift.D3.Tools.createShadowFilter(defs, 'text-bg', 1.0, 'rgba(230,230,230,0.25)', 2.5);
+
+	
+	</script>
   </body>
 
 </html>

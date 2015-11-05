@@ -148,6 +148,7 @@ responsive-type($fontNormal, $fontHighlight, $fontCode
 	
 	// Definitions
 	.small,
+	.label,
 	small {
 		type--small()
 	}
@@ -201,7 +202,7 @@ responsive-type($fontNormal, $fontHighlight, $fontCode
 	
 	p code::before,
 	p code::after {
-		letter-spacing: (-$codePadding);
+		letter-spacing: -($codePadding);
 		content: "\00a0";
 	}
 	

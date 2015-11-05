@@ -1,49 +1,43 @@
 
 radial-chart($labelColour = #3e3e3e, $tickColour = black) {
-  .labels {
-    text-transform: uppercase;
-    font-weight: normal;
-    fill: $labelColour;
-    font-size: 1.0em;
-  }
+  .d3-rc {
+    .segment-label {
+      text-transform: uppercase;
+      fill: $labelColour;
+    }
+    
+    .outer-line {
+      stroke: $tickColour;
+      stroke-width: 1.5px;
+      fill: none;
+    }
+    
+    .tick-line {
+      stroke: grey;
+      stroke-width: 0.5px;
+      stroke-dasharray: 2,2;
+      fill: none;
+    }
+    
+    .spokes {
+      stroke: $tickColour;
+      stroke-width: 0.5px;
+    }
+    
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: $tickColour;
+      stroke-width: 2.5px;
+      shape-rendering: crispEdges;
+    }
   
-  .outer-line {
-    stroke: black;
-    stroke-width: 1.5px;
-    fill: none;
-  }
-  
-  .tick-line {
-    stroke: grey;
-    stroke-width: 0.5px;
-    stroke-dasharray: 2,2;
-    fill: none;
-  }
-  
-  .spokes {
-    stroke: black;
-    stroke-width: 0.5px;
-  }
-  
-  .axis path,
-  .axis line {
-    fill: none;
-    stroke: $tickColour;
-    stroke-width: 2.5px;
-    shape-rendering: crispEdges;
-  }
- 
-  path {
-    fill: url('data:image/svg+xml;base64,PHN2Zz4NCjxkZWZzPg0KPHBhdHRlcm4gaWQ9InBhdHRlcm4tc3RyaXBlIiANCndpZHRoPSI0IiBoZWlnaHQ9IjQiIA0KcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSINCnBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPg0KPHJlY3Qgd2lkdGg9IjIiIGhlaWdodD0iNCIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMCwwKSIgZmlsbD0id2hpdGUiPjwvcmVjdD4NCjwvcGF0dGVybj4NCjxtYXNrIGlkPSJtYXNrLXN0cmlwZSI+DQo8cmVjdCB4PSItMjAwIiB5PSItMjAwIiB3aWR0aD0iODAwIiBoZWlnaHQ9IjgwMCIgZmlsbD0idXJsKCNwYXR0ZXJuLXN0cmlwZSkiIC8+DQo8L21hc2s+ICAgICAgDQo8L2RlZnM+DQo8L3N2Zz4=');
-  }
- 
-  .axis text {
-    fill: $labelColour;
-    font-size: 1.1em;
-    filter: url(#text-bg);
-  }
-  
-  .x.axis path {
-    display: none;
+    .axis text {
+      fill: $labelColour;
+    }
+    
+    .x.axis path {
+      display: none;
+    }
   }
 }

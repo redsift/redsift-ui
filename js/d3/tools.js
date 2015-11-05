@@ -60,6 +60,52 @@ var Tools = {
     var merge = filter.append('feMerge');
     merge.append('feMergeNode').attr('in', "BG");
     merge.append('feMergeNode').attr('in', "SourceGraphic");
+  },
+  createDefs: function(parent) {
+    if (parent === undefined) {
+      parent = 'body';
+    }
+     var defs = d3.select(parent).append("svg").append("defs");
+     
+     return defs;
+  },
+  createMask: function(defs, id, fill) {
+    var m = defs.append('mask')
+            .attr('id', id);
+    
+    m.append('rect')
+            .attr('x', -200)
+            .attr('y', -200)
+            .attr('width', 800)
+            .attr('height', 800)
+            .attr('fill', fill);
+    
+    return m;    
+  },
+  createDiagonal: function(defs, id, ang, w, h) {
+    if (ang === undefined) {
+      ang = 45;
+    }
+    if (w === undefined) {
+      w = 3;
+    }
+    if (h === undefined) {
+      h = 3;
+    }
+    var p = defs.append('pattern')
+            .attr('id', id)
+            .attr('width', 4)
+            .attr('height', 4)
+            .attr('patternUnits', 'userSpaceOnUse')
+            .attr('patternTransform', 'rotate('+ ang + ')');
+    
+    p.append('rect')
+            .attr('width', w)
+            .attr('height', h)
+            .attr('transform', 'translate(0,0)')
+            .attr('fill', 'white');
+    
+    return p;            
   }
 };
 

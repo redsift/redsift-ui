@@ -79,7 +79,7 @@ function makeCss(name) {
         .pipe(sourcemaps.write())
         .pipe(gulp.dest('./distribution/css'))
         .pipe(rename({suffix: '.min'}))
-        .pipe(minifyCss({compatibility: '*', roundingPrecision: 4}))
+        .pipe(minifyCss({compatibility: '*', roundingPrecision: 4, keepSpecialComments: 0}))
         .pipe(sourcemaps.write('../../distribution/maps'))
         .pipe(gulp.dest('./distribution/css'))
         .pipe(browserSync.stream())

@@ -14,12 +14,12 @@ var Lang = {
 		} else {
 			formatter = {
 				format: function(date) {
-				return date.toUTCString().split(' ')[2]
+					return date.toUTCString().split(' ')[2]
 				}
 			}
 		}
 		return Array.apply(null, Array(12)).map(function(_, i) {
-			return formatter.format(new Date(2014, i));
+			return formatter.format(new Date(2014, i, 7));
 		});
 	}	
 };

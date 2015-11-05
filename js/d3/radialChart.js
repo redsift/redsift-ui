@@ -8,7 +8,7 @@ var tools = require('./tools.js');
 function radialChart() {
   var width = 300,
     height = width,
-    labelDistance = 1.025,
+    labelDistance = 1.04,
     animationDelay = 0,
     animationSegmentDelay = 100,
     animationDuration = 1000,
@@ -18,19 +18,17 @@ function radialChart() {
     minorTicks = 3,
     spokeOverhang = 15,
     labelOrient = "left",
-    barHeight = height / 2;
+    barHeight = height / 2,
+    cpfx = 'd3-rc';
 
   var formatNumber = d3.format("s");
 
   function impl(selection) {
     selection.each(function(data) {
-      console.log(tools);
       var svg = tools.svgRoot(this, width, height);
 
-      var defs = svg.append('defs');
-      tools.createShadowFilter(defs, 'text-bg', 1.0, 'rgba(255,255,255,1.0)', 2.5);
-
       var g = svg.append("g")
+        .attr('class', cpfx)
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
       var extent = [1, d3.max(data, function(d) {
@@ -77,6 +75,9 @@ function radialChart() {
           d.outerRadius = 0;
         })
         .attr("d", arc)
+        .attr('class', function(d) {
+          return 'segment '+ (d.classed ? d.classed : '');
+        })
         .style("fill", function(d) {
           return d.color;
         });
@@ -105,7 +106,7 @@ function radialChart() {
         });
 
       var vals = g.append("g")
-        .attr("class", "x axis");
+        .attr("class", "x axis label");
 
        var xAxis = d3.svg.axis()
         .scale(x).orient(labelOrient)
@@ -119,7 +120,7 @@ function radialChart() {
       var labelRadius = barHeight * labelDistance;
 
       var labels = g.append("g")
-        .classed("labels", true);
+        .attr("class", "segment-label label");
 
       labels.append("def")
         .append("path")
