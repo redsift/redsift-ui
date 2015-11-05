@@ -23,15 +23,15 @@
 	<div class="cards">
 		<div class="chart">
 			<div id="one"></div>
-			<h3>One</h3>
+			<h3 id="one-label" class="hidden animate-opacity">One</h3>
 		</div>
 		<div class="chart">
 			<div id="two"></div>
-			<h3>Two</h3>
+			<h3 class="hidden animate-opacity">Two</h3>
 		</div>
 		<div class="chart">
 			<div id="three"></div>
-			<h3>Three</h3>
+			<h3 class="hidden animate-opacity">Three</h3>
 		</div>
   	</div>
     
@@ -56,7 +56,10 @@
 		var chart1 = radialChart()
 			.width(400)
 			.prefix('£')
-			.animationSegmentDelay(delay);
+			.animationSegmentDelay(delay)
+			.animationEnd(function() {
+				d3.select('#one-label').classed('hidden', false);
+			});
 		
 		var data1 = _dummyData(200);
 		d3.select('#one').datum(data1).call(chart1);
@@ -65,7 +68,10 @@
 			.width(400)
 			.prefix('£')
 			.animationSegmentDelay(delay)
-			.animationDelay(chart1.animationDuration() * 0.56);
+			.animationDelay(chart1.animationDuration() * 0.56)
+			.animationEnd(function() {
+				d3.select('.hidden').classed('hidden', false);
+			});
 		
 		var data2 = _dummyData(100);
 		d3.select('#two').datum(data2).call(chart2);

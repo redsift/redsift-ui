@@ -19,6 +19,7 @@ function radialChart() {
     spokeOverhang = 15,
     labelOrient = "left",
     barHeight = height / 2,
+    animationEnd = null,
     cpfx = 'd3-rc';
 
   var formatNumber = d3.format("s");
@@ -93,6 +94,11 @@ function radialChart() {
               d.outerRadius = i(t);
               return arc(d, index);
             };
+          })
+          .each("end", function() {
+            if (animationEnd) {
+              animationEnd();
+            }
           });
       }
 
@@ -156,6 +162,12 @@ function radialChart() {
     return impl;
   };
 
+  impl.animationEnd = function(value) {
+    if (!arguments.length) return animationEnd;
+    animationEnd = value;
+    return impl;
+  };
+  
   impl.animation = function(value) {
     if (!arguments.length) return animation;
     animation = value;
