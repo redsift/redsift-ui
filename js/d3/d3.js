@@ -2,9 +2,11 @@
 
 var tools = require('./tools.js');
 var radialChart = require('./radialChart.js');
+var legendChart = require('./legendChart.js');
 
 var reusable = {
-  radialChart: radialChart
+  radialChart: radialChart,
+  legendChart: legendChart
 };
 
 var D3 = {

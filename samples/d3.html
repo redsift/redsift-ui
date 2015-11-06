@@ -3,6 +3,8 @@
   <link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
   <link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
   <style>
+	/* --- Chart layout --- */
+
     div.chart {
 		display: flex;
 		flex-direction: column;
@@ -11,12 +13,22 @@
 		text-align: center;
 	}	
 	
+	/* --- Chart customisation --- */
+
 	.stripe {
   		mask: url(#mask-stripe);
 	}
 	
+	/* --- DISABLED: Text shadow --- */
+	/*
+	.overlayed,
+	.d3-rc .axis text {
+    	filter: url(#text-bg);
+	}
+	 */	
+	 	
+	/* --- Segment background hover  --- */	 
 	.d3-rc .segment-bg {
-  		fill: #FFDE00;
 		transition: opacity cubic-bezier(0.175, 0.885, 0.335, 1.155) 800ms;  
 	}
 
@@ -27,19 +39,15 @@
 	.d3-rc .segment-bg:hover {
 		opacity: 1.0;
 	}
-	/*
-	.overlayed,
-	.d3-rc .axis text {
-    	filter: url(#text-bg);
-	}
-	 */	
+
+	/* --- Average band and colour  --- */	 
 	.d3-rc .band circle {
 		fill: none;
-		stroke: #7fcdbb;
 		stroke-width: 16px;
 		stroke-opacity: 0.4;
 	}
 	
+	/* --- Hide circular tick lines  --- */	 
 	.d3-rc .tick-line {
 		visibility: hidden;
 	}
@@ -61,42 +69,62 @@
 			<div id="three"></div>
 			<h3 class="hidden animate-opacity">2013</h3>
 		</div>
+		<div class="themes">
+			<div id="theme"></div>
+		</div>
   	</div>
     
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="/js/redsift-global.es5.min.js"></script>
     <script>
-		var fmt = d3.format(",.0f");
-		
+		// start knobs
+		var SEGMENTS = ["#edf8b1", "#7fcdbb", "#2c7fb8"];
+		var SEGMENT_BG = "#FFDE00";
+		var BAND = "#7fcdbb";
+		var P_A = 45;
+		var P_X = 1;
+		var P_Y = 2;
+		var P_S = 5;
+		// end knobs
+			
+		var STRIPE_CLASS = "stripe";
+		var themes = [
+			{ color: SEGMENTS, title: 'Segments (range)' },
+			{ color: SEGMENTS, title: 'Segments (range), knockback', classed: STRIPE_CLASS },
+			{ color: SEGMENT_BG, title: 'Segment background' },
+			{ color: BAND, title: 'Average Band' },
+		];
+
+		// generate some styles
+		var css = Redsift.D3.Tools.createCSSRuleSheet();
+		css('.d3-rc .band circle', 'stroke: ' + BAND + ';');
+		css('.d3-rc .segment-bg', 'fill:' + SEGMENT_BG + ';');
+	
+		// generate some patterns
+		var defs = Redsift.D3.Tools.createDefs();
+		Redsift.D3.Tools.createDiagonal(defs, 'pattern-stripe', P_A, P_X, P_Y, P_S);
+		Redsift.D3.Tools.createMask(defs, 'mask-stripe', 'url(#pattern-stripe)');
+	    Redsift.D3.Tools.createShadowFilter(defs, 'text-bg', 1.0, 'rgba(230,230,230,0.25)', 2.5);	
+
+		// create legend						
+		var legend = Redsift.D3.Reusable.legendChart().width(400).sample(20);
+		d3.select('#theme').datum(themes).call(legend);
+
+		// make up data
 		var data1 = _dummyData(200);
+		var data2 = _dummyData(100);
+		var fmt = d3.format(",.0f");
 		var total = data1.reduce(function(p, d) { return p + d.value }, 0);
 		var avg = total/data1.length;
 		var data1Band = "£" + fmt(total) + "/y £" + fmt(avg) + "/m";	
 
-		var data2 = _dummyData(100);
 
 		var max = d3.max(data1.concat(data2), function(d) { return d.value; });
 		
-		/*
-		var C = Redsift.ColorTools.lightnessSort(["#36B8FE",
-												"#84B4D8",
-												"#7AB5EF",
-												"#8ACCF9",
-												"#69B8EA",
-												"#5EB3FB",
-												"#5DBCF8",
-												"#98C4EF",
-												"#7EB5E7",
-												"#81C3ED",
-												"#86BBF0",
-												"#5FB7F0"]);
-		var color = d3.scale.ordinal().range(C);
-		*/
 		var color = d3.scale.linear()
 			.domain([0, (max/2), max])
-			.range(["#edf8b1", "#7fcdbb", "#2c7fb8"]);
-						
-		// ["#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3", "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd", "#ccebc5", "#ffed6f"]
+			.range(SEGMENTS);
+
 		function _dummyData(range) {
 			return Redsift.Lang.localShortMonths().map(function(m, i) {
 				var v = Math.random() * range;
@@ -108,9 +136,9 @@
 				};
 			});
 		}
-      
+
+      	// present the charts on the nodes
 	  	var radialChart = Redsift.D3.Reusable.radialChart;
-		  
 		var delay = 50;
 		var chart1 = radialChart()
 			.width(400)
@@ -120,8 +148,7 @@
 			.animationEnd(function() {
 				d3.select('#one-label').classed('hidden', false);
 			});
-		
-		
+
 		d3.select('#one').datum(data1).call(chart1);
 		
 		var chart2 = radialChart()
@@ -134,15 +161,7 @@
 			});
 		
 		d3.select('#two').datum(data2).call(chart2);
-		
 		d3.select('#three').datum(data2).call(chart2);
-    	
-		var defs = Redsift.D3.Tools.createDefs();
-		Redsift.D3.Tools.createDiagonal(defs, 'pattern-stripe', 45, 1, 2, 5);
-		Redsift.D3.Tools.createMask(defs, 'mask-stripe', 'url(#pattern-stripe)');
-	    Redsift.D3.Tools.createShadowFilter(defs, 'text-bg', 1.0, 'rgba(230,230,230,0.25)', 2.5);
-
-	
 	</script>
   </body>
 
