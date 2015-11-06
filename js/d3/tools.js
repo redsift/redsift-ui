@@ -3,12 +3,16 @@
 var BezierEasing = require('../../node_modules/bezier-easing/index.js');
 
 var Tools = {
-  svgRoot: function (parent, width, height) {
+  svgRoot: function (parent, width, height, classed) {
     var svg = d3.select(parent).append("svg")
           .attr("version", "1.1")
           .attr("xmlns", "http://www.w3.org/2000/svg")
           .attr("width", width)
           .attr("height", height);
+          
+    if (classed != null) {
+      svg.attr("class", classed);
+    }
     
     // d3 work around
     svg.node().setAttributeNS("http://www.w3.org/2000/xmlns/", "xmlns:xlink", "http://www.w3.org/1999/xlink");
@@ -26,6 +30,31 @@ var Tools = {
   },
   redsiftBezier: function() {
     return BezierEasing(0.175, 0.885, 0.335, 1.155);  
+  },
+  createCSSRuleSheet: function(media) {
+    // Create the <style> tag
+    var style = document.createElement("style");
+    
+    if (media) {
+      style.setAttribute("media", media)
+    }
+    // style.setAttribute("media", "only screen and (max-width : 1024px)")
+    
+    // WebKit hack :(
+    style.appendChild(document.createTextNode(""));
+    
+    // Add the <style> element to the page
+    document.head.appendChild(style);
+    var sheet = style.sheet;
+    
+    return function addCSSRule(selector, rules, index) {
+      if("insertRule" in sheet) {
+        sheet.insertRule(selector + "{" + rules + "}", index);
+      }
+      else if("addRule" in sheet) {
+        sheet.addRule(selector, rules, index);
+      }
+    }
   },
   createShadowFilter: function (defs, fname, morphRadius, shadowColour, blurRadius, padding) {
     if (morphRadius === undefined) {
