@@ -1,6 +1,6 @@
 machine: 
   node:
-    version: 4.1.0
+    version: 4.1.1
   environment: 
     S3_BUCKET: redsift-static
 
@@ -15,7 +15,12 @@ dependencies:
   override:
     - node node_modules/gulp/bin/gulp.js 
     - mv ./distribution ${CIRCLE_ARTIFACTS}/distribution
-        
+
+test:
+  override:
+    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/distribution/css/redsift-light.min.css ]"
+    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/distribution/js/redsift-global.es5.min.js ]"
+            
 deployment:
   production:
     branch: /release-.*/
