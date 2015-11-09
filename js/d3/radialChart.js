@@ -172,7 +172,7 @@ function radialChart() {
             }
           });
       }
-      if (band) {
+      if (band != null) {
         var pth = null;
         var bl = null;
         var crc = null;
@@ -198,8 +198,9 @@ function radialChart() {
           bl = bnd.select('textPath');
         }
         
+        var bandScaled = barScale(band);
         function setBand() {
-          var bandRadius = band - inset;
+          var bandRadius = bandScaled - inset;
           pth.attr("d", "m0 " + bandRadius + " a" + bandRadius + " " + bandRadius + " 0 1,0 -0.01 0");
   
           var l = bandLabel;
@@ -212,10 +213,10 @@ function radialChart() {
         
         if (animation) {
           bl.text('');
-          crc.transition().ease(animation).duration(animationDuration).attr("r", band)
+          crc.transition().ease(animation).duration(animationDuration).attr("r", bandScaled)
             .each("end", setBand);
         } else {
-            crc.attr("r", band);
+            crc.attr("r", bandScaled);
             setBand();     
         }
       }  
@@ -238,6 +239,11 @@ function radialChart() {
         .tickFormat(function(v) {
           return prefix + formatNumber(v);
         });
+        
+      if (animation) {
+        vals = vals.transition().ease(animation).duration(animationDuration);
+      }
+        
       vals.call(xAxis);
 
       // Labels
@@ -252,7 +258,7 @@ function radialChart() {
       } else {
         def = labels.select('#label-path-'+inst);
       }
-      console.log(def, labelRadius);
+
       def.attr("d", "m0 " + -labelRadius + " a" + labelRadius + " " + labelRadius + " 0 1,1 -0.01 0");
       
       labels.selectAll("text")

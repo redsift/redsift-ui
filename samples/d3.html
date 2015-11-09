@@ -165,10 +165,10 @@
 		
 		var count = 0;
 		setInterval(function() {
-			var dataUp = _dummyData(Math.random() * 400);
+			var dataUp = _dummyData((Math.random() * 400) + 20);
 			var max = d3.max(dataUp, function(d) { return d.value; });
 			count++;
-			var avg = max / 2;
+			var avg = (max / 2) + (Math.random() * 20) - 10;
 			chart1.band(avg, 'Update ' + count + ', Avg £' + fmt(avg), -3);
 			
 			d3.select('#one').datum(dataUp).call(chart1);
