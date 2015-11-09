@@ -152,7 +152,7 @@
 		d3.select('#one').datum(data1).call(chart1);
 		
 		var chart2 = radialChart()
-			.width(400)
+			.width(250)
 			.prefix('£')
 			.animationSegmentDelay(delay)
 			.animationDelay(chart1.animationDuration() * 0.56)
@@ -162,6 +162,29 @@
 		
 		d3.select('#two').datum(data2).call(chart2);
 		d3.select('#three').datum(data2).call(chart2);
+		
+		var count = 0;
+		setInterval(function() {
+			var dataUp = _dummyData(Math.random() * 400);
+			var max = d3.max(dataUp, function(d) { return d.value; });
+			count++;
+			var avg = max / 2;
+			chart1.band(avg, 'Update ' + count + ', Avg £' + fmt(avg), -3);
+			
+			d3.select('#one').datum(dataUp).call(chart1);
+		}, 1500);
+		
+		setInterval(function() {
+			var newData = data2.map(function(d) {
+				d.animateFrom = d.value;
+				d.value = d.value + (Math.random() * 20) - 10;
+				return d;
+			});
+			
+			d3.select('#two').datum(newData).call(chart2);
+		}, 1000);
+		
+		
 	</script>
   </body>
 
