@@ -27,7 +27,8 @@ function radialChart() {
     cpfx = 'd3-rc',
     band = null,
     bandLabel = null,
-    inset = 0;
+    inset = 0,
+    selected = null;
 
   var formatNumber = d3.format(".0f");
 
@@ -97,6 +98,17 @@ function radialChart() {
           return "rotate(" + (i * 360 / numBars) + ")";
         });
 
+      function updateLabel(d, i) {
+          var t = d.valueText;
+          if (t === undefined) {
+            t = prefix + formatNumber(d.value);
+          } else if (typeof t === 'function') {
+            t = t();
+          }
+          selected = i;
+          g.select("#segment-label-" + i).classed('hover', true).text(t);
+      }
+        
       g.selectAll(".segment-bg")
         .data(data)
         .enter()
@@ -106,17 +118,10 @@ function radialChart() {
           d.outerRadius = barHeight + (2*spokeOverhang);
         })
         .attr("d", arc)
-        .on('mouseover', function(d, i) {
-            var t = d.valueText;
-            if (t === undefined) {
-              t = prefix + formatNumber(d.value);
-            } else if (typeof t === 'function') {
-              t = t();
-            }
-            g.select("#segment-label-" + i).classed('hover', true).text(t);
-        })
+        .on('mouseover', updateLabel)
         .on("mouseout",function(d, i) {
             var t = keys[i];
+            selected = null;
             g.select("#segment-label-" + i).classed('hover', false).text(t);
         });
       
@@ -131,7 +136,7 @@ function radialChart() {
         .append("path")
         .attr('class', 'segment');
         
-      bind.each(function(d) {
+      bind.each(function(d, i) {
           if (animation) {
             if (d.animateFrom !== undefined) {
               d.outerRadius = barScale(d.animateFrom);
@@ -140,6 +145,10 @@ function radialChart() {
             }
           } else {
             d.outerRadius = barScale(d.value);
+          }
+          
+          if (i === selected) {
+            updateLabel(d, i);
           }
         })
         .attr("d", arc)
