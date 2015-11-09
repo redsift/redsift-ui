@@ -18,6 +18,14 @@ responsive-type($fontNormal, $fontHighlight, $fontCode
 		};
 	}
 	
+	retina-screen() {
+		@media 
+		(-webkit-min-device-pixel-ratio: 2), 
+		(min-resolution: 192dpi) { 
+			{block}
+		};
+	}
+	
 	body {
 		font-family: $fontNormal;
 		font-weight: 300; 
@@ -188,7 +196,11 @@ responsive-type($fontNormal, $fontHighlight, $fontCode
 		font-family: $fontCode;	
 		/* required to remove thin fonts on rotation */
 		-webkit-font-smoothing: antialiased;
-		font-weight: 300;
+		font-weight: 400;
+		
+		+retina-screen() {
+			font-weight: 300;
+		}
 	}
 	
 	.overlayed {
