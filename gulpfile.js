@@ -24,9 +24,12 @@ gulp.task('clean', function() {
 });
 
 gulp.task('js', function() {
-    return streamqueue({ objectMode: true },
+    return streamqueue(
+            { objectMode: true },
             gulp.src('./node_modules/babel-polyfill/browser.js'),
-            browserify(['./js/redsift.js']).bundle().pipe(source('./js/redsift-browserify.js')))
+            browserify(['./js/redsift.js'])
+              .bundle()
+              .pipe(source('./js/redsift-browserify.js')))
         .pipe(buffer())
         .pipe(concat('redsift-global.js'))
         .pipe(plumber())
@@ -46,7 +49,7 @@ gulp.task('js', function() {
 
 function makeCss(name) {
     return gulp.src([
-            './node_modules/normalize.css/**.css',      
+            './node_modules/normalize.css/**.css',
             './css/' + name + '.styl',
             './css/**.css'
         ])
@@ -83,18 +86,24 @@ gulp.task('css', ['css-light', 'css-dark']);
 gulp.task('browser-sync', function() {
     browserSync.init({
         server: {
-            baseDir: [ "./samples", "./distribution" ],
+            baseDir: ['./samples', './distribution'],
             directory: true
         }
     });
 });
 
-gulp.task('js-watch', ['js'], function() { browserSync.reload('*.js'); });
-
-gulp.task('serve', ['default', 'browser-sync'] , function() {
-    gulp.watch(['./css/**/*.{import.styl,styl,css}'], ['css']);
-    gulp.watch(['./js/**/*.js'], ['js-watch']);
-    gulp.watch("./samples/*.html").on('change', function() { browserSync.reload('*.html'); });
+gulp.task('modules', function() {
+  return gulp.src([
+      './js/color/color.js'
+    ]).pipe(gulp.dest('./distribution/modules'));
 });
 
-gulp.task('default', [ 'css', 'js' ]);
+gulp.task('js-watch', ['js'], function() { browserSync.reload('*.js'); });
+
+gulp.task('serve', ['default', 'browser-sync'], function() {
+    gulp.watch(['./css/**/*.{import.styl,styl,css}'], ['css']);
+    gulp.watch(['./js/**/*.js'], ['js-watch']);
+    gulp.watch('./samples/*.html').on('change', function() { browserSync.reload('*.html'); });
+});
+
+gulp.task('default', ['css', 'js', 'modules']);

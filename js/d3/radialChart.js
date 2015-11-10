@@ -1,15 +1,19 @@
 /* global d3 */
+/* global d3 */
 'use strict';
 
 var tools = require('./tools.js');
 
+var index = 0;
+
 // Adapted from: http://bl.ocks.org/bricedev/8aaef92e64007f882267
 // Uses Bostock's Reusable Chart Convention http://bost.ocks.org/mike/chart/ 
 function radialChart() {
+  var inst = index++;
   
   var width = 300,
     height = width,
-    labelDistance = 1.04,
+    labelDistance = 8,
     animationDelay = 0,
     animationSegmentDelay = 100,
     animationDuration = tools.redsiftDuration(),
@@ -19,22 +23,37 @@ function radialChart() {
     minorTicks = 3,
     spokeOverhang = 15,
     labelOrient = "left",
-    barHeight = height / 2,
     animationEnd = null,
     cpfx = 'd3-rc',
     band = null,
     bandLabel = null,
-    inset = 0;
+    inset = 0,
+    selected = null;
 
   var formatNumber = d3.format(".0f");
 
   function impl(selection) {
+    var barHeight = (height / 2) - 30;
+    var labelRadius = barHeight + labelDistance;
+          
     selection.each(function(data) {
-      var svg = tools.svgRoot(this, width, height);
-
-      var g = svg.append("g")
-        .attr('class', cpfx)
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+      var svg = d3.select(this).select('svg');
+      var g = null;
+      var labels = null;
+      
+      var create = false;
+      if (svg.empty()) {
+        create = true;
+        svg = tools.svgRoot(this, width, height);
+        g = svg.append("g")
+          .attr('class', cpfx)
+          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+          
+      } else {
+        g = svg.select('.'+cpfx);
+        labels = g.select('.segment-label');
+      }
+      
 
       var extent = [1, d3.max(data, function(d) {
         return d.value;
@@ -79,6 +98,17 @@ function radialChart() {
           return "rotate(" + (i * 360 / numBars) + ")";
         });
 
+      function updateLabel(d, i) {
+          var t = d.valueText;
+          if (t === undefined) {
+            t = prefix + formatNumber(d.value);
+          } else if (typeof t === 'function') {
+            t = t();
+          }
+          selected = i;
+          g.select("#segment-label-" + i).classed('hover', true).text(t);
+      }
+        
       g.selectAll(".segment-bg")
         .data(data)
         .enter()
@@ -88,110 +118,165 @@ function radialChart() {
           d.outerRadius = barHeight + (2*spokeOverhang);
         })
         .attr("d", arc)
-        .on('mouseover', function(d, i) {
-            var t = prefix + formatNumber(d.value);
-            g.select("#segment-label-" + i).classed('hover', true).text(t);
-        })
+        .on('mouseover', updateLabel)
         .on("mouseout",function(d, i) {
             var t = keys[i];
+            selected = null;
             g.select("#segment-label-" + i).classed('hover', false).text(t);
         });
       
-      var segments = g.selectAll(".segment")
-        .data(data)
-        .enter()
+      var bind = g.selectAll(".segment")
+        .data(data);
+      
+      // update
+      bind.attr("class", "update");  
+      
+      // enter / new
+      bind.enter()
         .append("path")
-        .each(function(d) {
-          d.outerRadius = 0;
+        .attr('class', 'segment');
+        
+      bind.each(function(d, i) {
+          if (animation) {
+            if (d.animateFrom !== undefined) {
+              d.outerRadius = barScale(d.animateFrom);
+            } else {
+              d.outerRadius = 0;
+            }
+          } else {
+            d.outerRadius = barScale(d.value);
+          }
+          
+          if (i === selected) {
+            updateLabel(d, i);
+          }
         })
         .attr("d", arc)
         .attr('class', function(d) {
           return 'segment '+ (d.classed ? d.classed : '');
         })
         .style("fill", function(d) {
-          if (typeof(d.color) === 'function') return d.color();
+          if (typeof d.color === 'function') return d.color();
           
           return d.color;
         });
       
-      segments.transition().ease(animation).duration(animationDuration).delay(function(d, i) {
-          return animationDelay + (i * animationSegmentDelay);
-        })
-        .attrTween("d", function(d, index) {
-          var i = d3.interpolate(d.outerRadius, barScale(+d.value));
-          return function(t) {
-            d.outerRadius = i(t);
-            return arc(d, index);
-          };
-        })
-        .each("end", function() {
-          if (animationEnd) {
-            animationEnd();
-          }
-        });
-
-      if (band) {
-        var bnd = g.append("g")
+      // exit
+      bind.exit().remove();
+      
+      if (animation) {
+        bind.transition().ease(animation).duration(animationDuration).delay(function(d, i) {
+            return animationDelay + (i * animationSegmentDelay);
+          })
+          .attrTween("d", function(d, index) {
+            var i = d3.interpolate(d.outerRadius, barScale(d.value));
+            return function(t) {
+              d.outerRadius = i(t);
+              return arc(d, index);
+            };
+          })
+          .each("end", function() {
+            if (animationEnd) {
+              animationEnd();
+            }
+          });
+      }
+      if (band != null) {
+        var pth = null;
+        var bl = null;
+        var crc = null;
+        if (create) {
+          var bnd = g.append("g")
                 .attr('class', "band");
+          crc = bnd.append("circle");
+          
+          pth = bnd.append("def")
+            .append("path")
+            .attr("id", "band-path-"+inst);
+          
+          bl = bnd.append("text")
+            .attr("class", "label overlayed")
+            .style("text-anchor", "start")
+            .append("textPath")
+            .attr("xlink:href", "#band-path-"+inst);
+        } else {
+          var bnd = g.select('.band');
+          
+          crc = bnd.select('circle');
+          pth = bnd.select('#band-path-'+inst);
+          bl = bnd.select('textPath');
+        }
         
-        bnd.append("circle")
-          .attr("r", band);
-        var l = bandLabel;
-        if (l == null) 
-        {
-          l = prefix + formatNumber(band);
-        }  
+        var bandScaled = barScale(band);
+        function setBand() {
+          var bandRadius = bandScaled - inset;
+          pth.attr("d", "m0 " + bandRadius + " a" + bandRadius + " " + bandRadius + " 0 1,0 -0.01 0");
+  
+          var l = bandLabel;
+          if (l == null) 
+          {
+            l = prefix + formatNumber(band);
+          }          
+          bl.text(l);
+        }
         
-        var bandRadius = band - inset;
-        
-        bnd.append("def")
-          .append("path")
-          .attr("id", "band-path")
-          .attr("d", "m0 " + bandRadius + " a" + bandRadius + " " + bandRadius + " 0 1,0 -0.01 0");
-        
-        var bl = bnd.append("text")
-          .attr("class", "label overlayed")
-          .style("text-anchor", "start")
-          .append("textPath")
-          .attr("xlink:href", "#band-path")
-          .text(l);
+        if (animation) {
+          bl.text('');
+          crc.transition().ease(animation).duration(animationDuration).attr("r", bandScaled)
+            .each("end", setBand);
+        } else {
+            crc.attr("r", bandScaled);
+            setBand();     
+        }
       }  
       
+      var vals = null;
+      if (create) {
+        g.append("circle")
+          .attr("r", barHeight)
+          .classed("outer-line", true);
+        
+        vals = g.append("g")
+          .attr("class", "x axis label");
+      } else {
+        vals = g.select('.x');
+      }
 
-
-      g.append("circle")
-        .attr("r", barHeight)
-        .classed("outer-line", true);
-
-      var vals = g.append("g")
-        .attr("class", "x axis label");
-
-       var xAxis = d3.svg.axis()
+      var xAxis = d3.svg.axis()
         .scale(x).orient(labelOrient)
         .ticks(labelTicks)
         .tickFormat(function(v) {
           return prefix + formatNumber(v);
         });
+        
+      if (animation) {
+        vals = vals.transition().ease(animation).duration(animationDuration);
+      }
+        
       vals.call(xAxis);
 
       // Labels
-      var labelRadius = barHeight * labelDistance;
+      var def = null;
+      if (labels == null) {
+        labels = g.append("g")
+          .attr("class", "segment-label label");
+      
+        def = labels.append("def")
+          .append("path")
+          .attr("id", "label-path-"+inst)
+      } else {
+        def = labels.select('#label-path-'+inst);
+      }
 
-      var labels = g.append("g")
-        .attr("class", "segment-label label");
-
-      labels.append("def")
-        .append("path")
-        .attr("id", "label-path")
-        .attr("d", "m0 " + -labelRadius + " a" + labelRadius + " " + labelRadius + " 0 1,1 -0.01 0");
-
+      def.attr("d", "m0 " + -labelRadius + " a" + labelRadius + " " + labelRadius + " 0 1,1 -0.01 0");
+      
       labels.selectAll("text")
         .data(keys)
         .enter().append("text")
         .style("text-anchor", "middle")
         .append("textPath")
         .attr("id", function(d, i) { return "segment-label-" + i; })
-        .attr("xlink:href", "#label-path")
+        .attr("xlink:href", "#label-path-"+inst)
         .attr("startOffset", function(d, i) {
           return i * 100 / numBars + 50 / numBars + '%';
         })
