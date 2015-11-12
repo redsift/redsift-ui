@@ -6,6 +6,9 @@ var tools = require('./tools.js');
 
 var index = 0;
 
+// Special CSS under this size
+var SMALL_TH = 200;
+
 // Adapted from: http://bl.ocks.org/bricedev/8aaef92e64007f882267
 // Uses Bostock's Reusable Chart Convention http://bost.ocks.org/mike/chart/ 
 function radialChart() {
@@ -19,9 +22,7 @@ function radialChart() {
     animationDuration = tools.redsiftDuration(),
     animation = tools.redsiftEasing(),
     prefix = "",
-    labelTicks = 3,
-    minorTicks = 3,
-    spokeOverhang = 15,
+    spokeOverhang = 16,
     labelOrient = "left",
     animationEnd = null,
     cpfx = 'd3-rc',
@@ -36,9 +37,20 @@ function radialChart() {
   var axisPadding = 30;
   
   function impl(selection) {
+   
+    var minorTicks = 3;
+    var small = false;
+    if (height < SMALL_TH) {
+      small = true;
+      minorTicks = 2;
+      labelDistance = 4;
+      spokeOverhang = 8;
+    }
+    
     var barHeight = (height / 2) - 30;
     var labelRadius = barHeight + labelDistance;
     var axisSize = tickAxisSize + (band.length > 0 ? bandAxisSize : 0);      
+        
     selection.each(function(data) {
       var svg = d3.select(this).select('svg');
       var g = null;
@@ -49,7 +61,7 @@ function radialChart() {
         create = true;
         svg = tools.svgRoot(this, width + axisSize, height);
         g = svg.append("g")
-          .attr('class', cpfx)
+          .attr('class', cpfx + (small ? ' d3-small' : ''))
           .attr("transform", "translate(" + (width / 2 + axisSize) + "," + height / 2 + ")");
           
       } else {
@@ -175,56 +187,6 @@ function radialChart() {
             }
           });
       }
-      /*
-      if (band.length !== 0) {
-        var pth = null;
-        var bl = null;
-        var crc = null;
-        if (create) {
-          var bnd = g.append("g")
-                .attr('class', "band");
-          crc = bnd.append("circle");
-          
-          pth = bnd.append("def")
-            .append("path")
-            .attr("id", "band-path-"+inst);
-          
-          bl = bnd.append("text")
-            .attr("class", "label overlayed")
-            .style("text-anchor", "start")
-            .append("textPath")
-            .attr("xlink:href", "#band-path-"+inst);
-        } else {
-          var bnd = g.select('.band');
-          
-          crc = bnd.select('circle');
-          pth = bnd.select('#band-path-'+inst);
-          bl = bnd.select('textPath');
-        }
-        
-        var bandScaled = barScale(band);
-        function setBand() {
-          var bandRadius = bandScaled - inset;
-          pth.attr("d", "m0 " + bandRadius + " a" + bandRadius + " " + bandRadius + " 0 1,0 -0.01 0");
-  
-          var l = bandLabel;
-          if (l == null) 
-          {
-            l = prefix + formatNumber(band);
-          }          
-          bl.text(l);
-        }
-        
-        if (animation) {
-          bl.text('');
-          crc.transition().ease(animation).duration(animationDuration).attr("r", bandScaled)
-            .each("end", setBand);
-        } else {
-            crc.attr("r", bandScaled);
-            setBand();     
-        }
-      }  
-      */
       
       var vals = null;
       var bvals = null;
@@ -248,7 +210,7 @@ function radialChart() {
 
       var xAxis = d3.svg.axis()
         .scale(x).orient(labelOrient)
-        .ticks(labelTicks)
+        .ticks(minorTicks)
         .tickFormat(function(v) {
           return prefix + formatNumber(v);
         });
@@ -374,12 +336,6 @@ function radialChart() {
     return impl;
   };
 
-  impl.labelDistance = function(value) {
-    if (!arguments.length) return labelDistance;
-    labelDistance = value;
-    return impl;
-  };
-
   impl.animationEnd = function(value) {
     if (!arguments.length) return animationEnd;
     animationEnd = value;
@@ -413,24 +369,6 @@ function radialChart() {
   impl.prefix = function(value) {
     if (!arguments.length) return prefix;
     prefix = value;
-    return impl;
-  };
-
-  impl.labelTicks = function(value) {
-    if (!arguments.length) return labelTicks;
-    labelTicks = value;
-    return impl;
-  };
-
-  impl.minorTicks = function(value) {
-    if (!arguments.length) return minorTicks;
-    minorTicks = value;
-    return impl;
-  };
-
-  impl.spokeOverhang = function(value) {
-    if (!arguments.length) return spokeOverhang;
-    spokeOverhang = value;
     return impl;
   };
 

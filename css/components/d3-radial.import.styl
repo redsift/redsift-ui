@@ -80,6 +80,22 @@ radial-chart($labelColour = #3e3e3e, $tickColour = black) {
     .xb.axis line {
       stroke-width: 2px;
     }
+   }
+
+    /* Small classes */
+  .d3-small {
+    .outer-line {
+      stroke-width: 0.5px;
+    }
     
+    .segment-label :not(.hover) {
+      font-size: 0.8em;
+    }
+    
+    
+    .segment-label .hover {
+      font-size: 1.0em;
+	   }
   }
+
 }
