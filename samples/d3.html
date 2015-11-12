@@ -125,7 +125,9 @@
 			.range(SEGMENTS);
 
 		function _dummyData(range) {
-			return Redsift.Lang.localShortMonths().map(function(m, i) {
+			var r = Redsift.Lang.localShortMonths();
+			r = r.concat(Redsift.Lang.localShortMonths(), Redsift.Lang.localShortMonths());		
+			return r.map(function(m, i) {
 				var v = Math.random() * range;
 				return {
 					name: m,
@@ -133,7 +135,7 @@
 					color: function () { return color(v) },
 					classed: (i !== 1) ? undefined : 'stripe'
 				};
-			});
+			}).filter(function (d, i) { return i < 12; });
 		}
 
       	// present the charts on the nodes
@@ -151,7 +153,7 @@
 		d3.select('#one').datum(data1).call(chart1);
 		
 		var chart2 = radialChart()
-			.width(250)
+			.width(150)
 			.prefix('£')
 			.animationSegmentDelay(delay)
 			.animationDelay(chart1.animationDuration() * 0.56)
@@ -162,7 +164,7 @@
 		d3.select('#two').datum(data2).call(chart2);
 		d3.select('#three').datum(data2).call(chart2);
 		
-		/*
+		
 		var count = 0;
 		setInterval(function() {
 			var dataUp = _dummyData((Math.random() * 400) + 20);
@@ -172,7 +174,7 @@
 			chart1.band(avg, '#' + count + ', £' + fmt(avg), -3);
 			
 			d3.select('#one').datum(dataUp).call(chart1);
-		}, 1500);
+		}, 2500);
 		
 		setInterval(function() {
 			var newData = data2.map(function(d) {
@@ -182,8 +184,8 @@
 			});
 			
 			d3.select('#two').datum(newData).call(chart2);
-		}, 1000);
-		*/
+		}, 2000);
+		
 		
 	</script>
   </body>
