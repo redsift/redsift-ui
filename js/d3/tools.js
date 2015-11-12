@@ -31,6 +31,13 @@ var Tools = {
   redsiftBezier: function() {
     return BezierEasing(0.175, 0.885, 0.335, 1.155);  
   },
+  preconnectTo: function(url) {
+    // taken from https://www.igvita.com/2015/08/17/eliminating-roundtrips-with-preconnect/
+    var hint = document.createElement("link");
+    hint.rel = "preconnect";
+    hint.href = url;
+    document.head.appendChild(hint);
+  },
   createCSSRuleSheet: function(media) {
     // Create the <style> tag
     var style = document.createElement("style");

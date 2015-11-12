@@ -4,13 +4,14 @@
   <link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
   <style>
 	/* --- Chart layout --- */
-
+	
     div.chart {
+		margin: 1em;
 		display: flex;
 		flex-direction: column;
 	}
 	div.chart h3 {
-		text-align: center;
+		text-align: left;
 	}	
 	
 	/* --- Chart customisation --- */
@@ -48,9 +49,7 @@
 	}
 	
 	/* --- Hide circular tick lines  --- */	 
-	.d3-rc .tick-line {
-		visibility: hidden;
-	}
+
 	
   </style>
   </head>
@@ -58,16 +57,16 @@
   <body>
 	<div class="cards">
 		<div class="chart">
-			<div id="one"></div>
 			<h3 id="one-label" class="hidden animate-opacity">2015</h3>
+			<div id="one"></div>
 		</div>
 		<div class="chart">
-			<div id="two"></div>
 			<h3 class="hidden animate-opacity">2014</h3>
+			<div id="two"></div>
 		</div>
 		<div class="chart">
-			<div id="three"></div>
 			<h3 class="hidden animate-opacity">2013</h3>
+			<div id="three"></div>
 		</div>
 		<div class="themes">
 			<div id="theme"></div>
@@ -82,8 +81,8 @@
 		var SEGMENT_BG = "#FFDE00";
 		var BAND = "#7fcdbb";
 		var P_A = 45;
-		var P_X = 1;
-		var P_Y = 2;
+		var P_X = 3;
+		var P_Y = 4;
 		var P_S = 5;
 		// end knobs
 			
@@ -116,7 +115,7 @@
 		var fmt = d3.format(",.0f");
 		var total = data1.reduce(function(p, d) { return p + d.value }, 0);
 		var avg = total/data1.length;
-		var data1Band = "£" + fmt(total) + "/y £" + fmt(avg) + "/m";	
+		var data1Band = "£" + fmt(avg) + "/m";	
 
 
 		var max = d3.max(data1.concat(data2), function(d) { return d.value; });
@@ -143,7 +142,7 @@
 		var chart1 = radialChart()
 			.width(400)
 			.prefix('£')
-			.band(max / 2, data1Band, -3)
+			.band(avg, data1Band, -3)
 			.animationSegmentDelay(delay)
 			.animationEnd(function() {
 				d3.select('#one-label').classed('hidden', false);
@@ -163,13 +162,14 @@
 		d3.select('#two').datum(data2).call(chart2);
 		d3.select('#three').datum(data2).call(chart2);
 		
+		/*
 		var count = 0;
 		setInterval(function() {
 			var dataUp = _dummyData((Math.random() * 400) + 20);
 			var max = d3.max(dataUp, function(d) { return d.value; });
 			count++;
 			var avg = (max / 2) + (Math.random() * 20) - 10;
-			chart1.band(avg, 'Update ' + count + ', Avg £' + fmt(avg), -3);
+			chart1.band(avg, '#' + count + ', £' + fmt(avg), -3);
 			
 			d3.select('#one').datum(dataUp).call(chart1);
 		}, 1500);
@@ -183,7 +183,7 @@
 			
 			d3.select('#two').datum(newData).call(chart2);
 		}, 1000);
-		
+		*/
 		
 	</script>
   </body>

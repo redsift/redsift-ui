@@ -31,11 +31,7 @@ radial-chart($labelColour = #3e3e3e, $tickColour = black) {
       fill: none;
     }
     
-    .band {
-      fill: rgba(200,200,200,0.2)
-    }
-    
-    .band circle {
+    circle {
       pointer-events: none;
     }
     
@@ -48,11 +44,14 @@ radial-chart($labelColour = #3e3e3e, $tickColour = black) {
       pointer-events: visible;
     }
     
+    .band-line,
     .tick-line {
-      stroke: grey;
-      stroke-width: 0.5px;
-      stroke-dasharray: 2,2;
+      stroke: #999;
+      stroke-width: 1.5px;
+      stroke-dasharray: 5,2;
       fill: none;
+      opacity: 0.0;
+      transition: opacity $curveRedsift $timeRedsift;
     }
     
     .spokes {
@@ -64,16 +63,23 @@ radial-chart($labelColour = #3e3e3e, $tickColour = black) {
     .axis line {
       fill: none;
       stroke: $tickColour;
-      stroke-width: 2.5px;
+      stroke-width: 1px;
       shape-rendering: crispEdges;
     }
     
     .axis text {
       @extend .overlayed;
+      pointer-events: visible;
+      cursor: crosshair;
     }
    
-    .x.axis path {
+    .xb.axis path {
       display: none;
     }
+    
+    .xb.axis line {
+      stroke-width: 2px;
+    }
+    
   }
 }
