@@ -22,7 +22,7 @@ function radialChart() {
     animationDuration = tools.redsiftDuration(),
     animation = tools.redsiftEasing(),
     prefix = "",
-    spokeOverhang = 16,
+    spokeOverhang = 14,
     labelOrient = "left",
     animationEnd = null,
     cpfx = 'd3-rc',
