@@ -25,17 +25,20 @@ function radialChart() {
     labelOrient = "left",
     animationEnd = null,
     cpfx = 'd3-rc',
-    band = null,
-    bandLabel = null,
+    band = [],
+    bandLabel = [],
     inset = 0,
     selected = null;
 
   var formatNumber = d3.format(".0f");
-
+  var tickAxisSize = 50;
+  var bandAxisSize = 40;
+  var axisPadding = 30;
+  
   function impl(selection) {
     var barHeight = (height / 2) - 30;
     var labelRadius = barHeight + labelDistance;
-          
+    var axisSize = tickAxisSize + (band.length > 0 ? bandAxisSize : 0);      
     selection.each(function(data) {
       var svg = d3.select(this).select('svg');
       var g = null;
@@ -44,16 +47,15 @@ function radialChart() {
       var create = false;
       if (svg.empty()) {
         create = true;
-        svg = tools.svgRoot(this, width, height);
+        svg = tools.svgRoot(this, width + axisSize, height);
         g = svg.append("g")
           .attr('class', cpfx)
-          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+          .attr("transform", "translate(" + (width / 2 + axisSize) + "," + height / 2 + ")");
           
       } else {
         g = svg.select('.'+cpfx);
         labels = g.select('.segment-label');
       }
-      
 
       var extent = [1, d3.max(data, function(d) {
         return d.value;
@@ -71,15 +73,6 @@ function radialChart() {
         .domain(extent)
         .range([0, -barHeight]);
 
-
-      var circles = g.selectAll("circle")
-        .data(x.ticks(minorTicks))
-        .enter().append("circle")
-        .attr("r", function(d) {
-          return barScale(d);
-        })
-        .classed("tick-line", true);
-
       var arc = d3.svg.arc()
         .startAngle(function(d, i) {
           return (i * 2 * Math.PI) / numBars;
@@ -89,7 +82,8 @@ function radialChart() {
         })
         .innerRadius(0);
       
-      var lines = g.selectAll("line")
+      // Spokes
+      g.selectAll("line")
         .data(keys)
         .enter().append("line")
         .attr("y2", -barHeight - spokeOverhang)
@@ -181,7 +175,8 @@ function radialChart() {
             }
           });
       }
-      if (band != null) {
+      /*
+      if (band.length !== 0) {
         var pth = null;
         var bl = null;
         var crc = null;
@@ -229,17 +224,26 @@ function radialChart() {
             setBand();     
         }
       }  
+      */
       
       var vals = null;
+      var bvals = null;
+
       if (create) {
         g.append("circle")
           .attr("r", barHeight)
           .classed("outer-line", true);
-        
+        var offset = (width + (axisSize - axisPadding)) / 2;
         vals = g.append("g")
-          .attr("class", "x axis label");
+          .attr("class", "x axis label")
+          .attr("transform", "translate(-" + offset + ",0)");
+
+        bvals = g.append("g")
+          .attr("class", "xb axis label")
+          .attr("transform", "translate(-" + offset + ",0)");
       } else {
         vals = g.select('.x');
+        bvals = g.select('.xb');
       }
 
       var xAxis = d3.svg.axis()
@@ -252,9 +256,68 @@ function radialChart() {
       if (animation) {
         vals = vals.transition().ease(animation).duration(animationDuration);
       }
-        
       vals.call(xAxis);
 
+      function tickHandlers(selection) {
+        return {
+          showTick: function (d, s) {
+            g.selectAll(selection).filter(function(d, i) { return (i === s); }).attr('style', 'opacity: 1.0');
+          },    
+          hideAllTicks: function () {
+            g.selectAll(selection).attr('style', 'opacity: 0.0');
+          }
+        }
+      }
+
+      var onmousetl = tickHandlers('.tick-line');
+      
+      g.select('.x').selectAll('text')
+        .on('mouseover', onmousetl.showTick)
+        .on("mouseout", onmousetl.hideAllTicks);
+
+      if (band.length !== 0) {
+        if (animation) {
+          bvals = bvals.transition().ease(animation).duration(animationDuration);
+        }
+        
+        var bandAxis = d3.svg.axis()
+          .scale(x).orient(labelOrient === 'left' ? 'right' : 'left')
+          .tickValues([ band ])
+          .tickFormat(function(v, i) {
+            if (bandLabel.length > i) {
+              var l = bandLabel[i];
+              if (l != null) return l;
+            }
+            return prefix + formatNumber(v);
+          });
+        bvals.call(bandAxis);
+
+       g.selectAll(".band-line")
+        .data(band)
+        .enter().append("circle")
+        .attr("r", function(d) {
+          return barScale(d);
+        })
+        .classed("band-line", true);
+        
+
+      var onmousebl = tickHandlers('.band-line');
+
+      g.select('.xb').selectAll('text')
+        .on('mouseover', onmousebl.showTick)
+        .on("mouseout", onmousebl.hideAllTicks);        
+        
+      }
+      
+      // Tick lines
+      g.selectAll(".tick-line")
+        .data(x.ticks(minorTicks))
+        .enter().append("circle")
+        .attr("r", function(d) {
+          return barScale(d);
+        })
+        .classed("tick-line", true);
+      
       // Labels
       var def = null;
       if (labels == null) {
@@ -289,6 +352,15 @@ function radialChart() {
 
   impl.band = function(value, label, i) {
     if (!arguments.length) return band;
+    
+    if (!Array.isArray(value)) {
+      value = [ value ];
+    }
+    
+    if (!Array.isArray(label)) {
+      label = [ label ];
+    }
+    
     band = value;
     bandLabel = label;
     inset = i;
