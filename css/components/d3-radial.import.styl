@@ -84,6 +84,10 @@ radial-chart($labelColour = #3e3e3e, $tickColour = black) {
 
     /* Small classes */
   .d3-small {
+    .axis text {
+      font-size: 0.8em;
+    }
+  
     .outer-line {
       stroke-width: 0.5px;
     }
@@ -91,7 +95,6 @@ radial-chart($labelColour = #3e3e3e, $tickColour = black) {
     .segment-label :not(.hover) {
       font-size: 0.8em;
     }
-    
     
     .segment-label .hover {
       font-size: 1.0em;
