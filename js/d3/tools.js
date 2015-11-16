@@ -1,3 +1,4 @@
+/* global d3 */
 'use strict';
 
 var BezierEasing = require('../../node_modules/bezier-easing/index.js');
