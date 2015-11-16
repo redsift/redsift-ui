@@ -28,7 +28,6 @@ function radialChart() {
     cpfx = 'd3-rc',
     band = [],
     bandLabel = [],
-    inset = 0,
     selected = null;
 
   var formatNumber = d3.format(".0f");
@@ -325,7 +324,7 @@ function radialChart() {
     });
   }
 
-  impl.band = function(value, label, i) {
+  impl.band = function(value, label) {
     if (!arguments.length) return band;
     
     if (!Array.isArray(value)) {
@@ -338,7 +337,6 @@ function radialChart() {
     
     band = value;
     bandLabel = label;
-    inset = i;
     return impl;
   };
 
