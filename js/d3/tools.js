@@ -115,7 +115,10 @@ var Tools = {
     if (parent === undefined) {
       parent = 'body';
     }
-     var defs = d3.select(parent).append("svg").append("defs");
+     var defs = d3.select(parent)
+      .append("svg")
+      .attr("style", "display: block; width: 0px; height: 0px;")
+      .append("defs");
      
      return defs;
   },
