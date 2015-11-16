@@ -55,11 +55,11 @@ function radialChart() {
       var svg = d3.select(this).select('svg');
       var g = null;
       var labels = null;
-      
+      var svgWidth = width + axisSize;
       var create = false;
       if (svg.empty()) {
         create = true;
-        svg = tools.svgRoot(this, width + axisSize, height);
+        svg = tools.svgRoot(this, svgWidth, height);
         g = svg.append("g")
           .attr('class', cpfx + (small ? ' d3-small' : ''))
           .attr("transform", "translate(" + (width / 2 + axisSize) + "," + height / 2 + ")");
@@ -68,6 +68,11 @@ function radialChart() {
         g = svg.select('.'+cpfx);
         labels = g.select('.segment-label');
       }
+
+      svg
+        .attr('width', svgWidth)
+        .attr('height', height);
+      
 
       var extent = [1, d3.max(data, function(d) {
         return d.value;
@@ -85,25 +90,21 @@ function radialChart() {
         .domain(extent)
         .range([0, -barHeight]);
 
-      var arc = d3.svg.arc()
-        .startAngle(function(d, i) {
-          return (i * 2 * Math.PI) / numBars;
-        })
-        .endAngle(function(d, i) {
-          return ((i + 1) * 2 * Math.PI) / numBars;
-        })
-        .innerRadius(0);
-      
       // Spokes
-      g.selectAll("line")
-        .data(keys)
-        .enter().append("line")
-        .attr("y2", -barHeight - spokeOverhang)
+      var spokes = g.selectAll("line")
+        .data(keys);
+        
+      spokes.enter().append("line")
         .classed("spokes", true)
         .attr("transform", function(d, i) {
           return "rotate(" + (i * 360 / numBars) + ")";
         });
 
+      spokes.attr("y2", -barHeight - spokeOverhang);
+      // -- End Spokes
+      
+      
+      // Segment Background
       function updateLabel(d, i) {
           var t = d.valueText;
           if (t === undefined) {
@@ -114,6 +115,15 @@ function radialChart() {
           selected = i;
           g.select("#segment-label-" + i).classed('hover', true).text(t);
       }
+      
+      var arc = d3.svg.arc()
+      .startAngle(function(d, i) {
+        return (i * 2 * Math.PI) / numBars;
+      })
+      .endAngle(function(d, i) {
+        return ((i + 1) * 2 * Math.PI) / numBars;
+      })
+      .innerRadius(0);
         
       g.selectAll(".segment-bg")
         .data(data)
@@ -130,14 +140,15 @@ function radialChart() {
             selected = null;
             g.select("#segment-label-" + i).classed('hover', false).text(t);
         });
+      // -- End Segment Background
       
+      
+      // Segment      
       var bind = g.selectAll(".segment")
         .data(data);
-      
-      // update
+
       bind.attr("class", "update");  
       
-      // enter / new
       bind.enter()
         .append("path")
         .attr('class', 'segment');
@@ -166,8 +177,7 @@ function radialChart() {
           
           return d.color;
         });
-      
-      // exit
+
       bind.exit().remove();
       
       if (animation) {
@@ -187,26 +197,29 @@ function radialChart() {
             }
           });
       }
+      // End Segment
       
+      var circle = null;
       var vals = null;
       var bvals = null;
 
       if (create) {
-        g.append("circle")
-          .attr("r", barHeight)
-          .classed("outer-line", true);
-        var offset = (width + (axisSize - axisPadding)) / 2;
+        circle = g.append("circle")
+          .attr("class", "outer-line");
         vals = g.append("g")
-          .attr("class", "x axis label")
-          .attr("transform", "translate(-" + offset + ",0)");
-
+          .attr("class", "x axis label");
         bvals = g.append("g")
-          .attr("class", "xb axis label")
-          .attr("transform", "translate(-" + offset + ",0)");
+          .attr("class", "xb axis label");
       } else {
+        circle = g.select('.outer-line');
         vals = g.select('.x');
         bvals = g.select('.xb');
       }
+
+      circle.attr("r", barHeight);   
+      var offset = (width + (axisSize - axisPadding)) / 2;
+      vals.attr("transform", "translate(-" + offset + ",0)");
+      bvals.attr("transform", "translate(-" + offset + ",0)");
 
       var xAxis = d3.svg.axis()
         .scale(x).orient(labelOrient)
