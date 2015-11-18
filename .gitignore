@@ -4,3 +4,7 @@ node_modules
 distribution
 
 bower_components
+
+npm-debug.log
+
+samples/sync.html
