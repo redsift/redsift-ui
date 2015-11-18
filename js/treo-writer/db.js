@@ -10,6 +10,7 @@ function DB(treo, max) {
   this.count = 0;
   this.outstanding = [];
   this.runningTotal = 0;
+  this.puts = 0;
   this.max = MAX_TRANSACTIONS;
   if (max) {
     this.max = max;
@@ -22,11 +23,17 @@ DB.prototype.tm = null;
 
 DB.prototype.max = 0;
 
+DB.prototype.puts = 0;
+
 DB.prototype.runningTotal = 0;
 
 DB.prototype.outstanding = null;
 
 DB.prototype.countQueue = function() {
+  return this.puts;
+};
+
+DB.prototype.countTransactionsQueue = function() {
   return this.outstanding.length;
 };
 
@@ -46,6 +53,7 @@ DB.prototype.shiftq = function(store, q, name, on) {
   var e = q.shift();
   if (e) {
     var req = store.put(e.v);
+    this.puts = this.puts - 1;
     req.onsuccess = function() {
       // Technically the transaction could still be aborted/fail so slightly wrong
       e.r();
@@ -102,7 +110,7 @@ DB.prototype.put = function(store, val) {
   var treo = this.treo;
   var tm = this.tm;
   var q = tm[store];
-
+  this.puts = this.puts + 1;
   return new Promise(function (resolve, reject) {
     var entry = { v: val, r: resolve, j: reject };
     if (q == null) {
