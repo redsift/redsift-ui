@@ -52,7 +52,7 @@ DB.prototype.shiftq = function(store, q, name, on) {
   var self = this;
   var e = q.shift();
   if (e) {
-    var req = store.put(e.v);
+    var req = store.put(e.v, e.k);
     this.puts = this.puts - 1;
     req.onsuccess = function() {
       // Technically the transaction could still be aborted/fail so slightly wrong
@@ -105,14 +105,14 @@ DB.prototype.gate = function(cb) {
     }
 }
 
-DB.prototype.put = function(store, val) {
+DB.prototype.put = function(store, val, optionalKey) {
   var self = this;
   var treo = this.treo;
   var tm = this.tm;
   var q = tm[store];
   this.puts = this.puts + 1;
   return new Promise(function (resolve, reject) {
-    var entry = { v: val, r: resolve, j: reject };
+    var entry = { v: val, r: resolve, j: reject, k: optionalKey };
     if (q == null) {
       q = [ entry ];
       tm[store] = q;
