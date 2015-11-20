@@ -1,15 +1,23 @@
 
 @import 'redsift' 
+@import 'brand.import' 
 
-$bg = white
+
+$bg = $brandWhite
 $codeBg = #f7f7f7
-$textColour = #3e3e3e
+$textColour = $brandBlack
 $linkColour = $textColour
-$hoverColour = #ed1651
+$hoverColour = $brandRed
 $visitedColour = $linkColour
 $lineColour = #666
 
 colour-system($textColour, $bg, $linkColour, $hoverColour, $visitedColour, $hoverColour, $codeBg)
+
+
+$sliderHighlight = $brandRed
+$sliderThumb = $brandWhite
+$sliderBackground = $brandGrey
+create-range($sliderHighlight, $sliderThumb, $sliderBackground);
 
 radial-chart($textColour, $lineColour)
  
