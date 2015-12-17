@@ -1,0 +1,24 @@
+@import 'common.import'
+@import 'animation.import'
+
+.down-arrow {
+    display: block;
+    width: 20px;
+    height: 30px;
+    margin-right: auto;
+    margin-left: auto;
+    padding: $padding;
+    float: none;
+    clear: none;
+    background-image: url("https://static.redsift.io/assets/icons/down-arrow-white-1.0.svg");
+    background-position: 50% 50%;
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    opacity: 0.6;
+    background-color: transparent;
+    transition: opacity $curveRedsift $timeRedsift;
+}
+
+.down-arrow:hover {
+    opacity: 1;
+}
