@@ -3,8 +3,6 @@
   <link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
   <link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
   <style>
-    
-        
     .hero-1 {
       /* Specify an image for the hero section, the default res image is the safest bet */
       background-image: url('//static.redsift.io/assets/images/taxi-1.jpg');
@@ -18,7 +16,16 @@
           url('//static.redsift.io/assets/images/taxi-1_2x.jpg') 2x
       ); 
     }
-
+    
+    .bar {
+      box-shadow: 0px 0px 2px 2px rgba(0,0,0,0.15);
+      background-image: url('//static.redsift.io/assets/images/taxi-1.jpg');
+      background-image: -webkit-image-set(
+          url('//static.redsift.io/assets/images/taxi-1.jpg') 1x,
+          url('//static.redsift.io/assets/images/taxi-1_2x.jpg') 2x
+      ); 
+    }
+    
     /* Optional: specify a set of WebP hero images based on screen DPI, faster downloads */
     @supports (background-image: url('//static.redsift.io/assets/images/taxi-1.webp')) {
       .hero-1 {
@@ -27,6 +34,13 @@
           url('//static.redsift.io/assets/images/taxi-1_2x.webp') 2x
         );
       }
+      
+      .bar {
+        background-image: -webkit-image-set(
+          url('//static.redsift.io/assets/images/taxi-1.webp') 1x,
+          url('//static.redsift.io/assets/images/taxi-1_2x.webp') 2x
+        );
+      }      
     } 
 
     .hero-2 {
@@ -40,8 +54,8 @@
 
   <body>
     <div class="hero darken hero-1">
-      <div class="container">
-        <h1>Taxi Sift</h1>
+      <div class="floating" id="heading"><h1>Taxi Sift</h1></div>
+      <div class="container center-third">
         <code class="fade-in">£17.50</code>
         <p class="fade-in delay">Your taxi bills from last week</p>
         <a href="#data" id="smooth">
@@ -63,10 +77,27 @@
       </div>
     </section>
     
+    <div class="content" id="data">
+      <div class="container expand">
+        <h2>Second content</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+      </div>
+    </div>    
+    
     <script src="/js/redsift-global.es5.min.js"></script>
     <script>
-      // Specify an anchor link to setup as smooth scroll
-      Redsift.Scroll.initSmooth("#smooth");
+      document.addEventListener("DOMContentLoaded", function() {
+        // Specify an anchor link to setup as smooth scroll
+        // As we have a floating header the anchor is wrong due to
+        // the height of the header, hence offset the scroll 
+        // Note: this offset dance not work in the case of page load
+        var offset = document.getElementById("heading").getBoundingClientRect().height;
+        Redsift.Scroll.initSmooth("#smooth", -offset);
+        // Make the bar toggle the class on and off based on overlap with content
+        Redsift.Scroll.toggleClass(".floating", "bar", ".content");
+        this.removeEventListener("DOMContentLoaded", arguments.callee);
+      });
+      
     </script>
   </body>
 

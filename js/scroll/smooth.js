@@ -3,18 +3,6 @@
 
 var SCROLL_DURATION = 200;
 
-function elementScrollTop(e)
-{
-    var top = 0;
-    while (e.offsetParent !== undefined && e.offsetParent !== null)
-    {
-        top += e.offsetTop + (e.clientTop != null ? e.clientTop : 0);
-        e = e.offsetParent;
-    }
-
-    return top;
-}
-
 function docScrollTop()
 {
     return document.documentElement.scrollTop + document.body.scrollTop;
@@ -89,21 +77,120 @@ function smooth_scroll_to(element, target, duration) {
     });
 }
 
-function clickFor(to) {
+function clickFor(to, offset) {
     return function(evt) { 
         var target = document.getElementById(to);
         if (target === undefined) {
             return true;
         }
-        var delta = elementScrollTop(target);
+        offset = offset || 0;
+        var delta = getAbsoluteBoundingRect(target).top + offset;
         smooth_scroll_to(document.body, delta, SCROLL_DURATION).catch(function (e) { console.error(e); } );
         evt.preventDefault();
         return false;
     }
 }
 
+var scrollNodes = [];
+
+function throttle(type, name, obj) {
+    obj = obj || window;
+    var running = false;
+    var func = function() {
+        if (running) { return; }
+        running = true;
+        requestAnimationFrame(function() {
+            obj.dispatchEvent(new CustomEvent(name));
+            running = false;
+        });
+    };
+    obj.addEventListener(type, func);
+}
+    
+function onScroll() {
+    var pos = window.scrollY;
+    scrollNodes.forEach(function (params) {
+        var node = params[0];
+        var current = params[1];
+        var cls = params[2];
+        var extents = params[4];
+        
+        var state = false;
+        for(var i=0; i<extents.length; i++) {
+            var extent = extents[i];
+            state = (pos > extent.start && pos < extent.end);    
+            if (state) {
+                break;
+            }
+        } 
+        
+        if (state === current) {
+            return;
+        }
+        params[1] = state;
+        if (state) {
+            node.classList.add(cls);
+        }
+        else {
+            node.classList.remove(cls);
+        }
+    });
+}
+
+function getAbsoluteBoundingRect(el) {
+    var doc  = document,
+        win  = window,
+        body = doc.body,
+
+        // pageXOffset and pageYOffset work everywhere except IE <9.
+        offsetX = win.pageXOffset !== undefined ? win.pageXOffset :
+            (doc.documentElement || body.parentNode || body).scrollLeft,
+        offsetY = win.pageYOffset !== undefined ? win.pageYOffset :
+            (doc.documentElement || body.parentNode || body).scrollTop,
+
+        rect = el.getBoundingClientRect();
+
+    if (el !== body) {
+        var parent = el.parentNode;
+
+        // The element's rect will be affected by the scroll positions of
+        // *all* of its scrollable parents, not just the window, so we have
+        // to walk up the tree and collect every scroll offset. Good times.
+        while (parent !== body) {
+            offsetX += parent.scrollLeft;
+            offsetY += parent.scrollTop;
+            parent   = parent.parentNode;
+        }
+    }
+
+    return {
+        bottom: rect.bottom + offsetY,
+        height: rect.height,
+        left  : rect.left + offsetX,
+        right : rect.right + offsetX,
+        top   : rect.top + offsetY,
+        width : rect.width
+    };
+}
+
+function updateRegions() {
+    scrollNodes.forEach(function (params) {
+        var target = params[0].getBoundingClientRect();
+        var overlap = params[3];
+        
+        var nodes = document.querySelectorAll(overlap);
+		var all = [];
+        for(var i=0; i<nodes.length; i++) {
+            var node = nodes[i];
+            var ext = getAbsoluteBoundingRect(node);
+            all.push({start: ext.top - target.height, end: ext.bottom });
+        }
+        params[4] = all;
+    });
+}
+
 var Scroll = {
-	initSmooth: function(selector) {
+	initSmooth: function(selector, offset) {
 		var nodes = document.querySelectorAll(selector);
 		for(var i=0; i<nodes.length; i++) {
 			var node = nodes[i];
@@ -116,10 +203,40 @@ var Scroll = {
                 continue;
             }
             
-            node.addEventListener('click', clickFor(to.substr(1)), false);
+            node.addEventListener('click', clickFor(to.substr(1), offset), false);
 		} 
-	}
+	},
+    getAbsoluteBoundingRect: getAbsoluteBoundingRect,
+    toggleClass: function(selector, cls, overlap) {
+		var nodes = document.querySelectorAll(selector);
+        if (nodes.length > 0) {
+            window.addEventListener('optimizedResize', updateRegions);
+            window.addEventListener('optimizedScroll', onScroll);
+        }
+		for(var i=0; i<nodes.length; i++) {
+			var node = nodes[i];
+            var param = [node, null, cls, overlap, []];
+            
+            // check for this node
+            var found = false;
+            for(var ii=0; i<scrollNodes.length; i++) {
+                if (scrollNodes[ii][0] == node) {
+                    scrollNodes[ii] = param;
+                    found = true;
+                    break;
+                }
+            }      
+            if (!found) {      
+                scrollNodes.push(param);
+            }
+        } 
+        updateRegions();
+        onScroll();       
+    }
 };
+
+throttle('scroll', 'optimizedScroll');
+throttle('resize', 'optimizedResize');
 
 if (typeof module !== 'undefined' && module.exports) { module.exports = Scroll; } // CommonJs export
 if (typeof define === 'function' && define.amd) { define([], function () { return Scroll; }); } // AMD
