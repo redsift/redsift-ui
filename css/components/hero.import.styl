@@ -1,6 +1,9 @@
 @import 'common.import'
 @import 'brand.import'
 
+$border = 1px
+$spacing = (2*$border) + (2*$padding)
+
 .hero {
 	height: $hero;
 	background-position: 50% 50%;
@@ -56,12 +59,15 @@
 }
 
 .content {
-	min-height: $hero;
+	min-height: ($hero - 2*$padding);
 	padding: $padding;
 }
 
 .content .container {
-	border: 1px solid $brandGrey;
+	border: $border solid $brandGrey;
 	border-radius: 3px;
-	height: 100%;
+}
+
+.content .container.expand {
+	min-height: ($hero - 2*$padding - 2*$border); 
 }
