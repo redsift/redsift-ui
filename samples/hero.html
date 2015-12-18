@@ -44,7 +44,7 @@
         <h1>Taxi Sift</h1>
         <code>£17.50</code>
         <p>Your taxi bills from last week</p>
-        <a href="#data">
+        <a href="#data" id="smooth">
           <div class="down-arrow"></div>
         </a>
       </div>
@@ -65,7 +65,8 @@
     
     <script src="/js/redsift-global.es5.min.js"></script>
     <script>
-
+      // Specify an anchor link to setup as smooth scroll
+      Redsift.Scroll.initSmooth("#smooth");
     </script>
   </body>
 

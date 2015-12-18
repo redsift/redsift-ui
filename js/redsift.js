@@ -5,6 +5,7 @@ var Lang = require('./lang/lang.js');
 var Timing = require('./timing/now.js');
 var TreoWriter = require('./treo-writer/db.js');
 var Widgets = require('./widgets/widgets.js');
+var Scroll = require('./scroll/smooth.js');
 
 if (window !== undefined) {
 	var ui = { };
@@ -19,6 +20,7 @@ if (window !== undefined) {
 	ui.Timing = Timing;
 	ui.TreoWriter = TreoWriter;
 	ui.Widgets = Widgets;
+	ui.Scroll = Scroll;
 			
 	window.Redsift = ui;
 }
