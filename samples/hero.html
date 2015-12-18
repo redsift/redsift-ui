@@ -1,5 +1,6 @@
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
   <link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
   <style>
@@ -9,7 +10,6 @@
       
       /* Also specify a BG color for the hero section to keep text readable, could use http://pieroxy.net/blog/pages/color-finder/demo.html */
       background-color: rgb(42, 24, 22);
-
       /* Optional: specify a set of hero images based on screen DPI */
       background-image: -webkit-image-set(
           url('//static.redsift.io/assets/images/taxi-1.jpg') 1x,
@@ -25,23 +25,6 @@
           url('//static.redsift.io/assets/images/taxi-1_2x.jpg') 2x
       ); 
     }
-    
-    /* Optional: specify a set of WebP hero images based on screen DPI, faster downloads */
-    @supports (background-image: url('//static.redsift.io/assets/images/taxi-1.webp')) {
-      .hero-1 {
-        background-image: -webkit-image-set(
-          url('//static.redsift.io/assets/images/taxi-1.webp') 1x,
-          url('//static.redsift.io/assets/images/taxi-1_2x.webp') 2x
-        );
-      }
-      
-      .bar {
-        background-image: -webkit-image-set(
-          url('//static.redsift.io/assets/images/taxi-1.webp') 1x,
-          url('//static.redsift.io/assets/images/taxi-1_2x.webp') 2x
-        );
-      }      
-    } 
 
     .hero-2 {
       /* Or you can just specify this and skip the quality and performance benefits of the additional markup */
@@ -54,6 +37,7 @@
 
   <body>
     <div class="hero darken hero-1">
+      <!-- Floating bars work poorly on mobile and are hidden by default -->
       <div class="floating" id="heading"><h1>Taxi Sift</h1></div>
       <div class="container center-third">
         <code class="fade-in">£17.50</code>
@@ -76,14 +60,14 @@
         <p>Just a message</p>
       </div>
     </section>
-    
+
     <div class="content" id="data">
       <div class="container expand">
         <h2>Second content</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
       </div>
     </div>    
-    
+  
     <script src="/js/redsift-global.es5.min.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function() {

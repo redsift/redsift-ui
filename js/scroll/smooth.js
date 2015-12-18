@@ -39,13 +39,17 @@ function smooth_scroll_to(element, target, duration) {
         // supposed to be, based on what we're doing
         var previous_top = element.scrollTop;
 
+        var timer = null;
         // This is like a think function from a game loop
         var scroll_frame = function() {
+            /*           
+            // This logic is too fragile
             if(element.scrollTop != previous_top) {
+                window.clearInterval(timer);
                 reject('interrupted');
                 return;
             }
-
+            */
             // set the scrollTop for this frame
             var now = Date.now();
             var point = smooth_step(start_time, end_time, now);
@@ -54,6 +58,7 @@ function smooth_scroll_to(element, target, duration) {
 
             // check if we're done!
             if(now >= end_time) {
+                window.clearInterval(timer);
                 resolve('done');
                 return;
             }
@@ -63,17 +68,15 @@ function smooth_scroll_to(element, target, duration) {
             // interrupted.
             if(element.scrollTop === previous_top
                 && element.scrollTop !== frameTop) {
+                window.clearInterval(timer);
                 resolve('limit');
                 return;
             }
             previous_top = element.scrollTop;
-
-            // schedule next frame for execution
-            setTimeout(scroll_frame, 0);
         }
-
+        
         // boostrap the animation process
-        setTimeout(scroll_frame, 0);
+        timer = setInterval(scroll_frame, 10);
     });
 }
 
@@ -206,7 +209,6 @@ var Scroll = {
             node.addEventListener('click', clickFor(to.substr(1), offset), false);
 		} 
 	},
-    getAbsoluteBoundingRect: getAbsoluteBoundingRect,
     toggleClass: function(selector, cls, overlap) {
 		var nodes = document.querySelectorAll(selector);
         if (nodes.length > 0) {
