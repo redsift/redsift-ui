@@ -21,8 +21,35 @@ $spacing = (2*$border) + (2*$padding)
 	background-repeat: no-repeat;
 	background-attachment: fixed;
 	background-size: cover;
-	background-color: none;
+	background-color: transparent;
 	padding: 0 $padding $padding $padding;
+}
+
+/* iPad [portrait + landscape] */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+	.hero {
+      	background-attachment: scroll;	
+	}
+	
+	.hero .floating {
+		background-position: 50% 100%;
+      	background-attachment: scroll;	
+	}
+}
+
+/* iPhone [portrait + landscape] */
+@media only screen and (max-device-width: 480px) {
+	.hero {
+		background-attachment: scroll;	
+	}
+
+	.hero .floating {
+		visibility: hidden;
+	}
+	
+	.hero .floating > * {
+		visibility: hidden;
+	}
 }
 	
 .hero.darken::before {
