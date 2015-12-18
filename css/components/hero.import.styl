@@ -8,13 +8,34 @@ section.hero {
 	background-attachment: fixed;
 	background-size: cover;
 }
+section.hero.darken::before {
+	content: " ";
+	background-color: black;
+	opacity: 0.2;
+	width: 100%;
+	height: $hero;
+	position: absolute;
+	z-index: 0;
+}
 
+section.hero.lighten::before {
+	content: " ";
+	background-color: white;
+	opacity: 0.2;
+	width: 100%;
+	height: $hero;
+	position: absolute;
+	z-index: 0;
+}	
+	
 section.hero > * {
     text-align: center;
 }
 
 section.hero div.container {
 	padding: 0 $padding $padding $padding; 
+	z-index: 1;
+	position: relative;
 }
 
 section.hero h1:first-of-type {
