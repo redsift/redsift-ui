@@ -3,7 +3,8 @@
   <link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
   <link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
   <style>
-    div.fb > div {
+    div.fb > div,
+    div.fb-h > div {
       margin: 0.1em;
       font-size: 10em;
       text-align: center;
@@ -18,6 +19,9 @@
 
     </div>
     
+    <div class="fb-h cards">
+
+    </div>
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="/js/redsift-global.es5.min.js"></script>
     <script>
@@ -48,6 +52,15 @@
         .style('background-color', function (d) { return d.c; })
         .style('color', function (d) { return ColorTools.textColorFor(d.c); })
         .text(function(d) { return d.t; });
+
+      d3.select('.fb-h').selectAll('.d3')
+          .data(data)
+        .enter().append('div')
+        .attr('class', 'd3 hash')
+        .style('background-color', function (d) { return d.c; })
+        .style('color', function (d) { return ColorTools.textColorFor(d.c); })
+        .text(function(d) { return d.t; });
+
     </script>
   </body>
 
