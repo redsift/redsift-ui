@@ -1,0 +1,79 @@
+@import 'brand.import'
+@import 'gradients.import'
+
+$disabledColour = #f1f1f1
+$dangerColour = #ed1651
+
+button {
+    border-radius: 3px;
+    padding: 12px 31px;
+    border: none;
+    background-color: $brandGrey;
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 1px $brandRed;
+}
+    
+button:hover {
+    background-color: #f7f7f7;
+}
+    
+button.danger {
+    color: white;
+    background-color: $dangerColour;
+}
+
+button.danger:hover {
+    background-color: $brandRed;
+}
+
+input[type="text"], 
+input[type="password"], 
+input[type="email"], 
+input[type="number"], 
+input[type="tel"], 
+input[type="url"], 
+select, 
+textarea {
+  min-height: 2.6em;
+  padding: 7px 8px;
+  color: #333;
+  vertical-align: bottom;
+  background-color: #fff;
+  background-repeat: no-repeat;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  outline: none;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
+}
+
+button:disabled {
+    background-image: pattern--core($disabledColour);
+}
+
+button:disabled:hover {
+    background-color: $brandGrey;
+    background-image: pattern--core($disabledColour);
+}
+
+button.danger:disabled {
+    background-image: pattern--core();
+}
+
+button.danger:disabled:hover {
+    background-color: $dangerColour;
+    background-image: pattern--core();
+}
+
+input[type="text"]:disabled, 
+input[type="password"]:disabled, 
+input[type="email"]:disabled, 
+input[type="number"]:disabled, 
+input[type="tel"]:disabled, 
+input[type="url"]:disabled, 
+select:disabled, 
+textarea:disabled {
+    background-image: pattern--core($disabledColour);
+}

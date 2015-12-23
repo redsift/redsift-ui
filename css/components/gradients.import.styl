@@ -1,0 +1,7 @@
+pattern--core(c = rgba(0,0,0,0.2), a = 125deg) {
+	repeating-linear-gradient(a, transparent, transparent 2px, c 2px, c 3px, transparent 3px, transparent 5px, c 5px)
+}
+
+gradient--core(colour) {
+	linear-gradient(to bottom, saturation(colour, 1.05 * saturation(colour)), saturation(colour, 0.91 * saturation(colour)))
+}
