@@ -3,7 +3,7 @@
   <link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
   <link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
   <style>
-    div {
+    body > div {
       margin: 1em;
     }
   </style>
@@ -31,6 +31,26 @@
       <input type='range' class='progress animated intermediate change' value='32' disabled/>
     </div>
 
+    <div>
+        <form accept-charset="UTF-8" action="/claim" method="get">
+          <input type="text" name="q" placeholder="Placeholder" autocapitalize="off">
+          <button>Claim</button>
+        </form>
+        <div class="informational">
+          <p class="small">Some information <a href="https://signin.redsift.io">Sift here</a>.</p>
+        </div>
+    </div>
+
+    <div>
+        <input type="text" name="q" placeholder="Disabled" disabled>
+        <button disabled>Disabled</button>
+    </div>
+    
+    <div>
+        <button class="danger">Danger</button>
+        <button class="danger" disabled>Disabled</button>
+    </div>
+    
     <script src="/js/redsift-global.es5.min.js"></script>
     <script>
       var Widgets = Redsift.Widgets;
