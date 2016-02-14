@@ -81,7 +81,11 @@ gulp.task('css-dark', function () {
     return makeCss('redsift-dark');
 });
 
-gulp.task('css', ['css-light', 'css-dark']);
+gulp.task('css-xtra', function () {
+    return makeCss('redsift-xtra');
+});
+
+gulp.task('css', ['css-light', 'css-dark', 'css-xtra']);
 
 gulp.task('browser-sync', function() {
     browserSync.init({

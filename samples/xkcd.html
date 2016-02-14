@@ -1,0 +1,114 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/redsift-xtra.min.css" title="light">
+  <style>
+
+    body {
+        margin: 1em;
+    } 
+	
+    path.say {
+        fill: black;
+    }
+    text.say {
+        fill: white;
+        font-size: 22px;
+    }
+    
+  </style>
+  </head>
+
+  <body>
+	<div class="xkcd">
+		<h1>Heading 1</h1>
+		<h2>Heading 2</h2>
+		<h3>Heading 3</h3>
+		<h4>Heading 4</h4>
+        <div class="panel">
+	    <code>
+            int getRandomNumber()</br>
+            {</br>
+            &emsp;    return 4;   // chosen by fair dice roll.</br>
+            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;                // guaranteed to be random.</br>
+            }
+        </code> 
+        </div>
+        <p>Para</p>
+        <div id="say"></div>
+        <p>Line Graph</p>
+        <div id="lines"></div>
+        <p>Arcs</p>
+        <div id="arcs"></div>
+      
+      </div>
+    
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="/js/redsift-global.es5.min.js"></script>
+    <script>
+        var bx = 0,
+            by = 0,
+            bw = 200,
+            bh = 35,
+            margin = 16;
+            
+        var svg = Redsift.D3.Tools.svgRoot('#say', bw+margin*2, bh+margin*2);
+        var el = svg.append("g")
+                    .attr("transform", "translate(" + margin + ", "
+                                                    + margin + ")");
+
+        var box = d3.svg.area().interpolate(Redsift.Xkcd.wiggle());
+        el.append("path")
+                .attr("class", "say")
+                .attr("d", box([[bx, 0], [bx, bh], [bw, bh], [bw, 0]]));
+		
+        el.append("text").attr("class", "say")
+                              .attr("x", 16)
+                              .attr("y", 22)
+                              .text("Hello Randall");
+        
+        var width = 400,
+            height = 100,
+            y0 = 80,
+            x0 = 20;
+        
+        var arrowSize = 12,
+            arrowAspect = 0.4,
+            arrowOffset = 6;
+        
+        var svg = Redsift.D3.Tools.svgRoot('#lines', width+margin*2, height+margin*2);
+        var el = svg.append("g")
+                    .attr("transform", "translate(" + margin + ", "
+                                                    + margin + ")");
+       
+        var axis = d3.svg.line().interpolate(Redsift.Xkcd.wiggle(0.9));
+        el.append("path")
+            .attr("class", "x axis")
+            .attr("d", axis([[0, y0], [width, y0]]));
+        el.append("path")
+            .attr("class", "y axis")
+            .attr("d", axis([[x0, 0], [x0, height]]));
+        var aa = arrowAspect * arrowSize,
+            o = arrowOffset,
+            s = arrowSize;
+        el.append("path")
+            .attr("class", "x axis arrow")
+            .attr("d", axis([[width - s + o, y0 + aa], [width + o, y0], [width - s + o, y0 - aa]]));
+        el.append("path")
+            .attr("class", "x axis arrow")
+            .attr("d", axis([[s - o, y0 + aa], [-o, y0], [s - o, y0 - aa]]));
+        el.append("path")
+            .attr("class", "y axis arrow")
+            .attr("d", axis([[x0 + aa, s - o], [x0, -o], [x0 - aa, s - o]]));
+        el.append("path")
+            .attr("class", "y axis arrow")
+            .attr("d", axis([[x0 + aa, height - s + o], [x0, height + o], [x0 - aa, height - s + o]]));
+
+        var svg = Redsift.D3.Tools.svgRoot('#arcs', width+margin*2, height+margin*2);
+        var el = svg.append("g")
+            .attr("transform", "translate(" + margin + ", "
+                                            + margin + ")");
+            
+	</script>
+  </body>
+
+</html>
