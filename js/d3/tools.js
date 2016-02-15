@@ -163,6 +163,23 @@ var Tools = {
             .attr('fill', 'white');
     
     return p;            
+  },
+  createCircle: function(start, end, step, l, cx, cy, sx, sy) {
+    if (cx === undefined) cx = 0;
+    if (cy === undefined) cy = 0;
+    if (sx === undefined) sx = 0;
+    if (sy === undefined) sy = 0;
+      
+    var circle = [];
+    for (var i=start; i<=end; i+=step) {
+        var rad = (i / 360) * 2 * Math.PI - (Math.PI / 2);
+        var sr = Math.sin(rad);
+        var cr = Math.cos(rad);
+        var x = l * cr + (sx * cr); 
+        var y = l * sr + (sy * sr);
+        circle.push([x + cx, y + cy]);
+    }
+    return circle;
   }
 };
 

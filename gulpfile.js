@@ -3,7 +3,7 @@
 var gulp = require('gulp');
 var stylus = require('gulp-stylus');
 var concat = require('gulp-concat');
-var minifyCss = require('gulp-minify-css');
+var minifyCss = require('gulp-cssnano');
 var sourcemaps = require('gulp-sourcemaps');
 var autoprefixer = require('gulp-autoprefixer');
 var rename = require('gulp-rename');
@@ -81,7 +81,11 @@ gulp.task('css-dark', function () {
     return makeCss('redsift-dark');
 });
 
-gulp.task('css', ['css-light', 'css-dark']);
+gulp.task('css-xtra', function () {
+    return makeCss('redsift-xtra');
+});
+
+gulp.task('css', ['css-light', 'css-dark', 'css-xtra']);
 
 gulp.task('browser-sync', function() {
     browserSync.init({
