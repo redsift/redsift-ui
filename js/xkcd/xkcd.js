@@ -23,7 +23,7 @@ function smooth(d, w) {
 var Xkcd = {
 	wiggle: function(perturbation, magnitude, fx, fy) {
 		if (perturbation === undefined) {
-			perturbation = 1.1;
+			perturbation = 0.93;
 		}
         
         if (magnitude === undefined) {

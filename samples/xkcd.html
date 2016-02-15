@@ -33,81 +33,83 @@
             }
         </code> 
         </div>
-        <p>Para</p>
+        <p>xkcd clock</p>
         <div id="say"></div>
-        <p>Line Graph</p>
-        <div id="lines"></div>
-        <p>Arcs</p>
-        <div id="arcs"></div>
-      
+        <div id="arrows"></div>
       </div>
     
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="/js/redsift-global.es5.min.js"></script>
     <script>
-        var bx = 0,
-            by = 0,
-            bw = 200,
-            bh = 35,
-            margin = 16;
+        var width = 400, height = 400, margin = 16;
             
-        var svg = Redsift.D3.Tools.svgRoot('#say', bw+margin*2, bh+margin*2);
-        var el = svg.append("g")
+        
+        // the xkcd style is applied as an interpolation function
+        // things like the scale of the wiggle can be supplied as a param
+        // set this to null to remove the wiggle
+        var style = Redsift.Xkcd.wiggle();
+                    
+        var svg = Redsift.D3.Tools.svgRoot('#say', width+margin*2, 30+margin*2);
+        var tl = svg.append("g")
                     .attr("transform", "translate(" + margin + ", "
                                                     + margin + ")");
+                                                    
+        var box = Redsift.D3.Components.box().classed('say').interpolation(style);  
 
-        var box = d3.svg.area().interpolate(Redsift.Xkcd.wiggle());
-        el.append("path")
-                .attr("class", "say")
-                .attr("d", box([[bx, 0], [bx, bh], [bw, bh], [bw, 0]]));
-		
-        el.append("text").attr("class", "say")
-                              .attr("x", 16)
-                              .attr("y", 22)
-                              .text("Hello Randall");
+
+        var ml = width / 2.5;
+        var hl = ml / 1.618;
         
-        var width = 400,
-            height = 100,
-            y0 = 80,
-            x0 = 20;
+        var el = Redsift.D3.Tools.svgRoot('#arrows', width+margin*2, height+margin*2)
+                    .append('g')
+                    .attr('transform', 'translate(' + margin + ', '
+                                                    + margin + ')');
         
-        var arrowSize = 12,
-            arrowAspect = 0.4,
-            arrowOffset = 6;
+        var m = 0;
+        var h = 0;        
+        var cx = width / 2;
+        var cy = height / 2;
+
         
-        var svg = Redsift.D3.Tools.svgRoot('#lines', width+margin*2, height+margin*2);
-        var el = svg.append("g")
-                    .attr("transform", "translate(" + margin + ", "
-                                                    + margin + ")");
+        // make the circle of the clock using a line                                
+        var face = Redsift.D3.Components.line().classed('face').interpolation(style);
+        // create the points on the line from 0 -> 360 deg in steps of 2 deg vectors centered
+        // at cx and cy with a slight oval shape in the y axis
+        var circle = Redsift.D3.Tools.createCircle(0, 360, 2, ml + margin, cx, cy, 0, height/18);
+        // bind the data to el and create the path
+        el.datum(circle).call(face);
+        
+        // make another line for the hands
+        var hands = Redsift.D3.Components.line().interpolation(style);
+                
+        function update() {
+            var mRad = m * 2/60 * Math.PI - (Math.PI / 2);
+            var mx = ml * Math.cos(mRad); 
+            var my = ml * Math.sin(mRad);
+            
+            var hRad = h * 2/24 * Math.PI - (Math.PI / 2);
+            var hx = hl * Math.cos(hRad); 
+            var hy = hl * Math.sin(hRad);            
+            
+            el.datum([[cx + hx, cy + hy], [cx, cy], [cx + mx, cy + my]])
+                .call(hands);
+                
+            tl.datum({x: 0, y: 0, t: "Randall's time " + (h < 10 ? ('0' + h) : h) + ':' + (m < 10 ? ('0' + m) : m), ty: 6, tx: 6}).call(box);                                                 
        
-        var axis = d3.svg.line().interpolate(Redsift.Xkcd.wiggle(0.9));
-        el.append("path")
-            .attr("class", "x axis")
-            .attr("d", axis([[0, y0], [width, y0]]));
-        el.append("path")
-            .attr("class", "y axis")
-            .attr("d", axis([[x0, 0], [x0, height]]));
-        var aa = arrowAspect * arrowSize,
-            o = arrowOffset,
-            s = arrowSize;
-        el.append("path")
-            .attr("class", "x axis arrow")
-            .attr("d", axis([[width - s + o, y0 + aa], [width + o, y0], [width - s + o, y0 - aa]]));
-        el.append("path")
-            .attr("class", "x axis arrow")
-            .attr("d", axis([[s - o, y0 + aa], [-o, y0], [s - o, y0 - aa]]));
-        el.append("path")
-            .attr("class", "y axis arrow")
-            .attr("d", axis([[x0 + aa, s - o], [x0, -o], [x0 - aa, s - o]]));
-        el.append("path")
-            .attr("class", "y axis arrow")
-            .attr("d", axis([[x0 + aa, height - s + o], [x0, height + o], [x0 - aa, height - s + o]]));
-
-        var svg = Redsift.D3.Tools.svgRoot('#arcs', width+margin*2, height+margin*2);
-        var el = svg.append("g")
-            .attr("transform", "translate(" + margin + ", "
-                                            + margin + ")");
-            
+    
+            m++;
+            if (m > 60) {
+                m = 0;
+                h++;
+                if (h > 24) {
+                    h = 0;
+                }
+            }    
+        }
+        update();
+                
+        // increment ever 200ms
+       setInterval(update, 200);
 	</script>
   </body>
 
