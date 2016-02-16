@@ -41,7 +41,10 @@
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="/js/redsift-global.es5.min.js"></script>
     <script>
-        var width = 400, height = 400, margin = 16;
+        // https://static.redsift.io/ui/latest/css/redsift-xtra.min.css
+        // https://static.redsift.io/ui/latest/js/redsift-global.es5.min.js
+
+        var width = 400, height = 400, textHeight = 30, margin = 16;
             
         
         // the xkcd style is applied as an interpolation function
@@ -49,7 +52,7 @@
         // set this to null to remove the wiggle
         var style = Redsift.Xkcd.wiggle();
                     
-        var svg = Redsift.D3.Tools.svgRoot('#say', width+margin*2, 30+margin*2);
+        var svg = Redsift.D3.Tools.svgRoot('#say', width+margin*2, textHeight+margin*2);
         var tl = svg.append("g")
                     .attr("transform", "translate(" + margin + ", "
                                                     + margin + ")");
@@ -83,6 +86,7 @@
         var hands = Redsift.D3.Components.line().interpolation(style);
                 
         function update() {
+            // Calculate the position of the hands
             var mRad = m * 2/60 * Math.PI - (Math.PI / 2);
             var mx = ml * Math.cos(mRad); 
             var my = ml * Math.sin(mRad);
@@ -91,11 +95,11 @@
             var hx = hl * Math.cos(hRad); 
             var hy = hl * Math.sin(hRad);            
             
-            el.datum([[cx + hx, cy + hy], [cx, cy], [cx + mx, cy + my]])
-                .call(hands);
-                
+            // update the hands
+            el.datum([[cx + hx, cy + hy], [cx, cy], [cx + mx, cy + my]]).call(hands);
+            
+            // update the text    
             tl.datum({x: 0, y: 0, t: "Randall's time " + (h < 10 ? ('0' + h) : h) + ':' + (m < 10 ? ('0' + m) : m), ty: 6, tx: 6}).call(box);                                                 
-       
     
             m++;
             if (m > 60) {
@@ -108,7 +112,7 @@
         }
         update();
                 
-        // increment ever 200ms
+        // increment every 200ms
        setInterval(update, 200);
 	</script>
   </body>
