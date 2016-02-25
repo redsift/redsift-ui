@@ -60,9 +60,9 @@ var Components = {
             if (as) {
                 deg = angleDeg(x0, y0, data[1][0], data[1][1]);
                 
-                var g = el.select('g.as');
+                var g = el.select('g.as.' + classed);
                 if (g.empty()) {
-                    g = el.append('g').attr('class', 'as');
+                    g = el.append('g').attr('class', 'as ' + classed);
                 }
                 
                 var a = g.select('path');
@@ -77,9 +77,9 @@ var Components = {
             if (ae) {
                 deg = angleDeg(x1, y1, data[data.length - 2][0], data[data.length - 2][1]);
 	            
-                g = el.select('g.ae');
+                g = el.select('g.ae.' + classed);
                 if (g.empty()) {
-                    g = el.append('g').attr('class', 'ae');
+                    g = el.append('g').attr('class', 'ae ' + classed);
                 }
                 
                 a = g.select('path');
@@ -123,7 +123,7 @@ var Components = {
   },
   box: function() {
     var interpolation = null, 
-        classed = 'box';
+        classed = 'box', baseline = 'hanging';
 
     function impl(selection) {
         selection.each(function(data) {
@@ -145,7 +145,7 @@ var Components = {
                     var t = el.select('text.' + classed);
                     var magicFix = 1;
                     if (t.empty()) {
-                        t = el.append('text').attr('class', classed).attr('dominant-baseline', 'hanging');
+                        t = el.append('text').attr('class', classed).attr('dominant-baseline', baseline);
                         // Chrome oddity, to investigate why getBBox is wrong first time by this factor
                         magicFix = 1.15;
                     }
@@ -159,23 +159,29 @@ var Components = {
                     data.width = data.width || (bound.width * magicFix + 2*tx);
                     data.height = data.height || (bound.height + ty);
                 }
-                
-                data = [ [data.x, data.y], [data.x, data.y + data.height], [data.x + data.width, data.y + data.height], [data.x + data.width, data.y] ];
-            } else if (data.length !== 4) {
+                console.log(data);
+                //  , [data.x + data.width, data.y + data.height], [data.x + data.width, data.y]
+                data = [ [data.x, data.y], [data.x, data.y + data.height], [data.x + data.width, data.y + data.height], [data.x + data.width, data.y], [data.x, data.y] ];
+            } else if (data.length < 4) {
                 console.log(data.length + ' data items not supported by box');
                 return;
             }
             
-            var box = d3.svg.area();
+            var box = d3.svg.line();
             if (interpolation != null) {
                 box = box.interpolate(interpolation);
             }
-
             
             p.attr('d', box(data));   
         });
     }
-
+    
+    impl.baseline = function(value) {
+        if (!arguments.length) return baseline;
+        baseline = value;
+        return impl;
+    };
+    
     impl.classed = function(value) {
         if (!arguments.length) return classed;
         classed = value;

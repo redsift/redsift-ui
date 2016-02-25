@@ -33,9 +33,14 @@
             }
         </code> 
         </div>
+
+        <p>xkcd chart</p>
+        <div id="chart"></div>
+        
         <p>xkcd clock</p>
         <div id="say"></div>
         <div id="arrows"></div>
+
       </div>
     
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -51,69 +56,110 @@
         // things like the scale of the wiggle can be supplied as a param
         // set this to null to remove the wiggle
         var style = Redsift.Xkcd.wiggle();
-                    
-        var svg = Redsift.D3.Tools.svgRoot('#say', width+margin*2, textHeight+margin*2);
-        var tl = svg.append("g")
-                    .attr("transform", "translate(" + margin + ", "
-                                                    + margin + ")");
-                                                    
-        var box = Redsift.D3.Components.box().classed('say').interpolation(style);  
-
-
-        var ml = width / 2.5;
-        var hl = ml / 1.618;
         
-        var el = Redsift.D3.Tools.svgRoot('#arrows', width+margin*2, height+margin*2)
-                    .append('g')
-                    .attr('transform', 'translate(' + margin + ', '
-                                                    + margin + ')');
-        
-        var m = 0;
-        var h = 0;        
-        var cx = width / 2;
-        var cy = height / 2;
-
-        
-        // make the circle of the clock using a line                                
-        var face = Redsift.D3.Components.line().classed('face').interpolation(style);
-        // create the points on the line from 0 -> 360 deg in steps of 2 deg vectors centered
-        // at cx and cy with a slight oval shape in the y axis
-        var circle = Redsift.D3.Tools.createCircle(0, 360, 2, ml + margin, cx, cy, 0, height/18);
-        // bind the data to el and create the path
-        el.datum(circle).call(face);
-        
-        // make another line for the hands
-        var hands = Redsift.D3.Components.line().interpolation(style);
-                
-        function update() {
-            // Calculate the position of the hands
-            var mRad = m * 2/60 * Math.PI - (Math.PI / 2);
-            var mx = ml * Math.cos(mRad); 
-            var my = ml * Math.sin(mRad);
+        // xkcd chart
+        function chart() {
+            var el = Redsift.D3.Tools.svgRoot('#chart', width+margin*2, height+margin*2)
+                                    .append('g')
+                                    .attr('transform', 'translate(' + margin + ', '
+                                                                    + margin + ')');
             
-            var hRad = h * 2/24 * Math.PI - (Math.PI / 2);
-            var hx = hl * Math.cos(hRad); 
-            var hy = hl * Math.sin(hRad);            
+            // axis                                               
+            var axisx = Redsift.D3.Components.line().classed('axisx').interpolation(style);
+            var axisy = Redsift.D3.Components.line().classed('axisy').interpolation(style);
+
+            var x = 50;            
+            var xl = width;
+            var y = 100;
+            var yl = height;
             
-            // update the hands
-            el.datum([[cx + hx, cy + hy], [cx, cy], [cx + mx, cy + my]]).call(hands);
+            el.datum([[x, 0], [x, xl]]).call(axisx);            
+            el.datum([[0, y], [yl, y]]).call(axisy);
             
-            // update the text    
-            tl.datum({x: 0, y: 0, t: "Randall's time " + (h < 10 ? ('0' + h) : h) + ':' + (m < 10 ? ('0' + m) : m), ty: 6, tx: 6}).call(box);                                                 
-    
-            m++;
-            if (m > 60) {
-                m = 0;
-                h++;
-                if (h > 24) {
-                    h = 0;
-                }
-            }    
+            // axis labels        
+                                                
+        
+            // line
+
+            // boxes .interpolation(style)
+            var barA = Redsift.D3.Components.box().classed('bara').baseline('ideographic').interpolation(style);
+            el.datum({x: 100, y: y - 50, height: 50, t: 'A', ty: -6, tx: 6}).call(barA); 
+
+            var barB = Redsift.D3.Components.box().classed('barb').baseline('ideographic').interpolation(style);
+            el.datum({x: 140, y: y - 60, height: 60, t: 'B', ty: -6, tx: 6}).call(barB); 
+                        
         }
-        update();
+        
+        chart();
+        
+        // xkcd clock        
+        function clock() {    
+            var svg = Redsift.D3.Tools.svgRoot('#say', width+margin*2, textHeight+margin*2);
+            var tl = svg.append('g')
+                        .attr('transform', 'translate(' + margin + ', '
+                                                        + margin + ')');
+                                                        
+            var box = Redsift.D3.Components.box().classed('say').interpolation(style);  
+
+
+            var ml = width / 2.5;
+            var hl = ml / 1.618;
+            
+            var el = Redsift.D3.Tools.svgRoot('#arrows', width+margin*2, height+margin*2)
+                        .append('g')
+                        .attr('transform', 'translate(' + margin + ', '
+                                                        + margin + ')');
+            
+            var m = 0;
+            var h = 0;        
+            var cx = width / 2;
+            var cy = height / 2;
+
+            
+            // make the circle of the clock using a line                                
+            var face = Redsift.D3.Components.line().classed('face').interpolation(style).arrowStart(false).arrowEnd(false);
+            // create the points on the line from 0 -> 360 deg in steps of 2 deg vectors centered
+            // at cx and cy with a slight oval shape in the y axis
+            var circle = Redsift.D3.Tools.createCircle(0, 360, 2, ml + margin, cx, cy, 0, height/18);
+            // bind the data to el and create the path
+            el.datum(circle).call(face);
+            
+            // make another line for the hands
+            var hands = Redsift.D3.Components.line().interpolation(style);
+                    
+            function update() {
+                // Calculate the position of the hands
+                var mRad = m * 2/60 * Math.PI - (Math.PI / 2);
+                var mx = ml * Math.cos(mRad); 
+                var my = ml * Math.sin(mRad);
                 
-        // increment every 200ms
-       setInterval(update, 200);
+                var hRad = h * 2/24 * Math.PI - (Math.PI / 2);
+                var hx = hl * Math.cos(hRad); 
+                var hy = hl * Math.sin(hRad);            
+                
+                // update the hands
+                el.datum([[cx + hx, cy + hy], [cx, cy], [cx + mx, cy + my]]).call(hands);
+                
+                // update the text    
+                tl.datum({x: 0, y: 0, t: "Randall's time " + (h < 10 ? ('0' + h) : h) + ':' + (m < 10 ? ('0' + m) : m), ty: 6, tx: 6}).call(box);                                                 
+        
+                m++;
+                if (m > 60) {
+                    m = 0;
+                    h++;
+                    if (h > 24) {
+                        h = 0;
+                    }
+                }    
+            }
+            update();
+                    
+            // increment every 200ms
+            setInterval(update, 200);
+        }
+        
+        clock();
+        
 	</script>
   </body>
 
