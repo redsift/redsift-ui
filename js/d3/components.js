@@ -12,21 +12,40 @@ var Components = {
   // .datum([ [2, 3], [2, 10] ]).call(...); 
   line: function() {
     var interpolation = null, 
-        classed = 'line', as = true, ae = true;
+        classed = 'line', as = true, ae = true, bgline = null;
 
     var arrowSize = 12,
         arrowAspect = 0.4,
-        arrowOffset = 6;
+        arrowOffset = 6,
+        xscale = null, yscale = null;
                   
     function impl(selection) {
         selection.each(function(data) {
-            if (data === undefined) {
+            if (data == null) {
                 console.log('no data for line');
                 return;
             }
+            
             if (data.length < 2) {
                 console.log(data.length + ' data items not supported by line');
                 return;
+            }
+            
+            if (!Array.isArray(data[0])) {
+                data = data.map(function (o) { return [ o.x, o.y ]; });
+            }
+            
+            
+            if (xscale || yscale) {
+                if (xscale == null) {
+                    xscale = function (v) { return v; }
+                }
+                if (yscale == null) {
+                    yscale = function (v) { return v; }
+                }
+                data = data.map(function (o) {
+                    return [ xscale(o[0]), yscale(o[1]) ];
+                });
             }
             
             var x0 = data[0][0];            
@@ -46,8 +65,15 @@ var Components = {
             
             var el = d3.select(this);
             
-            var p = el.select('.' + classed);
+            if (bgline) {
+                var bg = el.select('.' + bgline);
+                if (bg.empty()) {
+                    bg = el.append('path').attr('class', 'bgstroke ' + bgline);
+                }
+                bg.attr('d', d3.svg.line()(data));
+            }
             
+            var p = el.select('.' + classed);
             if (p.empty()) {
                 p = el.append('path').attr('class', classed);
             }
@@ -95,6 +121,24 @@ var Components = {
         });
     }
 
+    impl.bgline = function(value) {
+        if (!arguments.length) return bgline;
+        bgline = value;
+        return impl;
+    };
+    
+    impl.xscale = function(value) {
+        if (!arguments.length) return xscale;
+        xscale = value;
+        return impl;
+    };
+    
+    impl.yscale = function(value) {
+        if (!arguments.length) return yscale;
+        yscale = value;
+        return impl;
+    };
+    
     impl.arrowStart = function(value) {
         if (!arguments.length) return as;
         as = value;
@@ -123,7 +167,7 @@ var Components = {
   },
   box: function() {
     var interpolation = null, 
-        classed = 'box', baseline = 'hanging';
+        classed = 'box', baseline = 'hanging', anchor = 'start', style = null;
 
     function impl(selection) {
         selection.each(function(data) {
@@ -145,10 +189,13 @@ var Components = {
                     var t = el.select('text.' + classed);
                     var magicFix = 1;
                     if (t.empty()) {
-                        t = el.append('text').attr('class', classed).attr('dominant-baseline', baseline);
+                        t = el.append('text').attr('class', classed);
                         // Chrome oddity, to investigate why getBBox is wrong first time by this factor
                         magicFix = 1.15;
                     }
+                    // text-anchor
+                    t.attr('text-anchor', anchor).attr('dominant-baseline', baseline);
+                    
                     var tx = data.tx || 0;
                     var ty = data.ty || 0;
                     
@@ -159,7 +206,7 @@ var Components = {
                     data.width = data.width || (bound.width * magicFix + 2*tx);
                     data.height = data.height || (bound.height + ty);
                 }
-                console.log(data);
+                // console.log(data);
                 //  , [data.x + data.width, data.y + data.height], [data.x + data.width, data.y]
                 data = [ [data.x, data.y], [data.x, data.y + data.height], [data.x + data.width, data.y + data.height], [data.x + data.width, data.y], [data.x, data.y] ];
             } else if (data.length < 4) {
@@ -173,9 +220,24 @@ var Components = {
             }
             
             p.attr('d', box(data));   
+            if (style) {
+                p.attr('style', style);
+            }
         });
     }
     
+    impl.style = function(value) {
+        if (!arguments.length) return style;
+        style = value;
+        return impl;
+    };
+
+    impl.anchor = function(value) {
+        if (!arguments.length) return anchor;
+        anchor = value;
+        return impl;
+    };
+
     impl.baseline = function(value) {
         if (!arguments.length) return baseline;
         baseline = value;

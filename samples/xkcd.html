@@ -10,11 +10,28 @@
     path.say {
         fill: black;
     }
+
     text.say {
         fill: white;
         font-size: 22px;
     }
     
+    path.line1 {
+        stroke: red;
+    }
+
+    path.line2 {
+        stroke: blue;
+    }
+    
+    #fills text {
+        font-size: 0.66em;
+    }
+    
+    pattern rect.foreground {
+        fill: black;
+    }
+         
   </style>
   </head>
 
@@ -34,6 +51,9 @@
         </code> 
         </div>
 
+        <p>xkcd fills</p>
+        <div id="fills"></div>
+
         <p>xkcd chart</p>
         <div id="chart"></div>
         
@@ -50,12 +70,45 @@
         // https://static.redsift.io/ui/latest/js/redsift-global.es5.min.js
 
         var width = 400, height = 400, textHeight = 30, margin = 16;
-            
+
+        var PATTERNS = {
+            crosshatch1: { ang: 45, w: 4, h: 4, s: 5 },
+            crosshatch2: { ang: 45, w: 3, h: 4, s: 5 }, 
+            crosshatch3: { ang: 45, w: 3, h: 3, s: 5 },   
+            diagonal1: { ang: 30, w: 5, h: 4, s: 5 }, 
+            diagonal2: { ang: 30, w: 5, h: 3, s: 5 }, 
+            diagonal3: { ang: 30, w: 5, h: 2, s: 5 },
+            blocks: { ang: 0, w: 3, h: 4, s: 5 },
+            redsift: { ang: 30, w: 3, h: 3, s: 5 },   
+        };  
+                        
+        function patterns() {
+            var defs = Redsift.D3.Tools.createDefs();
+            Object.keys(PATTERNS).forEach(function (k) {
+                Redsift.D3.Tools.createDiagonal(defs, 'pattern-stripe-' + k, PATTERNS[k]);                
+            });
+        }
+        patterns();            
+
         
         // the xkcd style is applied as an interpolation function
         // things like the scale of the wiggle can be supplied as a param
         // set this to null to remove the wiggle
         var style = Redsift.Xkcd.wiggle();
+
+        // xkcd fills
+        function fills() {
+            var el = Redsift.D3.Tools.svgRoot('#fills', 800+margin*2, 100+margin*2)
+                                    .append('g')
+                                    .attr('transform', 'translate(' + margin + ', '
+                                                                    + margin + ')');
+            var x = 30, y = 100, w = 20, h = 70, span = 80;    
+            Object.keys(PATTERNS).forEach(function (k, i) {                                                    
+                var bar = Redsift.D3.Components.box().classed(k).baseline('ideographic').anchor('middle').style('fill: url(#pattern-stripe-' + k + ');').interpolation(style);
+                el.datum({x: x + i*span, y: y - h, height: h, width: w, t: k, ty: -6, tx: (w/2)}).call(bar);   
+            });                                                          
+        }
+        fills();
         
         // xkcd chart
         function chart() {
@@ -78,16 +131,47 @@
             
             // axis labels        
                                                 
-        
-            // line
 
-            // boxes .interpolation(style)
+            // bars
             var barA = Redsift.D3.Components.box().classed('bara').baseline('ideographic').interpolation(style);
             el.datum({x: 100, y: y - 50, height: 50, t: 'A', ty: -6, tx: 6}).call(barA); 
 
             var barB = Redsift.D3.Components.box().classed('barb').baseline('ideographic').interpolation(style);
             el.datum({x: 140, y: y - 60, height: 60, t: 'B', ty: -6, tx: 6}).call(barB); 
-                        
+                    
+            // line, generate some data.
+            function f1(x) {
+                return Math.exp(-0.5 * (x - 1) * (x - 1)) * Math.sin(x + 0.2) + 0.05;
+            }
+
+            function f2(x) {
+                return 0.5 * Math.cos(x - 0.5) + 0.1;
+            }
+            
+            var xmin = -1.0,
+            xmax = 7,
+            N = 100,
+            yscale = d3.scale.linear().domain([-1, 1]).range([height, 0]),
+            xscale = d3.scale.linear().domain([xmin, xmax]).range([0, width]),
+            data1 = d3.range(xmin, xmax, (xmax - xmin) / N).map(function(d) {
+                return {
+                x: d,
+                y: f1(d)
+                };
+            }),
+            data2 = d3.range(xmin, xmax, (xmax - xmin) / N).map(function(d) {
+                return {
+                    x: d,
+                    y: f2(d)
+                };
+            });
+            
+            var line1 = Redsift.D3.Components.line().classed('line1').bgline('line1bg').interpolation(style).xscale(xscale).yscale(yscale).arrowStart(false).arrowEnd(false);
+            el.datum(data1).call(line1);
+
+            var line2 = Redsift.D3.Components.line().classed('line2').bgline('line2bg').interpolation(style).xscale(xscale).yscale(yscale).arrowStart(false).arrowEnd(false);
+            el.datum(data2).call(line2);
+
         }
         
         chart();

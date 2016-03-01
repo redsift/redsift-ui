@@ -137,8 +137,13 @@ var Tools = {
     return m;    
   },
   createDiagonal: function(defs, id, ang, w, h, s) {
-    if (ang === undefined) {
+    if (ang == null) {
       ang = 45;
+    } else if (typeof ang  === 'object') {
+      s = ang.s;
+      w = ang.w;
+      h = ang.h;
+      ang = ang.ang;
     }
     if (w === undefined) {
       w = 3;
@@ -155,12 +160,17 @@ var Tools = {
             .attr('height', s)
             .attr('patternUnits', 'userSpaceOnUse')
             .attr('patternTransform', 'rotate('+ ang + ')');
-    
+
     p.append('rect')
+            .attr('class', 'background')
+            .attr('width', s)
+            .attr('height', s);
+                
+    p.append('rect')
+            .attr('class', 'foreground')
             .attr('width', w)
             .attr('height', h)
-            .attr('transform', 'translate(0,0)')
-            .attr('fill', 'white');
+            .attr('transform', 'translate(0,0)');
     
     return p;            
   },
