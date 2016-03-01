@@ -117,18 +117,26 @@
             var y = 100;
             var yl = height;
             
-            el.datum([[x, 0], [x, xl]]).call(axisx);            
-            el.datum([[0, y], [yl, y]]).call(axisy);
+            el.datum([[x, 0], [x, yl]]).call(axisy);            
+            el.datum([[0, y], [xl, y]]).call(axisx);
             
             // axis labels        
                                                 
 
             // bars
-            var barA = Redsift.D3.Components.box().classed('bara').baseline('ideographic').interpolation(style);
-            el.datum({x: 100, y: y - 50, height: 50, t: 'A', ty: -6, tx: 6}).call(barA); 
+            function draw() {
+                var va = 50 * Math.random();
+                var barA = Redsift.D3.Components.box().classed('bara').baseline('ideographic').interpolation(null);
+                el.datum({x: 100, y: y - va, height: va, t: 'A', ty: -6, tx: 6}).call(barA); 
 
-            var barB = Redsift.D3.Components.box().classed('barb').baseline('ideographic').interpolation(style);
-            el.datum({x: 140, y: y - 60, height: 60, t: 'B', ty: -6, tx: 6}).call(barB); 
+                var vb = 100 * Math.random();
+                var barB = Redsift.D3.Components.box().classed('barb').baseline('ideographic').interpolation(style);
+                el.datum({x: 140, y: y - vb, height: vb, t: 'B', ty: -6, tx: 6}).call(barB); 
+            }
+            
+            draw();
+
+            setInterval(draw, 2000);
                     
             // line, generate some data.
             function f1(x) {
