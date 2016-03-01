@@ -71,21 +71,12 @@
 
         var width = 400, height = 400, textHeight = 30, margin = 16;
 
-        var PATTERNS = {
-            crosshatch1: { ang: 45, w: 4, h: 4, s: 5 },
-            crosshatch2: { ang: 45, w: 3, h: 4, s: 5 }, 
-            crosshatch3: { ang: 45, w: 3, h: 3, s: 5 },   
-            diagonal1: { ang: 30, w: 5, h: 4, s: 5 }, 
-            diagonal2: { ang: 30, w: 5, h: 3, s: 5 }, 
-            diagonal3: { ang: 30, w: 5, h: 2, s: 5 },
-            blocks: { ang: 0, w: 3, h: 4, s: 5 },
-            redsift: { ang: 30, w: 3, h: 3, s: 5 },   
-        };  
+        var fills =  Redsift.D3.Constants.Patterns;
                         
         function patterns() {
             var defs = Redsift.D3.Tools.createDefs();
-            Object.keys(PATTERNS).forEach(function (k) {
-                Redsift.D3.Tools.createDiagonal(defs, 'pattern-stripe-' + k, PATTERNS[k]);                
+            Object.keys(fills).forEach(function (k) {
+                Redsift.D3.Tools.createDiagonal(defs, 'pattern-stripe-' + k, fills[k]);                
             });
         }
         patterns();            
@@ -97,18 +88,18 @@
         var style = Redsift.Xkcd.wiggle();
 
         // xkcd fills
-        function fills() {
+        function samples() {
             var el = Redsift.D3.Tools.svgRoot('#fills', 800+margin*2, 100+margin*2)
                                     .append('g')
                                     .attr('transform', 'translate(' + margin + ', '
                                                                     + margin + ')');
             var x = 30, y = 100, w = 20, h = 70, span = 80;    
-            Object.keys(PATTERNS).forEach(function (k, i) {                                                    
+            Object.keys(fills).forEach(function (k, i) {                                                    
                 var bar = Redsift.D3.Components.box().classed(k).baseline('ideographic').anchor('middle').style('fill: url(#pattern-stripe-' + k + ');').interpolation(style);
                 el.datum({x: x + i*span, y: y - h, height: h, width: w, t: k, ty: -6, tx: (w/2)}).call(bar);   
             });                                                          
         }
-        fills();
+        samples();
         
         // xkcd chart
         function chart() {
