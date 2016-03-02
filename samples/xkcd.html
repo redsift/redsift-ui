@@ -51,6 +51,9 @@
         </code> 
         </div>
 
+        <p>xkcd pie</p>
+        <div id="pie"></div>
+        
         <p>xkcd fills</p>
         <div id="fills"></div>
 
@@ -70,6 +73,49 @@
         // https://static.redsift.io/ui/latest/js/redsift-global.es5.min.js
 
         var width = 400, height = 400, textHeight = 30, margin = 16;
+
+        function pie() {
+            var radius = Math.min(width, height) / 2;
+
+            var data = [ 1, 2, 3, 5, 8 ];
+
+            var arc = d3.svg.arc()
+                .outerRadius(radius)
+                .innerRadius(0);
+
+            var pie = d3.layout.pie()
+                .sort(null);
+
+            var el = Redsift.D3.Tools.svgRoot('#pie', width + margin * 2, height + margin * 2)
+            .append('g')
+                .attr('transform', 'translate(' + (width+margin)/2 + ',' + (height+margin)/2 + ')');
+
+            var style = Redsift.Xkcd.wiggle();
+
+            var g = el.selectAll('.arc')
+            .data(pie(data))
+            .enter().append('g')
+                .attr('class', 'arc');
+
+var points = 50;
+var angle = d3.scale.linear()
+    .domain([0, points-1])
+    .range([0, 2 * Math.PI]);
+var line = d3.svg.line.radial()
+    .interpolate(style)
+    .radius(radius)
+    .angle(function(d, i) { return angle(i); });
+
+            var test = Redsift.D3.Tools.arcLine().outerRadius(radius).interpolation(style);
+            g.append('path')
+            .datum(d3.range(points))
+            .attr('d', function(d) {
+                console.log(d, line(d), arc(d));
+                return line(d);
+            });
+        }
+        
+        pie();
 
         var fills =  Redsift.D3.Constants.Patterns;
                         

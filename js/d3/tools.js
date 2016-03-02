@@ -3,6 +3,25 @@
 
 var BezierEasing = require('../../node_modules/bezier-easing/index.js');
 
+function circle(start, end, step, l, cx, cy, sx, sy) {
+    if (cx === undefined) cx = 0;
+    if (cy === undefined) cy = 0;
+    if (sx === undefined) sx = 0;
+    if (sy === undefined) sy = 0;
+        
+    var circle = [];
+    for (var i=start; i<=end; i+=step) {
+        var rad = (i / 360) * 2 * Math.PI - (Math.PI / 2);
+        
+        var sr = Math.sin(rad);
+        var cr = Math.cos(rad);
+        var x = l * cr + (sx * cr); 
+        var y = l * sr + (sy * sr);
+        circle.push([x + cx, y + cy]);
+    }
+    return circle;
+}
+
 var Tools = {
   svgRoot: function (parent, width, height, classed) {
     var svg = d3.select(parent).append("svg")
@@ -174,22 +193,42 @@ var Tools = {
     
     return p;            
   },
-  createCircle: function(start, end, step, l, cx, cy, sx, sy) {
-    if (cx === undefined) cx = 0;
-    if (cy === undefined) cy = 0;
-    if (sx === undefined) sx = 0;
-    if (sy === undefined) sy = 0;
+  createCircle: circle,
+  arcLine: function() {
       
-    var circle = [];
-    for (var i=start; i<=end; i+=step) {
-        var rad = (i / 360) * 2 * Math.PI - (Math.PI / 2);
-        var sr = Math.sin(rad);
-        var cr = Math.cos(rad);
-        var x = l * cr + (sx * cr); 
-        var y = l * sr + (sy * sr);
-        circle.push([x + cx, y + cy]);
-    }
-    return circle;
+      var interpolation = null, degreeSteps = 1, outerRadius = 100;
+      
+      function impl(d) {
+          var line = d3.svg.line();
+          if (interpolation) {
+              line = line.interpolate(interpolation);
+          }
+          
+          var start = d.startAngle * 180 / Math.PI;
+          var end = d.endAngle * 180 / Math.PI;
+          var seg = circle(start, end, degreeSteps, outerRadius);
+          return line(seg);
+      }
+      
+      impl.interpolation = function(value) {
+        if (!arguments.length) return interpolation;
+        interpolation = value;
+        return impl;
+      }
+      
+      impl.degreeSteps = function(value) {
+        if (!arguments.length) return degreeSteps;
+        degreeSteps = value;
+        return impl;
+      }
+      
+      impl.outerRadius = function(value) {
+        if (!arguments.length) return outerRadius;
+        outerRadius = value;
+        return impl;
+      }
+      
+      return impl;
   }
 };
 
