@@ -31,6 +31,11 @@
     pattern rect.foreground {
         fill: black;
     }
+    
+    path.pie-filling {
+        stroke: none;
+        fill: red;
+    }
          
   </style>
   </head>
@@ -91,24 +96,47 @@
                 .attr('transform', 'translate(' + (width+margin)/2 + ',' + (height+margin)/2 + ')');
 
             var style = Redsift.Xkcd.wiggle();
-
+            
+            var pies = pie(data);
             var g = el.selectAll('.arc')
-            .data(pie(data))
+            .data(pies)
             .enter().append('g')
                 .attr('class', 'arc');
 
-var points = 50;
-var angle = d3.scale.linear()
-    .domain([0, points-1])
-    .range([0, 2 * Math.PI]);
-var line = d3.svg.line.radial()
-    .interpolate(style)
-    .radius(radius)
-    .angle(function(d, i) { return angle(i); });
+            var seg = d3.svg.line().interpolate(style);
+
+            g.append('path')
+                .attr('class', 'pie-filling')
+                .attr('d', arc);
+                
+            g.append('path')
+            .attr('d', function(d, i) {
+                console.log(d);
+                var hl = radius;
+                var hRad = d.startAngle - Math.PI/2;
+                var hx = hl * Math.cos(hRad); 
+                var hy = hl * Math.sin(hRad);  
+                
+                var eRad = d.endAngle - Math.PI/2;
+                var ex = hl * Math.cos(eRad); 
+                var ey = hl * Math.sin(eRad);  
+                
+                return seg([[ ex, ey ], [ 0, 0 ], [ hx, hy ]]);
+            });
+
+      
+            var points = 90;
+            var angle = d3.scale.linear()
+                .domain([0, points])
+                .range([0, 2 * Math.PI]);
+            var line = d3.svg.line.radial()
+                .interpolate(style)
+                .radius(radius)
+                .angle(function(d, i) { return angle(i); });
 
             var test = Redsift.D3.Tools.arcLine().outerRadius(radius).interpolation(style);
             g.append('path')
-            .datum(d3.range(points))
+            .datum(d3.range(points+1))
             .attr('d', function(d) {
                 console.log(d, line(d), arc(d));
                 return line(d);
