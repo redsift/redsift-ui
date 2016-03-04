@@ -234,7 +234,8 @@ var Scroll = {
         } 
         updateRegions();
         onScroll();       
-    }
+    },
+    updateRegions: updateRegions
 };
 
 throttle('scroll', 'optimizedScroll');
