@@ -60,6 +60,9 @@
         </code> 
         </div>
 
+        <p>xkcd radial</p>
+        <div id="radial"></div>
+
         <p>xkcd pie</p>
         <div id="pie"></div>
         
@@ -89,6 +92,27 @@
         // set this to null to remove the wiggle
         var style = Redsift.Xkcd.wiggle();
         
+        function radial() {
+            var radius = Math.min(width, height) / 2;
+            
+            var el = Redsift.D3.Tools.svgRoot('#radial', width + margin * 2, height + margin * 2)
+                        .append('g')
+                            .attr('transform', 'translate(' + (width+margin)/2 + ',' + (height+margin)/2 + ')');
+            
+            var outline = Redsift.D3.Components.radial().radius(radius).interpolation(style);
+            var points = 1;
+                            
+            function draw() {    
+                outline.points(points).endAngle(Math.PI);
+                points = points + 1;
+                el.call(outline);
+            }
+            draw();
+            
+            setInterval(draw, 1000);
+        }
+        
+        radial();
         
         function pie() {
             var radius = Math.min(width, height) / 2;
