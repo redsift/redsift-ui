@@ -257,6 +257,131 @@ var Components = {
     };
       
     return impl;
+  },
+  spokes: function() {
+    var radius = 100, 
+        interpolation = null, 
+        classed = 'spokes';       
+      
+      function impl(selection) {
+        selection.each(function(data) {
+            var seg = d3.svg.line().interpolate(interpolation);  
+                    
+            var p = d3.select(this).selectAll('path.' + classed).data(data);
+            p.enter().append('path')
+                .attr('class', classed);
+            p.exit().remove();
+            
+            p.attr('d', function(d, i) {
+                var hl = radius;
+                var hRad = d.startAngle - Math.PI/2;
+                var hx = hl * Math.cos(hRad); 
+                var hy = hl * Math.sin(hRad);  
+                
+                var eRad = d.endAngle - Math.PI/2;
+                var ex = hl * Math.cos(eRad); 
+                var ey = hl * Math.sin(eRad);  
+                
+                return seg([[ ex, ey ], [ 0, 0 ], [ hx, hy ]]);
+            });
+                        
+        });
+      }
+      
+    impl.classed = function(value) {
+        if (!arguments.length) return classed;
+        classed = value;
+        return impl;
+    };      
+
+    impl.radius = function(value) {
+        if (!arguments.length) return radius;
+        radius = value;
+        return impl;
+    };
+    
+    impl.interpolation = function(value) {
+        if (!arguments.length) return interpolation;
+        interpolation = value;
+        return impl;
+    };
+          
+      return impl;
+  },
+  radial: function() {
+      var radius = 100, 
+        interpolation = null, 
+        classed = 'radial', 
+        points = 90,
+        startAngle = 0,
+        endAngle = 2*Math.PI;
+      
+      function impl(selection) {
+        selection.each(function() {
+
+            var angle = d3.scale.linear()
+                .domain([0, points])
+                .range([startAngle, endAngle]);
+                
+            var line = d3.svg.line.radial()
+                .interpolate(interpolation)
+                .radius(radius)
+                .angle(function(d, i) { return angle(i); });
+            
+            var data = [];
+            if (points > 0) {
+                data = [ d3.range(points+1) ];
+                
+            }
+            var p = d3.select(this).selectAll('path.' + classed).data(data);
+            
+            p.enter().append('path')
+                .attr('class', classed);
+            p.exit().remove();
+                    
+            p.attr('d', function(d) {
+                return line(d);
+            });      
+        });
+      }
+
+    impl.startAngle = function(value) {
+        if (!arguments.length) return startAngle;
+        startAngle = value;
+        return impl;
+    };  
+
+    impl.endAngle = function(value) {
+        if (!arguments.length) return endAngle;
+        endAngle = value;
+        return impl;
+    };       
+      
+    impl.classed = function(value) {
+        if (!arguments.length) return classed;
+        classed = value;
+        return impl;
+    };      
+
+    impl.points = function(value) {
+        if (!arguments.length) return points;
+        points = value;
+        return impl;
+    };
+
+    impl.radius = function(value) {
+        if (!arguments.length) return radius;
+        radius = value;
+        return impl;
+    };
+    
+    impl.interpolation = function(value) {
+        if (!arguments.length) return interpolation;
+        interpolation = value;
+        return impl;
+    };
+        
+      return impl;
   }  
 };
 

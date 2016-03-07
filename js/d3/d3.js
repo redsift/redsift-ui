@@ -4,10 +4,12 @@ var components = require('./components.js');
 var tools = require('./tools.js');
 var radialChart = require('./radialChart.js');
 var legendChart = require('./legendChart.js');
+var pieChart = require('./pieChart.js');
 
 var reusable = {
   radialChart: radialChart,
-  legendChart: legendChart
+  legendChart: legendChart,
+  pieChart: pieChart  
 };
 
 var RedsfitAngle = 33.75;
