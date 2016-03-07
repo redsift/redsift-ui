@@ -32,10 +32,14 @@
         fill: black;
     }
     
-    path.pie-filling {
+    path.pie-straight {
         stroke: none;
-        fill: red;
     }
+    
+    path.spokes {
+        stroke: gray;
+    }
+    
          
   </style>
   </head>
@@ -79,68 +83,54 @@
 
         var width = 400, height = 400, textHeight = 30, margin = 16;
 
+        
+        // the xkcd style is applied as an interpolation function
+        // things like the scale of the wiggle can be supplied as a param
+        // set this to null to remove the wiggle
+        var style = Redsift.Xkcd.wiggle();
+        
+        
         function pie() {
             var radius = Math.min(width, height) / 2;
 
-            var data = [ 1, 2, 3, 5, 8 ];
-
-            var arc = d3.svg.arc()
-                .outerRadius(radius)
-                .innerRadius(0);
-
-            var pie = d3.layout.pie()
-                .sort(null);
-
+            var data = [ 18, 2, 3, 5, 8 ];
+            
             var el = Redsift.D3.Tools.svgRoot('#pie', width + margin * 2, height + margin * 2)
             .append('g')
                 .attr('transform', 'translate(' + (width+margin)/2 + ',' + (height+margin)/2 + ')');
-
-            var style = Redsift.Xkcd.wiggle();
+                
+            var fills = d3.scale.ordinal()
+                .range(['url(#pattern-stripe-diagonal3)', 
+                        'url(#pattern-stripe-redsift)', 
+                        'url(#pattern-stripe-diagonal2)',
+                        'url(#pattern-stripe-blocks)', 
+                        'url(#pattern-stripe-diagonal1)',
+                        'url(#pattern-stripe-crosshatch1)']);
+         
+            var pie = Redsift.D3.Reusable.pieChart()
+                .classed('pie-straight').outerRadius(radius)
+                .fill(function (d, i) { 
+                    return fills(i); 
+                });
             
-            var pies = pie(data);
-            var g = el.selectAll('.arc')
-            .data(pies)
-            .enter().append('g')
-                .attr('class', 'arc');
-
-            var seg = d3.svg.line().interpolate(style);
-
-            g.append('path')
-                .attr('class', 'pie-filling')
-                .attr('d', arc);
+            var outline = Redsift.D3.Components.radial().radius(radius).interpolation(style);
+            
+            var spokes = Redsift.D3.Components.spokes().radius(radius).interpolation(style);
+            
+            var pieLayout = d3.layout.pie()
+                .sort(null);
+            
+            function draw() {    
+                // todo: Blows up between 19 and 25
+                // console.log(data);
+                el.datum(pieLayout(data)).call(pie).call(spokes);
+                data[0] = data[0] + 1;
                 
-            g.append('path')
-            .attr('d', function(d, i) {
-                console.log(d);
-                var hl = radius;
-                var hRad = d.startAngle - Math.PI/2;
-                var hx = hl * Math.cos(hRad); 
-                var hy = hl * Math.sin(hRad);  
-                
-                var eRad = d.endAngle - Math.PI/2;
-                var ex = hl * Math.cos(eRad); 
-                var ey = hl * Math.sin(eRad);  
-                
-                return seg([[ ex, ey ], [ 0, 0 ], [ hx, hy ]]);
-            });
-
-      
-            var points = 90;
-            var angle = d3.scale.linear()
-                .domain([0, points])
-                .range([0, 2 * Math.PI]);
-            var line = d3.svg.line.radial()
-                .interpolate(style)
-                .radius(radius)
-                .angle(function(d, i) { return angle(i); });
-
-            var test = Redsift.D3.Tools.arcLine().outerRadius(radius).interpolation(style);
-            g.append('path')
-            .datum(d3.range(points+1))
-            .attr('d', function(d) {
-                console.log(d, line(d), arc(d));
-                return line(d);
-            });
+                el.call(outline);
+            }
+            draw();
+            
+            setInterval(draw, 1000);
         }
         
         pie();
@@ -155,11 +145,6 @@
         }
         patterns();            
 
-        
-        // the xkcd style is applied as an interpolation function
-        // things like the scale of the wiggle can be supplied as a param
-        // set this to null to remove the wiggle
-        var style = Redsift.Xkcd.wiggle();
 
         // xkcd fills
         function samples() {
