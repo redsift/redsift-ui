@@ -105,6 +105,7 @@
             function draw() {    
                 outline.points(points).endAngle(Math.PI);
                 points = points + 1;
+                if (points > 200) points = 1;
                 el.call(outline);
             }
             draw();
@@ -149,7 +150,7 @@
                 // console.log(data);
                 el.datum(pieLayout(data)).call(pie).call(spokes);
                 data[0] = data[0] + 1;
-                
+                if (data[0] > 200) data[0] = 10;
                 el.call(outline);
             }
             draw();
