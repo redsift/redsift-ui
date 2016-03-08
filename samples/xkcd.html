@@ -165,7 +165,7 @@
         function patterns() {
             var defs = Redsift.D3.Tools.createDefs();
             Object.keys(fills).forEach(function (k) {
-                Redsift.D3.Tools.createDiagonal(defs, 'pattern-stripe-' + k, fills[k]);                
+                Redsift.D3.Tools.createDiagonal(defs, 'pattern-stripe-' + k, Redsift.D3.Tools.scalePattern(fills[k], 1.2));                
             });
         }
         patterns();            
