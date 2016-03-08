@@ -123,6 +123,8 @@
             var el = Redsift.D3.Tools.svgRoot('#pie', width + margin * 2, height + margin * 2)
             .append('g')
                 .attr('transform', 'translate(' + (width+margin)/2 + ',' + (height+margin)/2 + ')');
+            
+            el.append('title').text('Oh Hai');
                 
             var fills = d3.scale.ordinal()
                 .range(['url(#pattern-stripe-diagonal3)', 
@@ -155,7 +157,7 @@
             }
             draw();
             
-            setInterval(draw, 1000);
+            setInterval(draw, 2000);
         }
         
         pie();
