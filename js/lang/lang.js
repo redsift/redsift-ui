@@ -40,7 +40,7 @@ var Lang = {
             }
         }
         return Array.apply(null, Array(7)).map(function(_, i) {
-            return formatter.format(new Date(Date.UTC(2014, 6, i)));
+            return formatter.format(new Date(Date.UTC(2014, 1, i+2)));
         });
     }	    	
 };
