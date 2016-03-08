@@ -203,8 +203,8 @@ var Components = {
                         .attr('y', data.y + ty)
                         .text(data.t);
                     var bound = t.node().getBBox();
-                    data.width = data.width || (bound.width * magicFix + 2*tx);
-                    data.height = data.height || (bound.height + ty);
+                    data.width = (data.width === undefined) ? (bound.width * magicFix + 2*tx) : data.width;
+                    data.height = (data.height === undefined) ? (bound.height + ty) : data.height;
                 }
                 // console.log(data);
                 //  , [data.x + data.width, data.y + data.height], [data.x + data.width, data.y]

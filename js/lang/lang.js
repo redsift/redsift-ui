@@ -19,9 +19,30 @@ var Lang = {
 			}
 		}
 		return Array.apply(null, Array(12)).map(function(_, i) {
-			return formatter.format(new Date(2014, i, 7));
+			return formatter.format(new Date(Date.UTC(2014, i, 7)));
 		});
-	}	
+	},
+    localShortWeekday: function(lang) {
+        if (lang === undefined) {
+            lang = navigator.language;
+        }
+        var formatter = null;
+
+        if (window.Intl !== undefined) {
+            formatter = new Intl.DateTimeFormat(lang, {
+            weekday: "short"
+            });
+        } else {
+            formatter = {
+            format: function(date) {
+                return date.toUTCString().split(' ')[0].substring(0, 3)
+            }
+            }
+        }
+        return Array.apply(null, Array(7)).map(function(_, i) {
+            return formatter.format(new Date(Date.UTC(2014, 6, i)));
+        });
+    }	    	
 };
 
 if (typeof module !== 'undefined' && module.exports) { module.exports = Lang; } // CommonJs export

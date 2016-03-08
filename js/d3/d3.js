@@ -28,7 +28,7 @@ var D3 = {
         diagonal2: { ang: RedsfitAngle, w: 5, h: 3, s: 5 }, 
         diagonal3: { ang: RedsfitAngle, w: 5, h: 2, s: 5 },
         blocks: { ang: 0, w: 3, h: 4, s: 5 },
-        redsift: { ang: RedsfitAngle, w: 3, h: 3, s: 5 },   
+        redsift: { ang: RedsfitAngle, w: 3, h: 3, s: 5 } 
     }
   }
 };
