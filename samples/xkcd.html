@@ -40,6 +40,9 @@
         stroke: gray;
     }
     
+    path.baseline {
+        stroke: lightgrey;
+    }
          
   </style>
   </head>
@@ -59,6 +62,9 @@
             }
         </code> 
         </div>
+
+        <p>xkcd text boxes</p>
+        <div id="boxes"></div>
 
         <p>xkcd radial</p>
         <div id="radial"></div>
@@ -91,6 +97,91 @@
         // things like the scale of the wiggle can be supplied as a param
         // set this to null to remove the wiggle
         var style = Redsift.Xkcd.wiggle();
+        
+        function boxes() {
+            var xl = 750;
+            
+            var el = Redsift.D3.Tools.svgRoot('#boxes', xl+margin*2, height+margin*2)
+                                    .append('g')
+                                    .attr('transform', 'translate(' + margin + ', '
+                                                                    + margin + ')');
+
+            var x = 0;            
+            var offset = 20;
+            var y = height - offset;
+            var xmid = (xl - x) / 2;
+            
+            // Y
+            var liney = Redsift.D3.Components.line().classed('baseline y').interpolation(style);
+            el.datum([[xmid, 0], [xmid, y - offset ]]).call(liney);    
+            
+            [   
+                { t: 'XY', span: 30 }, 
+                { t: 'ty=16', ty: 16, tx: 0, span: 50 }, 
+                { t: 'tx=16', tx: 16, span: 50 }, 
+                { t: 'ty=-16', ty: -16, tx: 0, span: 30 },                
+                { t: 'middle', a: 'middle', span: 30 },
+                { t: 'middle,true', a: 'middle', f: true, span: 30 },                
+                { t: 'middle,tx=16', a: 'middle', tx: 16, span: 30 },
+                { t: 'middle,tx=16,true', a: 'middle', tx: 16, f: true, span: 30 },
+                { t: 'end', a: 'end', span: 30 },
+                { t: 'end,tx=16', a: 'end', tx: 16, span: 30 },                
+            ].forEach(function (l, i) {
+                var box = Redsift.D3.Components.box()
+                            .classed('label y-'+i)
+                            .interpolation(style)
+                            .bound(l.f);
+                            
+                if (l.a) box.anchor(l.a);
+                
+                el.datum({
+                        x: xmid,
+                        y: offset,
+                        t: l.t,
+                        ty: l.ty,
+                        tx: l.tx
+                    }).call(box);                
+
+                offset += l.span;
+            });            
+            
+            // X                                               
+            var linex = Redsift.D3.Components.line().classed('baseline x').interpolation(style);
+            el.datum([[x, y], [xl, y]]).call(linex);               
+
+            offset = 20;
+            [   { t: 'XY', span: 30 }, 
+                { t: 'ty=16', ty: 16, tx: 0, span: 50 }, 
+                { t: 'tx=16', tx: 16, span: 80 }, 
+                { t: 'ty=-16', ty: -16, tx: 0, span: 50 },
+                { t: 'alphabetic', b: 'alphabetic', span: 80 },
+                { t: 'ideographic', b: 'ideographic', span: 90 },
+                { t: 'mathematical', b: 'mathematical', span: 100 },
+                { t: 'middle', b: 'middle', span: 60 },
+                { t: 'central', b: 'central', span: 60 }, 
+                { t: 't-a-e', b: 'text-after-edge', span: 50 }, 
+                { t: 't-b-e', b: 'text-before-edge', span: 50 },                
+            ].forEach(function (l, i) {
+                var box = Redsift.D3.Components.box()
+                            .classed('label x-'+i)
+                            .interpolation(style);
+                if (l.b) box.baseline(l.b);
+                
+                el.datum({
+                        x: offset,
+                        y: y,
+                        t: l.t,
+                        ty: l.ty,
+                        tx: l.tx
+                    }).call(box);                
+
+                offset += l.span;
+            });
+
+
+        }
+        
+        boxes();
         
         function radial() {
             var radius = Math.min(width, height) / 2;
