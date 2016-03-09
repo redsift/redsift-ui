@@ -167,7 +167,7 @@ var Components = {
   },
   box: function() {
     var interpolation = null, 
-        classed = 'box', baseline = 'hanging', anchor = 'start', style = null;
+        classed = 'box', baseline = 'hanging', anchor = 'start', style = null, bound = false;
 
     function impl(selection) {
         selection.each(function(data) {
@@ -191,10 +191,12 @@ var Components = {
                     if (t.empty()) {
                         t = el.append('text').attr('class', classed);
                         // Chrome oddity, to investigate why getBBox is wrong first time by this factor
-                        magicFix = 1.15;
+                        // could be due to font load?
+                        magicFix = 1; //1.15;
                     }
                     // text-anchor
-                    t.attr('text-anchor', anchor).attr('dominant-baseline', baseline);
+                    if (anchor !== undefined) t.attr('text-anchor', anchor);
+                    if (baseline !== undefined) t.attr('dominant-baseline', baseline);
                     
                     var tx = data.tx || 0;
                     var ty = data.ty || 0;
@@ -202,12 +204,16 @@ var Components = {
                     t.attr('x', data.x + tx)
                         .attr('y', data.y + ty)
                         .text(data.t);
-                    var bound = t.node().getBBox();
-                    data.width = (data.width === undefined) ? (bound.width * magicFix + 2*tx) : data.width;
-                    data.height = (data.height === undefined) ? (bound.height + ty) : data.height;
+                    var boundBox = t.node().getBBox();
+                    data.width = (data.width === undefined) ? (boundBox.width * magicFix + 2*tx) : data.width;
+                    data.height = (data.height === undefined) ? (boundBox.height + ty) : data.height;
+                    
+                    if (bound) {
+                        data.x = boundBox.x - tx;
+                        data.y = boundBox.y - ty;
+                    }
                 }
-                // console.log(data);
-                //  , [data.x + data.width, data.y + data.height], [data.x + data.width, data.y]
+
                 data = [ [data.x, data.y], [data.x, data.y + data.height], [data.x + data.width, data.y + data.height], [data.x + data.width, data.y], [data.x, data.y] ];
             } else if (data.length < 4) {
                 console.log(data.length + ' data items not supported by box');
@@ -226,6 +232,13 @@ var Components = {
         });
     }
     
+    // should the box bound the text
+    impl.bound = function(value) {
+        if (!arguments.length) return bound;
+        bound = value;
+        return impl;
+    };
+        
     impl.style = function(value) {
         if (!arguments.length) return style;
         style = value;
