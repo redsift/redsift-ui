@@ -9,7 +9,8 @@ var Lang = {
 		
 		if (window.Intl !== undefined) {
 			formatter = new Intl.DateTimeFormat(lang, {
-				month: "short"
+				month: 'short',
+                timeZone: 'UTC'
 			});
 		} else {
 			formatter = {
@@ -30,7 +31,8 @@ var Lang = {
 
         if (window.Intl !== undefined) {
             formatter = new Intl.DateTimeFormat(lang, {
-            weekday: "short"
+                weekday: 'short',
+                timeZone: 'UTC'
             });
         } else {
             formatter = {
