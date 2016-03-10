@@ -167,7 +167,8 @@ var Components = {
   },
   box: function() {
     var interpolation = null, 
-        classed = 'box', baseline = 'hanging', anchor = 'start', style = null, bound = false;
+        classed = 'box', baseline = 'hanging', anchor = 'start', 
+        style = null, styleBox = null, styleText = null, bound = false;
 
     function impl(selection) {
         selection.each(function(data) {
@@ -204,6 +205,13 @@ var Components = {
                     t.attr('x', data.x + tx)
                         .attr('y', data.y + ty)
                         .text(data.t);
+                        
+                    if (styleText) {
+                        t.attr('style', styleText);
+                    } else if (style) {
+                        t.attr('style', style);
+                    }   
+                     
                     var boundBox = t.node().getBBox();
                     data.width = (data.width === undefined) ? (boundBox.width * magicFix + 2*tx) : data.width;
                     data.height = (data.height === undefined) ? (boundBox.height + ty) : data.height;
@@ -226,7 +234,9 @@ var Components = {
             }
             
             p.attr('d', box(data));   
-            if (style) {
+            if (styleBox) {
+                p.attr('style', styleBox);
+            } else if (style) {
                 p.attr('style', style);
             }
         });
@@ -244,6 +254,18 @@ var Components = {
         style = value;
         return impl;
     };
+
+    impl.styleBox = function(value) {
+        if (!arguments.length) return styleBox;
+        styleBox = value;
+        return impl;
+    };
+    
+    impl.styleText = function(value) {
+        if (!arguments.length) return styleText;
+        styleText = value;
+        return impl;
+    };    
 
     impl.anchor = function(value) {
         if (!arguments.length) return anchor;
@@ -395,7 +417,74 @@ var Components = {
     };
         
       return impl;
-  }  
+  },
+  tspanWrap: function() {
+      // Replaces a <text>'s list of a <tspan>
+    var split = /\s+/, join = ' ', width = 0;
+    
+    function impl(selection) {
+        selection.each(function() {
+        var text = d3.select(this),
+            words = text.text().split(split).reverse(),
+            word,
+            line = [],
+            spans = [],
+            dy = 0,
+            x = parseInt(text.attr('x')),
+            y = parseInt(text.attr('y')),
+            tspan = text.text(null).append('tspan');
+
+        while (word = words.pop()) {
+            line.push(word);
+            tspan.text(line.join(join));
+
+            if (tspan.node().getComputedTextLength() > width) {
+            line.pop();
+            tspan.text(line.join(join));
+            line = [ word ];
+
+            tspan.attr('x', x).attr('y', y);
+            var box = tspan.node().getBBox();
+            dy = dy + box.height;
+
+            // update the dy later to keep the BBox predictable
+            spans.push([tspan, dy]);
+            tspan = text.append('tspan').text(null);
+            }
+        }
+        if (line.length !== 0) {
+            tspan.text(line.join(join));
+            tspan.attr('x', x).attr('y', y);
+            spans.push([tspan, dy + tspan.node().getBBox().height]);
+        }
+
+        // this workaround is due to odd behaviour with getBBox and the height
+        spans.forEach(function (d) {
+            d[0].attr('dy', d[1]);
+        });
+        });
+    }
+
+    impl.width = function(value) {
+        if (!arguments.length) return width;
+        width = value;
+        return impl;
+    }; 
+    
+    impl.split = function(value) {
+        if (!arguments.length) return split;
+        split = value;
+        return impl;
+    };  
+
+    impl.join = function(value) {
+        if (!arguments.length) return join;
+        join = value;
+        return impl;
+    };  
+    
+    return impl;
+    }    
 };
 
 if (typeof module !== 'undefined' && module.exports) { module.exports = Components; } // CommonJs export
