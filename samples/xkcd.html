@@ -272,7 +272,8 @@
                                                                     + margin + ')');
             var x = 30, y = 100, w = 20, h = 70, span = 80;    
             Object.keys(fills).forEach(function (k, i) {                                                    
-                var bar = Redsift.D3.Components.box().classed(k).baseline('ideographic').anchor('middle').style('fill: url(#pattern-stripe-' + k + ');').interpolation(style);
+                var bar = Redsift.D3.Components.box().classed(k).baseline('ideographic').anchor('middle')
+                            .styleBox('fill: url(#pattern-stripe-' + k + ');').interpolation(style);
                 el.datum({x: x + i*span, y: y - h, height: h, width: w, t: k, ty: -6, tx: (w/2)}).call(bar);   
             });                                                          
         }
