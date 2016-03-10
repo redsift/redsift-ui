@@ -43,7 +43,23 @@
     path.baseline {
         stroke: lightgrey;
     }
-         
+
+    .row.even {
+        font-size: x-large;
+    }  
+
+    path.row-0 {
+        stroke: none;
+    }  
+    path.row.end {
+        stroke: none;
+    } 
+    path.column-0 {
+        stroke: none;
+    }  
+    path.column.end {
+        stroke: none;
+    }         
   </style>
   </head>
 
@@ -63,6 +79,9 @@
         </code> 
         </div>
 
+        <p>xkcd matrix</p>
+        <div id="matrix"></div>
+        
         <p>xkcd text boxes</p>
         <div id="boxes"></div>
 
@@ -92,11 +111,60 @@
 
         var width = 400, height = 400, textHeight = 30, margin = 16;
 
-        
         // the xkcd style is applied as an interpolation function
         // things like the scale of the wiggle can be supplied as a param
         // set this to null to remove the wiggle
         var style = Redsift.Xkcd.wiggle();
+
+        function matrix() {
+            var dataSummary = [
+                ['Start', 'End', 'Duration'],
+                [new Date(12345), new Date(56887), '3 months, 5 days', 'dummy' ],
+                ['Distinct', 'People', 'Domains'],
+                [undefined, 50, 3, undefined, 3.0000004],
+                ['Time spent', 'Reading', 'Writing'],
+                [],
+                [],
+                [undefined, '89 hours', '3 days, 6 hours'],
+            ];
+            
+            var el = Redsift.D3.Tools.svgRoot('#matrix', 800+margin*2, height+margin*2)
+                                    .append('g')
+                                    .attr('transform', 'translate(' + margin + ', '
+                                                                    + margin + ')');                                   
+            
+            var t = new Intl.DateTimeFormat(navigator.language);
+            
+            function formatter(d) {
+                if (typeof d === 'number' && !Number.isInteger(d)) {
+                    return d.toPrecision(2);
+                }
+                
+                if (d instanceof Date) {
+                    return t.format(d);
+                }
+                
+                return d;
+            }                                       
+                                                            
+            var sheet = Redsift.D3.Reusable.matrix().formatter(formatter).tx(20).ty(10).grid(el);
+            
+            function doit() {                                                     
+                el.selectAll('.' + sheet.rowClassed()).data(dataSummary).call(sheet);  
+                if (dataSummary.length) {
+                    var row = dataSummary[dataSummary.length - 1];
+                    if (row.length) {
+                        row.pop();
+                    } else {
+                        dataSummary.pop();
+                    }
+                    setTimeout(doit, 1000);
+                }    
+            }   
+            
+            doit();                                                        
+        }
+        matrix();
         
         function boxes() {
             var xl = 750;
@@ -201,7 +269,7 @@
             }
             draw();
             
-            setInterval(draw, 1000);
+            // setInterval(draw, 1000);
         }
         
         radial();
@@ -248,7 +316,7 @@
             }
             draw();
             
-            setInterval(draw, 2000);
+            // setInterval(draw, 2000);
         }
         
         pie();
@@ -272,7 +340,8 @@
                                                                     + margin + ')');
             var x = 30, y = 100, w = 20, h = 70, span = 80;    
             Object.keys(fills).forEach(function (k, i) {                                                    
-                var bar = Redsift.D3.Components.box().classed(k).baseline('ideographic').anchor('middle').style('fill: url(#pattern-stripe-' + k + ');').interpolation(style);
+                var bar = Redsift.D3.Components.box().classed(k).baseline('ideographic').anchor('middle')
+                            .styleBox('fill: url(#pattern-stripe-' + k + ');').interpolation(style);
                 el.datum({x: x + i*span, y: y - h, height: h, width: w, t: k, ty: -6, tx: (w/2)}).call(bar);   
             });                                                          
         }
