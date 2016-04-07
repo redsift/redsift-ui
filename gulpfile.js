@@ -74,10 +74,10 @@ function makeCss(name) {
         });
 }
 
-// To activate the meteor refresh logic create the JSON file "meteor-refresh.json"
+// To activate the meteor refresh logic create the JSON file "trigger-app-reload.json"
 // next to the gulpfile.js with the following content:
 // {
-//    "meteorTriggerFolder": "/path/to/meteor/folder"
+//    "watchedFolder": "/path/to/meteor/folder"
 // }
 // where the given path is a folder which meteor will reload automatically on a
 // file change.
@@ -85,25 +85,25 @@ function meteorRefresh() {
   var fs = require('fs'),
       path = require('path');
 
-  var configFilePath = path.join(__dirname, 'meteor-refresh.json'),
+  var configFilePath = path.join(__dirname, 'trigger-app-reload.json'),
   configFile = null;
 
   try {
     configFile = fs.readFileSync(configFilePath);
   } catch(err) {
-    console.log('No config file "meteor-refresh.json" found, skipping...');
+    console.log('No config file "trigger-app-reload.json" found, skipping reloading trigger...');
   }
 
   if (configFile) {
     var config = JSON.parse(configFile);
 
-    if (config && config.meteorTriggerFolder) {
+    if (config && config.watchedFolder) {
       var now = Date.now(),
-      outputFilePath = path.join(config.meteorTriggerFolder, 'ignore-me-from-redsift-ui.js'),
+      outputFilePath = path.join(config.watchedFolder, 'ignore-me-from-redsift-ui.js'),
       content = 'var now = ' + now + ';';
 
       fs.writeFile(outputFilePath, content, function() {
-        console.log('Triggered file creation/update in "%s" for reload refresh...', outputFilePath);
+        console.log('Triggered application reload via "%s"...', outputFilePath);
       });
     }
   }
