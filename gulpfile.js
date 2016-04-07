@@ -18,6 +18,7 @@ var browserSync = require('browser-sync').create();
 var plumber = require('gulp-plumber');
 var streamqueue = require('streamqueue');
 
+
 // Clean
 gulp.task('clean', function() {
     return del([ 'distribution/**' ]);
@@ -73,6 +74,41 @@ function makeCss(name) {
         });
 }
 
+// To activate the meteor refresh logic create the JSON file "meteor-refresh.json"
+// next to the gulpfile.js with the following content:
+// {
+//    "meteorTriggerFolder": "/path/to/meteor/folder"
+// }
+// where the given path is a folder which meteor will reload automatically on a
+// file change.
+function meteorRefresh() {
+  var fs = require('fs'),
+      path = require('path');
+
+  var configFilePath = path.join(__dirname, 'meteor-refresh.json'),
+  configFile = null;
+
+  try {
+    configFile = fs.readFileSync(configFilePath);
+  } catch(err) {
+    console.log('No config file "meteor-refresh.json" found, skipping...');
+  }
+
+  if (configFile) {
+    var config = JSON.parse(configFile);
+
+    if (config && config.meteorTriggerFolder) {
+      var now = Date.now(),
+      outputFilePath = path.join(config.meteorTriggerFolder, 'ignore-me-from-redsift-ui.js'),
+      content = 'var now = ' + now + ';';
+
+      fs.writeFile(outputFilePath, content, function() {
+        console.log('Triggered file creation/update in "%s" for reload refresh...', outputFilePath);
+      });
+    }
+  }
+}
+
 gulp.task('css-light', function () {
     return makeCss('redsift-light');
 });
@@ -85,7 +121,9 @@ gulp.task('css-xtra', function () {
     return makeCss('redsift-xtra');
 });
 
-gulp.task('css', ['css-light', 'css-dark', 'css-xtra']);
+gulp.task('css', ['css-light', 'css-dark', 'css-xtra'], function() {
+  return meteorRefresh();
+});
 
 gulp.task('browser-sync', function() {
     browserSync.init({
