@@ -22,7 +22,6 @@
     "gulp-notify": "*",
     "gulp-plumber": "^1.0.1",
     "gulp-rename": "*",
-    "gulp-sass": "*",
     "gulp-sourcemaps": "*",
     "gulp-stylus": "*",
     "gulp-uglify": "*",
