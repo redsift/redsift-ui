@@ -34,7 +34,7 @@
   },
   "scripts": {
     "test": "echo \"No test specified\" && exit 0",
-    "postinstall": "./node_modules/bower/bin/bower install",
+    "postinstall": "./node_modules/bower/bin/bower install --allow-root",
     "serve": "node node_modules/gulp/bin/gulp.js serve"
   }
 }
