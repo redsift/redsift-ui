@@ -36,7 +36,7 @@ To enable this handy feature create a new file `./my-application/npm_modules/red
 
 Replace `/path/to/watched/folder` with a path suited for your application and restart the interactive development setup of **redsift-ui**:
 
-| CAUTION: Do **NOT** use `~` to specify your home folder, as it is not supported!
+> CAUTION: Do **NOT** use `~` to specify a home folder, it is not supported!
 
 ```shell
 cd my-application/npm_modules/redsift-ui
