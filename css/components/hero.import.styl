@@ -1,5 +1,5 @@
 @import 'common.import'
-@import 'brand.import'
+@import '../brand.import'
 
 $border = 1px
 $spacing = (2*$border) + (2*$padding)
@@ -10,7 +10,7 @@ $spacing = (2*$border) + (2*$padding)
 	background-repeat: no-repeat;
 	background-size: cover;
 }
-    
+
 .hero .floating {
 	position: fixed;
 	left: 0;
@@ -26,30 +26,30 @@ $spacing = (2*$border) + (2*$padding)
 /* iPad [portrait + landscape] */
 @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
 	.hero {
-      	background-attachment: scroll;	
+      	background-attachment: scroll;
 	}
-	
+
 	.hero .floating {
 		background-position: 50% 100%;
-      	background-attachment: scroll;	
+      	background-attachment: scroll;
 	}
 }
 
 /* iPhone [portrait + landscape] */
 @media only screen and (max-device-width: 480px) {
 	.hero {
-		background-attachment: scroll;	
+		background-attachment: scroll;
 	}
 
 	.hero .floating {
 		visibility: hidden;
 	}
-	
+
 	.hero .floating > * {
 		visibility: hidden;
 	}
 }
-	
+
 .hero.darken::before {
 	content: " ";
 	background-color: black;
@@ -68,14 +68,14 @@ $spacing = (2*$border) + (2*$padding)
 	height: $hero;
 	position: absolute;
 	z-index: 0;
-}	
-	
+}
+
 .hero > * {
     text-align: center;
 }
 
 .hero .container {
-	padding: 0 $padding $padding $padding; 
+	padding: 0 $padding $padding $padding;
 	z-index: 1;
 	position: relative;
 }
@@ -119,5 +119,5 @@ $spacing = (2*$border) + (2*$padding)
 }
 
 .content .container.expand {
-	min-height: ($hero - 2*$padding - 2*$border); 
+	min-height: ($hero - 2*$padding - 2*$border);
 }
