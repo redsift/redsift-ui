@@ -10,3 +10,5 @@ npm-debug.log
 samples/sync.html
 
 assets/out/
+
+trigger-app-reload.json
