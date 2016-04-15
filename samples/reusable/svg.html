@@ -1,0 +1,49 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
+  <link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
+  <style>
+	  text {
+          fill: white;
+          dominant-baseline: text-before-edge;
+      }
+      div:nth-child(odd) > svg {
+          background-color: #50AFFA;
+      }
+      
+      div:nth-child(even) > svg {
+          background-color: #FFDF53
+      }
+	
+  </style>
+  </head>
+
+  <body>
+	<div class="chart0"></div>
+	<div class="chart1"></div>
+	<div class="chart1"></div>
+    
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="/js/redsift-global.es5.min.js"></script>
+    <script>
+        var svg0 = Redsift.D3.Reusable.svg().width(200).height(200).margin(0);
+        var div0 = d3.select('div.chart0').call(svg0);
+        div0.select(svg0.child())
+            .append('text')
+            .text(function(d, i) { return 'SVG0, i=' + i + ', iw=' + svg0.innerWidth() + ', ih=' + svg0.innerHeight(); });
+        
+        
+        var svg1 = Redsift.D3.Reusable.svg();
+        var div1 = d3.selectAll('div.chart1').call(svg1);
+        div1.select(svg1.child())
+            .append('text')
+            .text(function(d, i) { return 'SVG1, i=' + i + ', iw=' + svg1.innerWidth() + ', ih=' + svg1.innerHeight(); });
+        
+        d3.transition().duration(5000).delay(1000).each(function() {
+            svg1.width(400).scale(2).margin(67).transition(true);
+            div1.call(svg1);            
+        });
+	</script>
+  </body>
+
+</html>

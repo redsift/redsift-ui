@@ -1,0 +1,60 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
+  <link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
+  <style>
+	
+      svg {
+          background-color: #aaa;
+      }
+	
+  </style>
+  </head>
+
+  <body>
+	<div class="chart"></div>
+    
+    <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="/js/redsift-global.es5.min.js"></script>
+    <script>
+        var data = [
+            {
+                "start": Date.parse("2016-04-13T14:30:00+01:00")
+            },
+            {
+                "end": Date.parse("2016-04-13T18:30:00+01:00")
+            },  
+            { 
+                "status":"confirmed", 
+                "summary": "Confirmed overlap event", 
+                "self": true,
+                "start": Date.parse("2016-04-13T16:30:00+01:00"),
+                "end": Date.parse("2016-04-13T18:30:00+01:00")
+            },  
+            { 
+                "status":"tentative", 
+                "summary": "Tentative event", 
+                "self": false,
+                "start": Date.parse("2016-04-13T15:00:00+01:00"),
+                "end": Date.parse("2016-04-13T16:00:00+01:00")
+            },   
+            { 
+                "status":"proposed", 
+                "summary": "Suggested event", 
+                "self": false,
+                "start": Date.parse("2016-04-13T16:00:00+01:00"),
+                "end": Date.parse("2016-04-13T17:00:00+01:00")
+            },  
+        ];        
+        var ratio = 1.91, width = 266, height = Math.round(width / ratio);
+
+        var svg = Redsift.D3.Reusable.svg().width(width).height(height).scale(2);
+        var schedule = Redsift.D3.Reusable.scheduleChart().width(svg.innerWidth()).height(svg.innerHeight());
+
+        var div = d3.select('div.chart').call(svg);
+        div.select(svg.child()).datum(data).call(schedule);
+
+	</script>
+  </body>
+
+</html>
