@@ -145,7 +145,7 @@ gulp.task('js-watch', ['js'], function() { browserSync.reload('*.js'); });
 gulp.task('serve', ['default', 'browser-sync'], function() {
     gulp.watch(['./css/**/*.{import.styl,styl,css}'], ['css']);
     gulp.watch(['./js/**/*.js'], ['js-watch']);
-    gulp.watch('./samples/*.html').on('change', function() { browserSync.reload('*.html'); });
+    gulp.watch('./samples/**/*.html').on('change', function() { browserSync.reload('*.html'); });
 });
 
 gulp.task('default', ['css', 'js', 'modules']);
