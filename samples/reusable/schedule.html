@@ -4,10 +4,14 @@
   <link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
   <style>
 	
-      svg {
+      body {
           background-color: #aaa;
       }
-	
+		
+      svg {
+          background-color: white;
+      }
+    
   </style>
   </head>
 
@@ -48,8 +52,16 @@
         ];        
         var ratio = 1.91, width = 266, height = Math.round(width / ratio);
 
-        var svg = Redsift.D3.Reusable.svg().width(width).height(height).scale(2);
-        var schedule = Redsift.D3.Reusable.scheduleChart().width(svg.innerWidth()).height(svg.innerHeight());
+        var svg = Redsift.D3.Reusable.svg()
+                            .width(width)
+                            .height(height)
+                            .scale(2);
+                            
+        var schedule = Redsift.D3.Reusable.scheduleChart()
+                            .width(svg.innerWidth())
+                            .height(svg.innerHeight())
+                            .eventHeight(40)
+                            .eventPadding(2);
 
         var div = d3.select('div.chart').call(svg);
         div.select(svg.child()).datum(data).call(schedule);

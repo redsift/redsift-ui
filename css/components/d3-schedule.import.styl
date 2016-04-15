@@ -11,74 +11,77 @@ $knock-back = 0.80
  
 g.schedule {
     .axis text {
-    fill: $grey-dark;
+        fill: $grey-dark;
+        font-size: $font-size;
     }
     
     .axis path {
-    fill: none;
-    stroke: $grey;
-    stroke-width: 2.5px;
-    shape-rendering: crispEdges;
+        fill: none;
+        stroke: $grey;
+        stroke-width: 2.5px;
+        shape-rendering: crispEdges;
     }
 
     .axis line {
-    fill: none;
-    stroke: $grey;
-    stroke-width: 1.6px;
+        fill: none;
+        stroke: $grey;
+        stroke-width: 1.6px;
     }
 
     .axis .minor {
-    stroke: $grey;
-    stroke-width: 0.4px;
+        stroke: $grey;
+        stroke-width: 0.4px;
     }
 
     .axis text.minor {
-    fill: none;
-    stroke: none;
+        fill: none;
+        stroke: none;
     }
 
     .event.self {
-    .symbol {
-        display: initial;
-        fill: $white;
+        .symbol {
+            display: initial;
+            fill: $white;
         } 
     }
 
     .event {
-    .symbol {
-        display: none;
-    }
-    
-    rect {
-        fill: $yellow;
-        opacity: $knock-back;
-    }
-    
-    text {
-        font-size: $event-font-size
-        fill: $grey-dark;
-    }  
+        .symbol {
+            display: none;
+            dominant-baseline: text-after-edge;
+            text-anchor: end;
+        }
+        
+        rect {
+            fill: $yellow;
+            opacity: $knock-back;
+        }
+        
+        text {
+            font-size: $event-font-size
+            fill: $grey-dark;
+        }  
     }
 
     .tentative {
-    rect {
-        fill: $yellow;
-    } 
+        rect {
+            fill: $yellow;
+        } 
     }
 
     .confirmed {
-    rect {
-        fill: $green;
-    }
+        rect {
+            fill: $green;
+        }
     }
 
     .proposed {
-    rect {
-        fill: $blue;
-        opacity: 1.0;
-    }
-    text {
-        fill: $white;
-    }  
+        rect {
+            fill: $blue;
+            opacity: 1.0;
+        }
+        text {
+            fill: $white;
+        }  
     }
 }

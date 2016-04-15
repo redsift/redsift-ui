@@ -6,7 +6,13 @@ var tools = require('./tools.js');
 function scheduleChart() {
   
   var width = 300,
-      height = 150;
+      height = 150,
+      eventHeight = 32,
+      eventPadding = 2,
+      textLeft = 4,
+      textRight = 4,
+      textTop = 4,
+      textBottom = 4;
   
   function _isMinor(d) {
     return  (d.getMinutes() != 0);
@@ -75,14 +81,13 @@ function scheduleChart() {
         var events = el.append('g')
                     .attr('class', 'events');
 
-        var eventHeight = 40, eventPad = 2;
 
         var event = events.selectAll('g.event')
             .data(data)
             .enter()
             .append('g')
             .attr('class', (d) => 'event ' + d.status + (d.self ? ' self' : ''))
-            .attr('transform', (d) => 'translate(' + x(d.start) + ',' + (d.index * (eventHeight + eventPad)) + ')');
+            .attr('transform', (d) => 'translate(' + x(d.start) + ',' + (d.index * (eventHeight + eventPadding)) + ')');
 
 
         event.append('rect')
@@ -90,23 +95,22 @@ function scheduleChart() {
             .attr('height', eventHeight);
 
         //TODO: Wrapping is a bit of hackfest
-
-        var padding = 4;
         event.append('text')
-            .attr('x', padding)
+            .attr('x', textLeft)
             .attr('y', 0)
+            .attr('width', (d) => x(d.end) - x(d.start) - textLeft - textRight)
+            .attr('height', eventHeight - textTop - textBottom)
             .text((d) => d.summary);
-            
+                        
             /*
             .call(Redsift.D3.Components.tspanWrap().width(80));
             */
             
         event.append('text')
             .attr('class', 'symbol')
-            .attr('x', (d) => x(d.end) - x(d.start) - 14)
-            .attr('y', eventHeight - 4)
+            .attr('x', (d) => x(d.end) - x(d.start))
+            .attr('y', eventHeight)
             .text('♚');
-
                                   
     });
   }
@@ -118,11 +122,44 @@ function scheduleChart() {
   };
 
   impl.height = function(value) {
-    if (!arguments.length) return width;
+    if (!arguments.length) return height;
     height = value;
     return impl;
   };
   
+  impl.eventHeight = function(value) {
+    if (!arguments.length) return eventHeight;
+    eventHeight = value;
+    return impl;
+  };
+  
+  impl.eventPadding = function(value) {
+    if (!arguments.length) return eventPadding;
+    eventPadding = value;
+    return impl;
+  };   
+  
+  impl.textPadding = function(value) {
+    if (!arguments.length) return {
+        top: textTop,
+        right: textRight,
+        bottom: textBottom,
+        left: textLeft
+    };
+    if (value.top !== undefined) {
+      textTop = value.top;
+      textRight = value.right;
+      textBottom = value.bottom;
+      textLeft = value.left; 
+    } else {
+      textTop = value;
+      textRight = value;
+      textBottom = value;
+      textLeft = value;
+    } 
+    return impl;
+  };      
+    
   return impl;
 }
 
