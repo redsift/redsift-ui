@@ -1,7 +1,7 @@
 /* global d3 */
 'use strict';
 
-var tools = require('./tools.js');
+var tspanWrap = require('./tspanWrap.js');
 
 function scheduleChart() {
   
@@ -14,9 +14,65 @@ function scheduleChart() {
       textTop = 4,
       textBottom = 4;
   
+  var colorText = '#7F736F',
+        colorLine = '#AB9A94',
+        colorLight = '#F7EEED',
+        ePx = '10px',
+        aPx = '12px';
+  
   function _isMinor(d) {
     return  (d.getMinutes() != 0);
   }
+    
+  var eventRectStyle = function(d) {
+      var c = '#FFDF53';
+      var o = '0.8';
+
+      if (d.status === 'proposed') {
+          c = '#50AFFA';
+          o = '1.0';
+      } else if (d.status === 'confirmed') {
+          c = '#37D192';
+      }
+      
+      return 'fill:' + c + ';opacity:' + o;
+  }
+  
+  var eventTextStyle = function(d) {
+      var c = colorText;
+      if (d.status === 'proposed') {
+          c = colorLight;
+      }
+      return 'dominant-baseline: text-before-edge; font-size: ' + ePx + ';fill:' + c;
+  }
+  
+  var eventSymbolStyle = function(d) {
+      var c = 'none';
+      if (d.self === true) {
+          c = colorLight;
+      }      
+      return 'dominant-baseline: text-after-edge; text-anchor: end; font-size: ' + ePx + ';fill:' + c;
+  }
+  
+  var axisTextStyle = function(d) {
+      var c = colorText;
+      if (_isMinor(d)) {
+        // hide minors
+        c = 'none';
+      } 
+      
+      return 'font-size: ' + aPx + ';fill: ' + c;
+  }
+
+  var axisLineStyle = function(d) {
+      var w = '1.6px';
+      if (_isMinor(d)) {
+        w = '0.4px';
+      } 
+      
+      return 'stroke-width: ' + w + ';stroke: ' + colorLine;
+  }
+
     
   function impl(selection) {
     selection.each(function(provided) {
@@ -67,15 +123,12 @@ function scheduleChart() {
 
         grid
             .selectAll('g.x.axis g.tick text')
-            .attr('class', function(d) {
-                return _isMinor(d) ? 'minor' : '';
-            });
+            .attr('style', axisTextStyle)
+            .attr('transform', 'translate(' + -10 + ',0)'); //TODO: axis hardcode here
 
         grid
             .selectAll('g.x.axis g.tick line')
-            .attr('class', function(d) {
-                return _isMinor(d) ? 'minor' : '';
-            });  
+            .attr('style', axisLineStyle); 
             
         // Event rects
         var events = el.append('g')
@@ -86,30 +139,32 @@ function scheduleChart() {
             .data(data)
             .enter()
             .append('g')
-            .attr('class', (d) => 'event ' + d.status + (d.self ? ' self' : ''))
+            .attr('class', 'event')
             .attr('transform', (d) => 'translate(' + x(d.start) + ',' + (d.index * (eventHeight + eventPadding)) + ')');
 
 
         event.append('rect')
+            .attr('style', eventRectStyle)
             .attr('width', (d) => x(d.end) - x(d.start))
             .attr('height', eventHeight);
 
-        //TODO: Wrapping is a bit of hackfest
+
+        var wrap = tspanWrap();
         event.append('text')
+            .attr('style', eventTextStyle)
             .attr('x', textLeft)
-            .attr('y', 0)
+            .attr('y', textTop)
             .attr('width', (d) => x(d.end) - x(d.start) - textLeft - textRight)
             .attr('height', eventHeight - textTop - textBottom)
-            .text((d) => d.summary);
-                        
-            /*
-            .call(Redsift.D3.Components.tspanWrap().width(80));
-            */
+            .text((d) => d.summary)
+            .call(wrap);
+            
             
         event.append('text')
             .attr('class', 'symbol')
-            .attr('x', (d) => x(d.end) - x(d.start))
-            .attr('y', eventHeight)
+            .attr('x', (d) => x(d.end) - x(d.start) - textRight)
+            .attr('y', eventHeight - textBottom)
+            .attr('style', eventSymbolStyle)
             .text('♚');
                                   
     });
