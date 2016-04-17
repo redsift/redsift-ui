@@ -8,6 +8,7 @@ var pieChart = require('./pieChart.js');
 var scheduleChart = require('./scheduleChart.js');
 var matrix = require('./matrix.js');
 var svg = require('./svg.js');
+var tspanWrap = require('./tspanWrap.js');
 
 var reusable = {
   radialChart: radialChart,
@@ -15,7 +16,8 @@ var reusable = {
   pieChart: pieChart,
   scheduleChart: scheduleChart,
   matrix: matrix,
-  svg: svg  
+  svg: svg,
+  tspanWrap: tspanWrap  
 };
 
 var RedsfitAngle = 33.75;
