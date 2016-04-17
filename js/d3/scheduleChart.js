@@ -2,6 +2,9 @@
 'use strict';
 
 var tspanWrap = require('./tspanWrap.js');
+var svg = require('./svg.js');
+
+var CSS = "text { font: 10px sans-serif; } \n"; 
 
 function scheduleChart() {
   
@@ -11,8 +14,8 @@ function scheduleChart() {
       eventPadding = 2,
       textLeft = 4,
       textRight = 4,
-      textTop = 4,
-      textBottom = 4;
+      textTop = 2,
+      textBottom = 2;
   
   var colorText = '#7F736F',
         colorLine = '#AB9A94',
@@ -213,7 +216,29 @@ function scheduleChart() {
       textLeft = value;
     } 
     return impl;
-  };      
+  };
+  
+  impl.rasterize = function(selection, data, width, height, scale) {
+      var ratio = 1.91;
+      if (height == null || height == 0) {
+          height = Math.round(width / ratio);
+      } else if (width == null || width == 0) {
+          width = Math.round(height * ratio);
+      }
+      
+      var frame = svg()
+                    .width(width)
+                    .height(height)
+                    .scale(scale)
+                    .css(CSS);   
+      
+      impl
+        .width(frame.innerWidth())
+        .height(frame.innerHeight());
+        
+      var div = selection.call(frame);
+      div.select(frame.child()).datum(data).call(impl);
+  }      
     
   return impl;
 }
