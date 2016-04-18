@@ -1,7 +1,6 @@
 @import "../common/variables.import"
 @import "../common/patterns.import"
 
-$content-block-spacing-end = 4em;
 $content-block-space-top = 2em;
 $content-block-space-top-small = 1.5em;
 $content-block-space-top-medium = 2em;
@@ -14,20 +13,27 @@ $content-block-space-bottom = 4em;
 $content-block-space-bottom-small = 4em;
 $content-block-space-bottom-medium = 8em;
 
+$content-block-border-multiplier = 13;
+$content-block-border-multiplier-large = 3;
+
 .redsift-content-block {
   display: flex;
+  justify-content: center;
 }
 
 .redsift-content-block__content {
   width: 100%;
   height: 100%;
+
   max-width: $content-max-width;
-  padding-top: $content-block-spacing-end;
+
+  padding-top: $content-block-space-top;
+  padding-bottom: $content-block-space-bottom;
+  padding-left: $content-block-space-side;
+  padding-right: $content-block-space-side;
 }
 
-.redsift-content-block__border--head-line,
-.redsift-content-block__border--generic,
-.redsift-content-block__border--none {
+.redsift-content-block__border--head-line {
   flex: 1 1 0px;
 }
 
@@ -37,17 +43,31 @@ $content-block-space-bottom-medium = 8em;
   margin-bottom: (3 * $pattern-down-arrow-green-height);
 }
 
-.redsift-content-block__border--generic {
-  margin-bottom: (13 * $pattern-down-arrow-green-height);
+.redsift-content-block__bar {
+  display: block;
+  width: 6em;
+  height: 1px;
+  margin-bottom: 32px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
-.redsift-content-block__bar {
-    display: block;
-    width: 6em;
-    height: 1px;
-    margin-bottom: 32px;
-    margin-right: auto;
-    margin-left: auto;
+.redsift-content-block__border--green {
+  width: 100%;
+  height: ($content-block-border-multiplier * $pattern-down-arrow-green-height);
+
+  background-image: url("/icons/down-arrow-green.svg");
+  background-repeat: repeat;
+  background-size: $pattern-down-arrow-green-width $pattern-down-arrow-green-height;
+}
+
+.redsift-content-block__border--red {
+  width: 100%;
+  height: ($content-block-border-multiplier * $pattern-redsift-logo-height);
+
+  background-image: url("/icons/redsift-logo-8.1.svg");
+  background-repeat: repeat;
+  background-size: $pattern-redsift-logo-width $pattern-redsift-logo-height;
 }
 
 @media only screen and (min-width: $bp-small) {
@@ -61,7 +81,11 @@ $content-block-space-bottom-medium = 8em;
       max-width: $content-max-width-medium;
     }
 
-  .redsift-content-block__border--generic {
-    margin-bottom: (3 * $pattern-down-arrow-green-height);
+  .redsift-content-block__border--green {
+    height: ($content-block-border-multiplier-medium * $pattern-down-arrow-green-height);
+  }
+
+  .redsift-content-block__border--red {
+    height: ($content-block-border-multiplier-medium * $pattern-redsift-logo-height);
   }
 }
