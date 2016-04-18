@@ -1,13 +1,7 @@
 <html>
 <head>
-  <link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
-  <link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
   <style>
-	
-      svg {
-          background-color: #aaa;
-      }
-	
+    
   </style>
   </head>
 
@@ -40,20 +34,18 @@
             },   
             { 
                 "status":"proposed", 
-                "summary": "Suggested event", 
+                "summary": "Suggested event of some significant length", 
                 "self": false,
                 "start": Date.parse("2016-04-13T16:00:00+01:00"),
                 "end": Date.parse("2016-04-13T17:00:00+01:00")
             },  
-        ];        
-        var ratio = 1.91, width = 266, height = Math.round(width / ratio);
+        ];     
 
-        var svg = Redsift.D3.Reusable.svg().width(width).height(height).scale(2);
-        var schedule = Redsift.D3.Reusable.scheduleChart().width(svg.innerWidth()).height(svg.innerHeight());
-
-        var div = d3.select('div.chart').call(svg);
-        div.select(svg.child()).datum(data).call(schedule);
-
+        var width = 266;
+        Redsift.D3.Reusable.scheduleChart()
+                            .eventHeight(40)
+                            .eventPadding(2)
+                            .rasterize(d3.select('div.chart'), data, width, 0, 2);
 	</script>
   </body>
 

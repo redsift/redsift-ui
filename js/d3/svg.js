@@ -18,7 +18,8 @@ function svg() {
       inner = 'g.inner',
       innerWidth = -1,
       innerHeight = -1,
-      transition = null;
+      transition = null,
+      css = null;
     
   function _updateInnerWidth() {
       innerWidth = width - left - right;
@@ -37,7 +38,7 @@ function svg() {
         var bind = d3.select(this).selectAll('svg.svg-guid-' + id);
                 
         // new
-        bind.data([ null ])
+        var nsvg = bind.data([ null ])
                 .enter()
                 .append('svg')
                     .attr({
@@ -48,12 +49,20 @@ function svg() {
                         width: width * scale,
                         height: height * scale,
                         viewBox: '0 0 ' + width + ' ' + height
-                    })
-                    .append('g')
-                        .attr({
-                            transform: 'translate(' + left + ',' + top + ')',
-                            class: 'inner'
-                            });
+                    });
+        
+        if (css != null) {            
+            nsvg.append('defs')
+                .append('style')
+                .attr('type', 'text/css')
+                .text(css);
+        }
+        
+        nsvg.append('g')
+            .attr({
+                transform: 'translate(' + left + ',' + top + ')',
+                class: 'inner'
+                });
         
         // d3 work around for xlink
         bind.each(function() {
@@ -103,11 +112,17 @@ function svg() {
     return impl;
   };
   
+  impl.css = function(value) {
+    if (!arguments.length) return css;
+    css = value;
+    return impl;
+  };  
+
   impl.scale = function(value) {
     if (!arguments.length) return scale;
     scale = value;
     return impl;
-  };  
+  };   
   
   impl.margin = function(value) {
     if (!arguments.length) return {
