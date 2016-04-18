@@ -1,0 +1,67 @@
+@import "../common/variables.import"
+@import "../common/patterns.import"
+
+$content-block-spacing-end = 4em;
+$content-block-space-top = 2em;
+$content-block-space-top-small = 1.5em;
+$content-block-space-top-medium = 2em;
+
+$content-block-space-side = 2em;
+$content-block-space-side-small = 2em;
+$content-block-space-side-medium = 2em;
+
+$content-block-space-bottom = 4em;
+$content-block-space-bottom-small = 4em;
+$content-block-space-bottom-medium = 8em;
+
+.redsift-content-block {
+  display: flex;
+}
+
+.redsift-content-block__content {
+  width: 100%;
+  height: 100%;
+  max-width: $content-max-width;
+  padding-top: $content-block-spacing-end;
+}
+
+.redsift-content-block__border--head-line,
+.redsift-content-block__border--generic,
+.redsift-content-block__border--none {
+  flex: 1 1 0px;
+}
+
+.redsift-content-block__border--head-line {
+  margin-top: (3 * $pattern-down-arrow-green-height);
+  margin-right: (2 * $pattern-down-arrow-green-height);
+  margin-bottom: (3 * $pattern-down-arrow-green-height);
+}
+
+.redsift-content-block__border--generic {
+  margin-bottom: (13 * $pattern-down-arrow-green-height);
+}
+
+.redsift-content-block__bar {
+    display: block;
+    width: 6em;
+    height: 1px;
+    margin-bottom: 32px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media only screen and (min-width: $bp-small) {
+  .redsift-content-block__content {
+    max-width: $content-max-width-small;
+  }
+}
+
+@media only screen and (min-width: $bp-medium) {
+    .redsift-content-block__content {
+      max-width: $content-max-width-medium;
+    }
+
+  .redsift-content-block__border--generic {
+    margin-bottom: (3 * $pattern-down-arrow-green-height);
+  }
+}

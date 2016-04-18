@@ -60,5 +60,5 @@ The repository contains the script `forweb.sh` to optimize images in size. It al
 After that run the script like so:
 
 ```
-./forweb.sh path/to/image outputpath/
+./forweb.sh path/to/image outputpath/basename
 ```
