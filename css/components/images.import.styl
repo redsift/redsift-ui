@@ -1,27 +1,90 @@
-/* Make WebP and HDPI selectors for a background image slot */
+/*
+ * Make WebP and HDPI selectors for a background image slot
+ */
 
 url-jpg(u)
   url(u + '/img.jpg')
 
 url-webp(u)
   url(u + '/img.webp')
-  
+
 url-jpg-hdpi(u)
   url(u + '/img_2x.jpg')
 
 url-webp-hdpi(u)
-  url(u + '/img_2x.webp')  
-  
+  url(u + '/img_2x.webp')
+
 multimode-image(colour, baseimage)
     background-color: colour;
-    background-image: url-jpg('/images/header'); 
+    background-image: url-jpg('/images/header');
     background-image: -webkit-image-set(
       url-jpg('/images/header') 1x,
       url-jpg-hdpi('/images/header') 2x
-    ); 
+    );
     @supports (background-image: url-webp('/images/header')) {
       background-image: -webkit-image-set(
         url-webp('/images/header') 1x,
         url-webp-hdpi('/images/header') 2x
       );
-    }  
+    }
+
+/*
+ * bg-webp(basefile, fallbackext, haswebp, filter = null)
+ *
+ * Loads a basefile as background image.
+ *
+ * basefile    - path to the image file without extension
+ * fallbackext - the fallback extension (e.g. 'jpg')
+ * haswebp     - if true the webp version is loaded, if supported by the browser.
+ *               The webp file has to exist next to the fallback version. If
+ *               'haswebp' is false or webp is not supported in the browser the
+ *               'fallbackext' version is loaded.
+ * filter      - (optional) single filter to apply to the image
+ *               (e.g. 'linear-gradient')
+ */
+bg-webp(basefile, fallbackext, haswebp, filter = null)
+  if filter {
+    background-image: filter, url(basefile'.'fallbackext);
+  } else {
+    background-image: url(basefile'.'fallbackext);
+  }
+
+  if haswebp {
+    @supports (background-image: url(basefile'.webp')) {
+      if filter {
+        background-image: filter, url(basefile'.webp');
+      } else {
+        background-image: url(basefile'.webp');
+      }
+    }
+  }
+
+/*
+ * bg-retina-webp(basefile, fallbackext, haswebp, filter = null)
+ *
+ * Same as 'bg-webp', but loads the basefile with a '_2x' appendix if a retina
+ * display is detected.
+ */
+bg-retina-webp(basefile, fallbackext, haswebp, filter = null)
+  @media (-webkit-min-device-pixel-ratio: 1.5),
+         (  min--moz-device-pixel-ratio: 1.5),
+         (    -o-min-device-pixel-ratio: 1.5/1),
+         (        min-device-pixel-ratio: 1.5),
+         (                min-resolution: 192dpi),
+         (                min-resolution: 1.5dppx) {
+    if filter {
+      background-image: filter, url(basefile'_2x.'fallbackext);
+    } else {
+      background-image: url(basefile'_2x.'fallbackext);
+    }
+
+    if haswebp {
+      @supports (background-image: url(basefile'_2x.webp')) {
+        if filter {
+          background-image: filter, url(basefile'_2x.webp');
+        } else {
+          background-image: url(basefile'_2x.webp');
+        }
+      }
+    }
+  }
