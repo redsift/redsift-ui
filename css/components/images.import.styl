@@ -88,3 +88,31 @@ bg-retina-webp(basefile, fallbackext, haswebp, filter = null)
       }
     }
   }
+
+/*
+ * bg-image-set-webp(basefile, fallbackext, haswebp)
+ *
+ * Uses '-webkit-image-set' to load low-res or high-res image based on DPI resolution.
+ * The high-res image has to reside next to the low-res version with a '_2x' appendix.
+ *
+ * basefile    - path to the image file without extension
+ * fallbackext - the fallback extension (e.g. 'jpg')
+ * haswebp     - if true the webp version is loaded, if supported by the browser.
+ *               The webp file has to exist next to the fallback version. If
+ *               'haswebp' is false or webp is not supported in the browser the
+ *               'fallbackext' version is loaded.
+ */
+bg-image-set-webp(basefile, fallbackext, haswebp)
+    background-image: -webkit-image-set(
+      url(basefile'.'fallbackext) 1x,
+      url(basefile'_2x.'fallbackext) 2x
+    );
+
+    if haswebp {
+      @supports (background-image: url(basefile'.webp')) {
+        background-image: -webkit-image-set(
+          url(basefile'.webp') 1x,
+          url(basefile'_2x.webp') 2x
+        );
+      }
+    }
