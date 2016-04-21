@@ -116,3 +116,23 @@ bg-image-set-webp(basefile, fallbackext, haswebp)
         );
       }
     }
+
+/*
+ * bg-image-responsive(basefile, fallbackext, haswebp)
+ *
+ * Sets the background image taking into account HDPI/retina devices. Loads webp
+ * version of image if existing and supported by the browser. The mixin uses
+ * '-webkit-image-set' if available. If not a fallback implementation with media
+ * queries is used.
+ *
+ * basefile    - path to the image file without extension
+ * fallbackext - the fallback extension (e.g. 'jpg')
+ * haswebp     - if true the webp version is loaded, if supported by the browser.
+ *               The webp file has to exist next to the fallback version. If
+ *               'haswebp' is false or webp is not supported in the browser the
+ *               'fallbackext' version is loaded.
+ */
+bg-image-responsive(basefile, fallbackext, haswebp)
+  bg-webp(basefile, fallbackext, haswebp);
+  bg-retina-webp(basefile, fallbackext, haswebp);
+  bg-image-set-webp(basefile, fallbackext, haswebp);
