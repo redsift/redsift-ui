@@ -7,14 +7,15 @@ var TreoWriter = require('./treo-writer/db.js');
 var Widgets = require('./widgets/widgets.js');
 var Scroll = require('./scroll/smooth.js');
 var Xkcd = require('./xkcd/xkcd.js');
+var FeatureDetection = require('./feature-detection/index.js');
 
 if (window !== undefined) {
 	var ui = { };
-	
+
 	if (window.Redsift !== undefined) {
 		ui = window.Redsift;
 	}
-	
+
 	ui.ColorTools = ColorTools;
 	ui.D3 = D3;
 	ui.Lang = Lang;
@@ -22,7 +23,8 @@ if (window !== undefined) {
 	ui.TreoWriter = TreoWriter;
 	ui.Widgets = Widgets;
 	ui.Scroll = Scroll;
-    ui.Xkcd = Xkcd;
-    
+  ui.Xkcd = Xkcd;
+	ui.FeatureDetection = FeatureDetection;
+
 	window.Redsift = ui;
 }
