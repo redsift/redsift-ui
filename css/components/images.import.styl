@@ -125,6 +125,11 @@ bg-image-set-webp(basefile, fallbackext, haswebp)
  * '-webkit-image-set' if available. If not a fallback implementation with media
  * queries is used.
  *
+ * NOTE: Does not support to overlay the image with filters (e.g. 'linear-gradient')
+ *       because the 'bg-image-set-webp' mixin used internally does not support it.
+ *       If you need filters use the 'bg-webp' and 'bg-retina-webp' mixins directly,
+ *       which has the same effect regarding responsiveness.
+ *
  * basefile    - path to the image file without extension
  * fallbackext - the fallback extension (e.g. 'jpg')
  * haswebp     - if true the webp version is loaded, if supported by the browser.
