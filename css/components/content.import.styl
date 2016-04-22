@@ -1,0 +1,99 @@
+@import "../common/patterns.import"
+
+$content__space-top = 2em;
+$content__space-top-small = 1.5em;
+$content__space-top-medium = 9em;
+
+$content__space-side = 2em;
+$content__space-side-small = 2em;
+$content__space-side-medium = 2em;
+
+$content__space-bottom = 4em;
+$content__space-bottom-small = 4em;
+$content__space-bottom-medium = 9em;
+
+$content__border-multiplier = 13;
+$content__border-multiplier-medium = 3;
+
+$content__max-width = 460px
+$content__max-width-small = 620px
+$content__max-width-medium = 800px
+$content__max-width-large = 1200px
+
+.redsift-content-padding {
+  height: 0.24em;
+}
+
+.redsift-content {
+  display: flex;
+  justify-content: center;
+}
+
+.redsift-content__container, .redsift-content__container--feature {
+  width: 100%;
+  height: 100%;
+
+  padding-top: $content__space-top;
+  padding-bottom: $content__space-bottom;
+  padding-left: $content__space-side;
+  padding-right: $content__space-side;
+}
+
+.redsift-content__container {
+  max-width: $content__max-width;
+}
+
+.redsift-content__container--feature {
+  margin: 0;
+  margin-right: (2 * $patterns__down-arrow-green-width);
+  margin-bottom: (3 * $patterns__down-arrow-green-height);
+
+  background: white;
+}
+
+.redsift-content__bar {
+  display: block;
+  width: 6rem;
+  height: 1px;
+  margin-bottom: 2rem;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.redsift-content-separator--green {
+  width: 100%;
+  height: ($content__border-multiplier * $patterns__down-arrow-green-height);
+
+  background-image: url("/icons/down-arrow-green.svg");
+  background-repeat: repeat;
+  background-size: $patterns__down-arrow-green-width $patterns__down-arrow-green-height;
+}
+
+.redsift-content-separator--red {
+  width: 100%;
+  height: ($content__border-multiplier * $patterns__redsift-logo-height);
+
+  background-image: url("/icons/redsift-logo-8.1.svg");
+  background-repeat: repeat;
+  background-size: $patterns__redsift-logo-width $patterns__redsift-logo-height;
+}
+
+@media only screen and (min-width: $bp-small) {
+  .redsift-content__container {
+    max-width: $content__max-width-small;
+  }
+}
+
+@media only screen and (min-width: $bp-medium) {
+    .redsift-content__container {
+      max-width: $content__max-width-medium;
+    }
+
+  .redsift-content-separator--green {
+    height: ($content__border-multiplier-medium * $patterns__down-arrow-green-height);
+  }
+
+  .redsift-content-separator--red {
+    height: ($content__border-multiplier-medium * $patterns__redsift-logo-height);
+  }
+}

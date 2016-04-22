@@ -18,31 +18,16 @@ $fonts = {
 
 $type-settings = {
 	mobilePortrait: {
-	  h1: { font-family: $fonts.headings, font-size: 3.8rem, line-height: 1.2em, margin-top:  0.1em, margin-bottom:   0.1em, font-weight: 400, text-transform: uppercase },
-	  h2: { font-family: $fonts.headings, font-size:   2rem, line-height: 1.5em, margin-top: 1.25em, margin-bottom: 0.625em, font-weight: 400, text-transform: uppercase },
-	  h3: { font-family: $fonts.headings, font-size: 1.6rem, line-height: 1.5em, margin-top:      0, margin-bottom: 0.625em, font-weight: 400, text-transform: uppercase },
-	  h4: { font-family: $fonts.headings, font-size: 0.9rem, line-height:     1, margin-top:      0, margin-bottom: 1.625em, font-weight: 400, text-transform: uppercase, border-bottom: 1px solid #424242 }
-	  h5: { font-family: $fonts.headings, font-size: 0.9rem, line-height:     1, margin-top: 0.75em, margin-bottom:  0.75em, font-weight: 400, text-transform: uppercase },
+	  h1: { font-family: $fonts.headings, font-size:   2rem, line-height: 1.2em, margin-top:  0.1em, margin-bottom:   0.1em, font-weight: 400, text-transform: uppercase },
+	  h2: { font-family: $fonts.headings, font-size: 1.4rem, line-height: 1.5em, margin-top: 1.25em, margin-bottom: 0.625em, font-weight: 400, text-transform: uppercase },
+	  h3: { font-family: $fonts.headings, font-size: 1.4rem, line-height: 1.5em, margin-top:      0, margin-bottom: 0.625em, font-weight: 400, text-transform: uppercase },
+	  h4: { font-family: $fonts.headings, font-size:   1rem, line-height: 1.5em, margin-top:  0.7em, margin-bottom:   0.7em, font-weight: 400, text-transform: uppercase, border-bottom: 1px solid #424242, text-align: center }
 	},
 	mobileLandscape: {
 	  h1: { font-family: $fonts.headings, font-size: 3.8rem, line-height: 1.2em, margin-top:  0.1em, margin-bottom:   0.1em, font-weight: 400, text-transform: uppercase },
 	  h2: { font-family: $fonts.headings, font-size:   2rem, line-height: 1.5em, margin-top: 1.25em, margin-bottom: 0.625em, font-weight: 400, text-transform: uppercase },
 	  h3: { font-family: $fonts.headings, font-size: 1.6rem, line-height: 1.5em, margin-top:      0, margin-bottom: 0.625em, font-weight: 400, text-transform: uppercase },
-	  h4: { font-family: $fonts.headings, font-size: 0.9rem, line-height:     1, margin-top:      0, margin-bottom: 1.625em, font-weight: 400, text-transform: uppercase, border-bottom: 1px solid #424242 }
-	  h5: { font-family: $fonts.headings, font-size: 0.9rem, line-height:     1, margin-top: 0.75em, margin-bottom:  0.75em, font-weight: 400, text-transform: uppercase },
-	},
-	tablet: {
-	  h1: { font-family: $fonts.headings, font-size: 3.8rem, line-height: 1.2em, margin-top:  0.1em, margin-bottom:   0.1em, font-weight: 400, text-transform: uppercase },
-	  h2: { font-family: $fonts.headings, font-size:   2rem, line-height: 1.5em, margin-top: 1.25em, margin-bottom: 0.625em, font-weight: 400, text-transform: uppercase },
-	  h3: { font-family: $fonts.headings, font-size: 1.6rem, line-height: 1.5em, margin-top:      0, margin-bottom: 0.625em, font-weight: 400, text-transform: uppercase },
-	  h4: { font-family: $fonts.headings, font-size: 0.9rem, line-height:     1, margin-top:      0, margin-bottom: 1.625em, font-weight: 400, text-transform: uppercase, border-bottom: 1px solid #424242 }
-	  h5: { font-family: $fonts.headings, font-size: 0.9rem, line-height:     1, margin-top: 0.75em, margin-bottom:  0.75em, font-weight: 400, text-transform: uppercase },
-	},
-	desktop: {
-	  h1: { font-family: $fonts.headings, font-size: 3.8rem, line-height: 1.2em, margin-top:  0.1em, margin-bottom:   0.1em, font-weight: 400, text-transform: uppercase },
-	  h2: { font-family: $fonts.headings, font-size:   2rem, line-height: 1.5em, margin-top: 1.25em, margin-bottom: 0.625em, font-weight: 400, text-transform: uppercase },
-	  h3: { font-family: $fonts.headings, font-size: 1.6rem, line-height: 1.5em, margin-top:      0, margin-bottom: 0.625em, font-weight: 400, text-transform: uppercase },
-	  h4: { font-family: $fonts.headings, font-size: 0.9rem, line-height:     1, margin-top:      0, margin-bottom: 1.625em, font-weight: 400, text-transform: uppercase, border-bottom: 1px solid #424242 }
+	  h4: { font-family: $fonts.headings, font-size:   1rem, line-height: 1.5em, margin-top:  0.7em, margin-bottom:   0.7em, font-weight: 400, text-transform: uppercase, border-bottom: 1px solid #424242 }
 	  h5: { font-family: $fonts.headings, font-size: 0.9rem, line-height:     1, margin-top: 0.75em, margin-bottom:  0.75em, font-weight: 400, text-transform: uppercase },
 	}
 }
@@ -66,12 +51,4 @@ setup-types($type-settings.mobilePortrait);
 
 +at('mobile-landscape') {
  setup-types($type-settings.mobileLandscape)
-}
-
-+at('tablet') {
- setup-types($type-settings.tablet)
-}
-
-+at('desktop') {
- setup-types($type-settings.desktop)
 }
