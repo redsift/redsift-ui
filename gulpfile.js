@@ -2,6 +2,7 @@
 
 var gulp = require('gulp');
 var stylus = require('gulp-stylus');
+var rupture = require('rupture');
 var concat = require('gulp-concat');
 var minifyCss = require('gulp-cssnano');
 var sourcemaps = require('gulp-sourcemaps');
@@ -49,6 +50,10 @@ gulp.task('js', function() {
 });
 
 function makeCss(name) {
+    var stylusOptions = {
+        use: [ rupture({ implicit: false }) ]
+    };
+
     return gulp.src([
             './node_modules/normalize.css/**.css',
             './css/' + name + '.styl',
@@ -56,7 +61,7 @@ function makeCss(name) {
         ])
         .pipe(plumber())
         .pipe(sourcemaps.init())
-        .pipe(stylus())
+        .pipe(stylus(stylusOptions))
         .pipe(concat(name + '.css'))
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
