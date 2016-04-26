@@ -3,41 +3,41 @@ colour-system($textColour, $bodyColour, $linkColour, $hoverColour, $visitedColou
 
 	body {
 		color: $textColour;
-		background: $bodyColour; 
+		background: $bodyColour;
 	}
-	
+
 	::selection {
-		background: $selectionColour; 
+		background: $selectionColour;
 		color: white;
 		fill: white;
 	}
-	
+
 	a {
   		color: $linkColour;
 	}
-	
+
 	a:active,
 	a:hover {
 		color: $hoverColour;
 	}
-	
+
 	a:visited {
 		color: $visitedColour;
 	}
-	
+
 	a:focus {
 		outline: none;
 		color: $hoverColour;
 	}
-	
+
 	p code {
 		background-color: $codeBg;
-	}	
+	}
 
 	pre {
 		background-color: $codeBg;
 	}
-	
+
 	.content {
 		background-color: $codeBg;
 	}
@@ -46,14 +46,14 @@ colour-system($textColour, $bodyColour, $linkColour, $hoverColour, $visitedColou
 		background-color: $bodyColour;
 	}
 
-    .informational {
-        color: #bbb;
-    }
-}
+  .informational {
+      color: #bbb;
+  }
 
-/* Images so assume white text is required */
-.hero {
-	h1, h2, h3, h4, h5, p, code {
-		color: white;
+	/* Images so assume white text is required */
+	.hero {
+		h1, h2, h3, h4, h5, p, code {
+			color: white;
+		}
 	}
 }
