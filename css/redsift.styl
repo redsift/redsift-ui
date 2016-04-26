@@ -1,30 +1,48 @@
 /*
- * Style setup uses as base for Sift themes.
+ * Style setup for redsift-ui based sifts.
  *
- * Provides:
- *   - ready-to-use UI components
- *   - responsive type system
- *   - breakpoint setup (via 'rupture')
- *   - common functionality like reset, patterns and fonts
+ * - Provides:
+ *   . ready-to-use UI components
+ *   . responsive type system
+ *   . breakpoint setup (via 'rupture')
+ *   . common functionality like reset, patterns and fonts
  *
- * Used by:
- *   - redsift-light
- *   - redsift-dark
+ * - Used by:
+ *   . redsift-light
+ *   . redsift-dark
+ *
+ * - Folder structure:
+ *
+ *   ./lib        -> mixin and function library
+ *   ./common     -> CSS setup and common classes
+ *   ./components -> UI components
  */
 
 /*
- * Common functionality:
+ * Mixin/functions library
+ *
+ * Common mixins and functions used by redsift-ui.
+ */
+@import './lib/cards.import'
+@import './lib/gradients.import'
+
+/*
+ * Base configuration and common classes:
+ *
+ * CSS base setup and common CSS classes.
  */
 @import './common/reset.import'
 @import './common/fonts.import'
 @import './common/patterns.import'
 @import './common/breakpoints.import'
 @import './common/selection.import'
+@import './common/animation.import'
 @import './common/base.import'
 @import './common/types.import'
 
 setup-types()
 disable-selection() // FIXXME: only disable on mobile?
+create-cards('cards', false)
 
 /*
  * UI components:
@@ -40,20 +58,10 @@ disable-selection() // FIXXME: only disable on mobile?
 @import './components/widgets.import'
 @import './components/colour.import'
 @import './components/style-switcher.import'
+@import './components/d3.import'
 
 setup-hero()
 setup-inputs()
 setup-sliders()
 setup-widget__down-arrow()
 setup-style-switcher()
-
-/* TODO: We are currently refactoring the components to provide a clear distinction
- *       between UI widgets and other functionality. The following list is still
- *       a mix of both. Bear with us...
- */
-@import './components/cards.import'
-@import './components/gradients.import'
-@import './components/animation.import'
-@import './components/d3.import'
-
-create-cards('cards', false)
