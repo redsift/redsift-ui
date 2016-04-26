@@ -7,23 +7,23 @@
     .hero-1 {
       /* Specify an image for the hero section, the default res image is the safest bet */
       background-image: url('//static.redsift.io/assets/images/taxi-1.jpg');
-      
+
       /* Also specify a BG color for the hero section to keep text readable, could use http://pieroxy.net/blog/pages/color-finder/demo.html */
       background-color: rgb(42, 24, 22);
       /* Optional: specify a set of hero images based on screen DPI */
       background-image: -webkit-image-set(
           url('//static.redsift.io/assets/images/taxi-1.jpg') 1x,
           url('//static.redsift.io/assets/images/taxi-1_2x.jpg') 2x
-      ); 
+      );
     }
-    
+
     .bar {
       box-shadow: 0px 0px 2px 2px rgba(0,0,0,0.15);
       background-image: url('//static.redsift.io/assets/images/taxi-1.jpg');
       background-image: -webkit-image-set(
           url('//static.redsift.io/assets/images/taxi-1.jpg') 1x,
           url('//static.redsift.io/assets/images/taxi-1_2x.jpg') 2x
-      ); 
+      );
     }
 
     .hero-2 {
@@ -31,11 +31,23 @@
       background-image: url("//static.redsift.io/assets/images/phones-1.jpg");
       background-color: rgb(167, 167, 167);
     }
-    
-  </style>
-  </head>
 
-  <body>
+    #style-switcher {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      margin: 1em;
+    }
+    </style>
+    </head>
+
+    <body>
+      
+    <div id="style-switcher">
+      <button onclick="Redsift.StyleSwitcher.use('light');return false;" class="danger">Light Theme</button>
+      <button onclick="Redsift.StyleSwitcher.use('dark');return false;" class="danger">Dark Theme</button>
+    </div>
+
     <div class="hero darken hero-1">
       <!-- Floating bars work poorly on mobile and are hidden by default -->
       <div class="floating" id="heading"><h1>Taxi Sift</h1></div>
@@ -63,7 +75,7 @@
             <button class="danger">Danger</button>
             <button disabled>Disabled</button>
             <button class="danger" disabled>DD</button>
-        </div>    
+        </div>
       </div>
     </section>
 
@@ -72,14 +84,14 @@
         <h2>Second content</h2>
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
       </div>
-    </div>    
-  
+    </div>
+
     <script src="/js/redsift-global.es5.min.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function() {
         // Specify an anchor link to setup as smooth scroll
         // As we have a floating header the anchor is wrong due to
-        // the height of the header, hence offset the scroll 
+        // the height of the header, hence offset the scroll
         // Note: this offset dance not work in the case of page load
         var offset = document.getElementById("heading").getBoundingClientRect().height;
         Redsift.Scroll.initSmooth("#smooth", -offset);
@@ -87,7 +99,7 @@
         Redsift.Scroll.toggleClass(".floating", "bar", ".content");
         this.removeEventListener("DOMContentLoaded", arguments.callee);
       });
-      
+
     </script>
   </body>
 

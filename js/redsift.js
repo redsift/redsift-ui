@@ -8,6 +8,7 @@ var Widgets = require('./widgets/widgets.js');
 var Scroll = require('./scroll/smooth.js');
 var Xkcd = require('./xkcd/xkcd.js');
 var FeatureDetection = require('./feature-detection/index.js');
+var StyleSwitcher = require('./widgets/style-switcher.js');
 
 if (window !== undefined) {
 	var ui = { };
@@ -25,6 +26,7 @@ if (window !== undefined) {
 	ui.Scroll = Scroll;
   ui.Xkcd = Xkcd;
 	ui.FeatureDetection = FeatureDetection;
+	ui.StyleSwitcher = StyleSwitcher;
 
 	window.Redsift = ui;
 }

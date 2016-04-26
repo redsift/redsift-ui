@@ -6,16 +6,28 @@
     body > div {
       margin: 1em;
     }
-  </style>
-  </head>
-
-  <body>
     
+    #style-switcher {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      margin: 1em;
+    }
+    </style>
+    </head>
+
+    <body>
+
+    <div id="style-switcher">
+      <button onclick="Redsift.StyleSwitcher.use('light');return false;" class="danger">Light Theme</button>
+      <button onclick="Redsift.StyleSwitcher.use('dark');return false;" class="danger">Dark Theme</button>
+    </div>
+
     <div>
       <h3>Slider</h3>
       <input type='range' value='42' min='5' max = '50'/>
     </div>
-    
+
     <div>
       <h3>Progress</h3>
       <input type='range' class='progress change' value='42' disabled/>
@@ -45,16 +57,16 @@
         <input type="text" name="q" placeholder="Disabled" disabled>
         <button disabled>Disabled</button>
     </div>
-    
+
     <div>
         <button class="danger">Danger</button>
         <button class="danger" disabled>Disabled</button>
     </div>
-    
+
     <script src="/js/redsift-global.es5.min.js"></script>
     <script>
       var Widgets = Redsift.Widgets;
-    
+
       // One-time
       Widgets.Sliders.initAllRanges();
 
@@ -68,7 +80,7 @@
             Widgets.Sliders.setValue(control, value);
           }, 1000);
         })(input, i);
-      }      
+      }
     </script>
   </body>
 

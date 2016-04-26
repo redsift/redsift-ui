@@ -4,16 +4,30 @@
 			#content {
 				margin: 1em;
 			}
-		</style>	
+
+			#style-switcher {
+		    position: fixed;
+		    right: 0;
+		    bottom: 0;
+		    margin: 1em;
+		  }
+		</style>
 		<link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
 		<link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
-	</head>
-	<body>
+	  </head>
+
+	  <body>
+
+	  <div id="style-switcher">
+	    <button onclick="Redsift.StyleSwitcher.use('light');return false;" class="danger">Light Theme</button>
+	    <button onclick="Redsift.StyleSwitcher.use('dark');return false;" class="danger">Dark Theme</button>
+	  </div>
+		
 		<div id="content">
 		<h1>Page Heading / H1</h1>
 		<p>
-			Nesting of conditions can be achieved by adding objects in the 
-			<code>conditions</code> array following the same structure. i.e. 
+			Nesting of conditions can be achieved by adding objects in the
+			<code>conditions</code> array following the same structure. i.e.
 			<code>{"conditions": [], "operator": ""}</code>
 		</p>
 		<h2>Section Heading / H2</h2>
@@ -45,11 +59,13 @@
 			}
 			</code>
 			</pre>
-			
+
 			<h3>Sub Heading / H3</h3>
-			<p>"The <b>Babel fish</b> is small, yellow, leech-like, and probably the oddest thing in the universe. It feeds on brain wave energy, absorbing all unconscious frequencies and then excreting telepathically a matrix formed from the conscious frequencies and nerve signals picked up from the speech centres of the brain, the practical upshot of which is that if you stick one in your ear, you can instantly understand anything 
+			<p>"The <b>Babel fish</b> is small, yellow, leech-like, and probably the oddest thing in the universe. It feeds on brain wave energy, absorbing all unconscious frequencies and then excreting telepathically a matrix formed from the conscious frequencies and nerve signals picked up from the speech centres of the brain, the practical upshot of which is that if you stick one in your ear, you can instantly understand anything
 			said to you in any form of language: the speech you hear decodes the brain wave matrix."</p>
 			<p class="small">Copyright Example 2001</p>
 			</div>
+
+	    <script src="/js/redsift-global.es5.min.js"></script>
 	</body>
 </html>

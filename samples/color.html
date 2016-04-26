@@ -11,14 +11,27 @@
       padding-left: 0.2em;
       padding-right: 0.2em;
     }
-  </style>
-  </head>
 
-  <body>
+    #style-switcher {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      margin: 1em;
+    }
+    </style>
+    </head>
+
+    <body>
+      
+    <div id="style-switcher">
+      <button onclick="Redsift.StyleSwitcher.use('light');return false;" class="danger">Light Theme</button>
+      <button onclick="Redsift.StyleSwitcher.use('dark');return false;" class="danger">Dark Theme</button>
+    </div>
+
     <div class="fb cards">
 
     </div>
-    
+
     <div class="fb-h cards">
 
     </div>
@@ -26,8 +39,8 @@
     <script src="/js/redsift-global.es5.min.js"></script>
     <script>
       var ColorTools = Redsift.ColorTools;
-      
-      var data = [ 
+
+      var data = [
         { t: 'U', c: '#1fbad6' },
         { t: 'Z', c: '#c2b810' },
         { t: 'E', c: '#c2c2c2' },
@@ -37,14 +50,14 @@
         { t: 'Y', c: '#f0f045' },
         { t: 'R', c: '#f00' },
         { t: 'G', c: '#0f0' },
-        { t: 'B', c: '#00f' },  
+        { t: 'B', c: '#00f' },
         { t: 'D', c: ColorTools.randomTheme() }
       ];
 
       data = data.concat(ColorTools.themes.map(function (c, i) {
         return { t: '' + i, c: c }
       }));
-  
+
       d3.select('.fb').selectAll('.d3')
           .data(data)
         .enter().append('div')
