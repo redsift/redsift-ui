@@ -19,17 +19,20 @@
 @import './common/fonts.import'
 @import './common/patterns.import'
 @import './common/breakpoints.import'
+@import './common/selection.import'
 @import './common/base.import'
 @import './common/types.import'
 
 setup-types()
+disable-selection() // FIXXME: only disable on mobile?
 
 /*
  * UI components:
  *
- * Each UI component is encapsulated within a setup function which takes a configuration
- * object. This allows a (theme) developer to customize the components in their own
- * project.
+ * Each UI component is encapsulated within a setup function which takes an
+ * opitional settings hash. If omitted the default settings available in the
+ * respective component file are used. This allows a (theme) developer to
+ * customize components for their own sifts and projects.
  */
  @import './components/hero.import'
  @import './components/inputs.import'
@@ -45,7 +48,6 @@ setup-widget__down-arrow()
  *       between UI components and common functionality. The following list still
  *       contains non-UI components as well. Bear with us...
  */
-@import './components/webview.import'
 @import './components/colour.import'
 @import './components/cards.import'
 @import './components/gradients.import'
