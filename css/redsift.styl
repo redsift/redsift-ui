@@ -1,43 +1,52 @@
-@import 'common/fonts.import'
-@import 'components/webview.import'
-@import 'components/type.import'
-@import 'components/colour.import'
-@import 'components/cards.import'
-@import 'components/input.import'
-@import 'components/sliders.import'
-@import 'components/hero.import'
-@import 'components/widgets.import'
-@import 'components/gradients.import'
-
-@import 'components/animation.import'
-
-@import 'components/d3.import'
-
-
-$fontNormal = 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif
-$fontHighlight = 'Electrolize', sans-serif
-$fontCode = 'Source Code Pro', monospace
-
-responsive-type($fontNormal, $fontHighlight, $fontCode)
-
-create-cards('cards', false)
-
-.hidden {
-	opacity: 0;
-}
-
-.hash {
-    background-image: pattern--core();
-}
+/*
+ * Style setup uses as base for Sift themes.
+ *
+ * Provides:
+ *   - ready-to-use UI components
+ *   - responsive type system
+ *   - breakpoint setup (via 'rupture')
+ *   - common functionality like reset, patterns and fonts
+ *
+ * Used by:
+ *   - redsift-light
+ *   - redsift-dark
+ */
 
 /*
- * Body reset
- * http://codepen.io/absolutholz/pen/XJJpPX
+ * Common functionality:
  */
-html {
-  height: 100%;
-}
+@import './common/reset.import'
+@import './common/fonts.import'
+@import './common/patterns.import'
+@import './common/breakpoints.import'
+@import './common/base.import'
+@import './common/types.import'
 
-body {
-  min-height: 100%;
-}
+setup-types()
+
+/*
+ * UI components:
+ *
+ * Each UI component is encapsulated within a setup function which takes a configuration
+ * object. This allows a (theme) developer to customize the components in their own
+ * project.
+ */
+ @import './components/hero.import'
+ @import './components/input.import'
+ @import './components/sliders.import'
+ @import './components/widgets.import'
+
+setup-hero()
+
+/* TODO: We are currently refactoring the components to provide a clear distinction
+ *       between UI components and common functionality. The following list still
+ *       contains non-UI components as well. Bear with us...
+ */
+@import './components/webview.import'
+@import './components/colour.import'
+@import './components/cards.import'
+@import './components/gradients.import'
+@import './components/animation.import'
+@import './components/d3.import'
+
+create-cards('cards', false)

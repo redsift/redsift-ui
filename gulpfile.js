@@ -60,18 +60,18 @@ function makeCss(name) {
             './css/**.css'
         ])
         .pipe(plumber())
-        .pipe(sourcemaps.init())
+        // .pipe(sourcemaps.init())
         .pipe(stylus(stylusOptions))
         .pipe(concat(name + '.css'))
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
         }))
-        .pipe(sourcemaps.write())
+        // .pipe(sourcemaps.write())
         .pipe(gulp.dest('./distribution/css'))
         .pipe(rename({suffix: '.min'}))
         .pipe(minifyCss({compatibility: '*', roundingPrecision: 4, keepSpecialComments: 0}))
-        .pipe(sourcemaps.write('../../distribution/maps'))
+        // .pipe(sourcemaps.write('../../distribution/maps'))
         .pipe(gulp.dest('./distribution/css'))
         .pipe(browserSync.stream())
         .on('error', function (e) {

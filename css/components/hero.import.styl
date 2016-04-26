@@ -1,124 +1,139 @@
 @import '../brand.import'
 
-$padding = 16px
-$hero = 500px
-$border = 1px
-$spacing = (2*$border) + (2*$padding)
+setup-hero($customSettings = {}) {
 
-.hero {
-	height: $hero;
-	background-position: 50% 50%;
-	background-repeat: no-repeat;
-	background-size: cover;
-}
+	/*
+   * Default settings:
+   */
+	$defaultSettings = {
+		padding: 16px,
+		height: 500px,
+		content: {
+			borderWidth: 1px,
+			borderColor: $brandGrey
+		}
+	}
 
-.hero .floating {
-	position: fixed;
-	left: 0;
-	right: 0;
-	z-index: 999;
-	background-position: 50% 50%;
-	background-repeat: no-repeat;
-	background-size: cover;
-	background-color: transparent;
-	padding: 0 $padding $padding $padding;
-}
+	$settings = merge($defaultSettings, $customSettings);
 
-/* iPad [portrait + landscape] */
-@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+  /*
+   * Breakpoint setup:
+   */
 	.hero {
-      	background-attachment: scroll;
+		height: $settings.height;
+		background-position: 50% 50%;
+		background-repeat: no-repeat;
+		background-size: cover;
 	}
 
 	.hero .floating {
-		background-position: 50% 100%;
-      	background-attachment: scroll;
-	}
-}
-
-/* iPhone [portrait + landscape] */
-@media only screen and (max-device-width: 480px) {
-	.hero {
-		background-attachment: scroll;
-	}
-
-	.hero .floating {
-		visibility: hidden;
+		position: fixed;
+		left: 0;
+		right: 0;
+		z-index: 999;
+		background-position: 50% 50%;
+		background-repeat: no-repeat;
+		background-size: cover;
+		background-color: transparent;
+		padding: 0 $settings.padding $settings.padding $settings.padding;
 	}
 
-	.hero .floating > * {
-		visibility: hidden;
+	/* iPad [portrait + landscape] */
+	@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+		.hero {
+	    background-attachment: scroll;
+		}
+
+		.hero .floating {
+			background-position: 50% 100%;
+	      	background-attachment: scroll;
+		}
 	}
-}
 
-.hero.darken::before {
-	content: " ";
-	background-color: black;
-	opacity: 0.2;
-	width: 100%;
-	height: $hero;
-	position: absolute;
-	z-index: 0;
-}
+	/* iPhone [portrait + landscape] */
+	@media only screen and (max-device-width: 480px) {
+		.hero {
+			background-attachment: scroll;
+		}
 
-.hero.lighten::before {
-	content: " ";
-	background-color: white;
-	opacity: 0.2;
-	width: 100%;
-	height: $hero;
-	position: absolute;
-	z-index: 0;
-}
+		.hero .floating {
+			visibility: hidden;
+		}
 
-.hero > * {
-    text-align: center;
-}
+		.hero .floating > * {
+			visibility: hidden;
+		}
+	}
 
-.hero .container {
-	padding: 0 $padding $padding $padding;
-	z-index: 1;
-	position: relative;
-}
+	.hero.darken::before {
+		content: " ";
+		background-color: black;
+		opacity: 0.2;
+		width: 100%;
+		height: $settings.height;
+		position: absolute;
+		z-index: 0;
+	}
 
-.hero h1:first-of-type {
-	font-size: 1.125em;
-	text-align: left;
-	text-transform: uppercase;
-	opacity: 0.7;
-	letter-spacing: initial;
-}
+	.hero.lighten::before {
+		content: " ";
+		background-color: white;
+		opacity: 0.2;
+		width: 100%;
+		height: $settings.height;
+		position: absolute;
+		z-index: 0;
+	}
 
-.hero .container.center-third {
-	padding-top: ($hero / 3);
-}
+	.hero > * {
+	    text-align: center;
+	}
 
-.hero .container.center-fourth {
-	padding-top: ($hero / 4);
-}
+	.hero .container {
+		padding: 0 $settings.padding $settings.padding $settings.padding;
+		z-index: 1;
+		position: relative;
+	}
 
-.hero code {
-	font-size: 3em;
-}
+	.hero h1:first-of-type {
+		font-size: 1.125em;
+		text-align: left;
+		text-transform: uppercase;
+		opacity: 0.7;
+		letter-spacing: initial;
+	}
 
-.hero p {
-	font-size: 1.5em;
-}
+	.hero .container.center-third {
+		padding-top: ($settings.height / 3);
+	}
 
-.content {
-	min-height: ($hero - 2*$padding);
-	padding: $padding;
-}
+	.hero .container.center-fourth {
+		padding-top: ($settings.height / 4);
+	}
 
-.content.collapse {
-  min-height: initial;
-}
+	.hero code {
+		font-size: 3em;
+	}
 
-.content .container {
-	border: $border solid $brandGrey;
-	border-radius: 3px;
-}
+	.hero p {
+		font-size: 1.5em;
+	}
 
-.content .container.expand {
-	min-height: ($hero - 2*$padding - 2*$border);
+	.content {
+		min-height: ($settings.height - 2*$settings.padding);
+		padding: $settings.padding;
+	}
+
+	.content.collapse {
+	  min-height: initial;
+	}
+
+	.content .container {
+		border: $settings.content.borderWidth solid $settings.content.borderColor;
+		border-radius: 3px;
+	}
+
+	.content .container.expand {
+		min-height: ($settings.height - 2*$settings.padding - 2*$settings.content.borderWidth);
+	}
 }
