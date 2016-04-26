@@ -1,99 +1,112 @@
 @import '../brand.import'
-@import 'gradients.import'
+@import './gradients.import'
 
-$disabledColour = #f1f1f1
-$dangerColour = #ed1651
-$buttonColour = $brandGrey
+setup-input($customSettings = {}) {
+	/*
+   * Default settings:
+   */
+	$defaultSettings = {
+		colourDisabled: #f1f1f1,
+    colourDanger: #ed1651,
+    colourButton: $brandGrey,
+    colourShadow: $brandRed
+	}
 
-button {
-    border-radius: 3px;
-    padding: 12px 31px;
-    border: none;
-    background-color: $buttonColour;
+	$settings = merge($defaultSettings, $customSettings);
 
-    &:focus {
-        outline: none;
-        box-shadow: 0 0 0 1px $brandRed;
-    }
+  /*
+   * Breakpoint setup:
+   */
+  button {
+      border-radius: 3px;
+      padding: 12px 31px;
+      border: none;
+      background-color: $settings.colourButton;
 
-    &:hover {
-        background-color: lighten($buttonColour, 30%);
-    }
+      &:focus {
+          outline: none;
+          box-shadow: 0 0 0 1px $settings.colourShadow;
+      }
 
-    &:disabled {
-        background-image: pattern--core($disabledColour);
-    }
+      &:hover {
+          background-color: lighten($settings.colourButton, 30%);
+      }
 
-    &:disabled:hover {
-        background-color: $brandGrey;
-        background-image: pattern--core($disabledColour);
-    }
-}
+      &:disabled {
+          background-image: pattern--core($settings.colourDisabled);
+      }
 
-.hero button.danger,
-button.danger {
-    color: white;
-    background-color: $dangerColour;
+      &:disabled:hover {
+          background-color: $brandGrey;
+          background-image: pattern--core($settings.colourDisabled);
+      }
+  }
 
-    &:hover {
-        background-color: desaturate($dangerColour, 20%);
-    }
+  .hero button.danger,
+  button.danger {
+      color: white;
+      background-color: $settings.colourDanger;
 
-    &:disabled {
-        background-image: pattern--core();
-    }
+      &:hover {
+          background-color: desaturate($settings.colourDanger, 20%);
+      }
 
-    &:disabled:hover {
-        background-color: $dangerColour;
-        background-image: pattern--core();
-    }
-}
+      &:disabled {
+          background-image: pattern--core();
+      }
 
-.hero button {
-    color: white;
-    font-size: 1.2em;
-    background-color: transparent;
-    box-shadow: 0 0 0 1px white;
+      &:disabled:hover {
+          background-color: $settings.colourDanger;
+          background-image: pattern--core();
+      }
+  }
 
-    &:focus {
-        outline: none;
-        box-shadow: 0 0 0 1px $brandRed;
-    }
+  .hero button {
+      color: white;
+      font-size: 1.2em;
+      background-color: transparent;
+      box-shadow: 0 0 0 1px white;
 
-    &:hover {
-        background-color: rgba(255,255,255,0.2);
-    }
+      &:focus {
+          outline: none;
+          box-shadow: 0 0 0 1px $settings.colourShadow;
+      }
 
-    &:disabled {
-        background-image: pattern--core(rgba(255,255,255,0.3));
-    }
+      &:hover {
+          background-color: rgba(255,255,255,0.2);
+      }
 
-    &:disabled:hover {
-        background-color: transparent;
-        background-image: pattern--core(rgba(255,255,255,0.3));
-    }
-}
+      &:disabled {
+          background-image: pattern--core(rgba(255,255,255,0.3));
+      }
 
-input[type="text"],
-input[type="password"],
-input[type="email"],
-input[type="number"],
-input[type="tel"],
-input[type="url"],
-select,
-textarea {
-    min-height: 43px;
-    padding: 7px 8px;
-    color: #333;
-    vertical-align: bottom;
-    background-color: #fff;
-    background-repeat: no-repeat;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    outline: none;
-    box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
+      &:disabled:hover {
+          background-color: transparent;
+          background-image: pattern--core(rgba(255,255,255,0.3));
+      }
+  }
 
-    &:disabled {
-        background-image: pattern--core($disabledColour);
-    }
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  select,
+  textarea {
+      min-height: 43px;
+      padding: 7px 8px;
+      color: #333;
+      vertical-align: bottom;
+      background-color: #fff;
+      background-repeat: no-repeat;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      outline: none;
+      box-shadow: inset 0 1px 2px rgba(0,0,0,0.075);
+
+      &:disabled {
+          background-image: pattern--core($settings.colourDisabled);
+      }
+  }
 }
