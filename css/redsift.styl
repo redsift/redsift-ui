@@ -34,21 +34,23 @@ disable-selection() // FIXXME: only disable on mobile?
  * respective component file are used. This allows a (theme) developer to
  * customize components for their own sifts and projects.
  */
- @import './components/hero.import'
- @import './components/inputs.import'
- @import './components/sliders.import'
- @import './components/widgets.import'
+@import './components/hero.import'
+@import './components/inputs.import'
+@import './components/sliders.import'
+@import './components/widgets.import'
+@import './components/colour.import'
+@import './components/style-switcher.import'
 
 setup-hero()
 setup-inputs()
 setup-sliders()
 setup-widget__down-arrow()
+setup-style-switcher()
 
 /* TODO: We are currently refactoring the components to provide a clear distinction
- *       between UI components and common functionality. The following list still
- *       contains non-UI components as well. Bear with us...
+ *       between UI widgets and other functionality. The following list is still
+ *       a mix of both. Bear with us...
  */
-@import './components/colour.import'
 @import './components/cards.import'
 @import './components/gradients.import'
 @import './components/animation.import'

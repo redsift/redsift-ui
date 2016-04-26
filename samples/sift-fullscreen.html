@@ -1,7 +1,7 @@
 <html>
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
+  <link rel="stylesheet" type="text/css" href="/css/redsift-light.css" title="light">
   <link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
   <style>
     .hero-1 {
@@ -31,19 +31,12 @@
       background-image: url("//static.redsift.io/assets/images/phones-1.jpg");
       background-color: rgb(167, 167, 167);
     }
-
-    #style-switcher {
-      position: fixed;
-      right: 0;
-      bottom: 0;
-      margin: 1em;
-    }
     </style>
     </head>
 
     <body>
-      
-    <div id="style-switcher">
+
+    <div class="style-switcher">
       <button onclick="Redsift.StyleSwitcher.use('light');return false;" class="danger">Light Theme</button>
       <button onclick="Redsift.StyleSwitcher.use('dark');return false;" class="danger">Dark Theme</button>
     </div>

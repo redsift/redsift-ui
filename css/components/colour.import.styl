@@ -1,59 +1,79 @@
+@import './brand.import';
 
-colour-system($textColour, $bodyColour, $linkColour, $hoverColour, $visitedColour, $selectionColour, $codeBg) {
+setup-colour-system($customSettings = {}) {
 
+	/*
+   * Default settings:
+   */
+	$defaultSettings = {
+		text: $brandBlack,
+		bgBody: $brandWhite,
+		link: $brandBlack,
+		hover: $brandRed,
+		visited: $brandBlack,
+		selection: $brandRed,
+		bgCode: #f7f7f7,
+		colourHero: white
+	}
+
+	$settings = merge($defaultSettings, $customSettings);
+
+  /*
+   * Breakpoint setup:
+   */
 	body {
-		color: $textColour;
-		background: $bodyColour;
+		color: $settings.text;
+		background: $settings.bgBody;
 	}
 
 	::selection {
-		background: $selectionColour;
+		background: $settings.selection;
 		color: white;
 		fill: white;
 	}
 
 	a {
-  		color: $linkColour;
+  		color: $settings.link;
 	}
 
 	a:active,
 	a:hover {
-		color: $hoverColour;
+		color: $settings.hover;
 	}
 
 	a:visited {
-		color: $visitedColour;
+		color: $settings.visited;
 	}
 
 	a:focus {
 		outline: none;
-		color: $hoverColour;
+		color: $settings.hover;
 	}
 
 	p code {
-		background-color: $codeBg;
+		background-color: $settings.bgCode;
 	}
 
 	pre {
-		background-color: $codeBg;
+		background-color: $settings.bgCode;
 	}
 
 	.content {
-		background-color: $codeBg;
+		background-color: $settings.bgCode;
 	}
 
 	.content .container {
-		background-color: $bodyColour;
+		background-color: $settings.bgBody;
 	}
 
   .informational {
-      color: #bbb;
+    color: #bbb;
   }
 
 	/* Images so assume white text is required */
 	.hero {
 		h1, h2, h3, h4, h5, p, code {
-			color: white;
+			color: $settings.colourHero;
 		}
 	}
 }

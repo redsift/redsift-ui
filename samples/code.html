@@ -4,13 +4,6 @@
 			#content {
 				margin: 1em;
 			}
-
-			#style-switcher {
-		    position: fixed;
-		    right: 0;
-		    bottom: 0;
-		    margin: 1em;
-		  }
 		</style>
 		<link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
 		<link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
@@ -18,11 +11,11 @@
 
 	  <body>
 
-	  <div id="style-switcher">
+	  <div class="style-switcher">
 	    <button onclick="Redsift.StyleSwitcher.use('light');return false;" class="danger">Light Theme</button>
 	    <button onclick="Redsift.StyleSwitcher.use('dark');return false;" class="danger">Dark Theme</button>
 	  </div>
-		
+
 		<div id="content">
 		<h1>Page Heading / H1</h1>
 		<p>

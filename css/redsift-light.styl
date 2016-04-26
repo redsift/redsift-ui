@@ -1,16 +1,19 @@
+@import './redsift'
+@import './brand.import'
 
-@import 'redsift'
-@import 'brand.import'
+$textColour = $brandBlack;
+$lineColour = #666;
 
-
-$bg = $brandWhite
-$codeBg = #f7f7f7
-$textColour = $brandBlack
-$linkColour = $textColour
-$hoverColour = $brandRed
-$visitedColour = $linkColour
-$lineColour = #666
-
-colour-system($textColour, $bg, $linkColour, $hoverColour, $visitedColour, $hoverColour, $codeBg)
+$coloursLight = {
+  text: $textColour,
+  bgBody: $brandWhite,
+  link: $brandBlack,
+  hover: $brandRed,
+  visited: $brandBlack,
+  selection: $brandRed,
+  bgCode: #f7f7f7,
+  colourHero: white
+}
+setup-colour-system($coloursLight)
 
 radial-chart($textColour, $lineColour)

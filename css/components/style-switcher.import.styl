@@ -1,0 +1,31 @@
+setup-style-switcher($customSettings = {}) {
+	/*
+   * Default settings:
+   */
+	$defaultSettings = {
+		background: rgba(0,0,0,0.9)
+	}
+
+	$settings = merge($defaultSettings, $customSettings);
+
+  /*
+   * Breakpoint setup:
+   */
+	.style-switcher {
+	  z-index: 1000;
+	  display: flex;
+	  justify-content: flex-end;
+
+	  position: fixed;
+	  right: 0;
+	  left: 0;
+	  bottom: 0;
+
+	  padding: 0.8em;
+	  background: $settings.background
+	}
+
+	.style-switcher button {
+	  margin-right: 1em;
+	}
+}

@@ -14,19 +14,12 @@
       div:nth-child(even) > svg {
           background-color: #FFDF53
       }
-
-      #style-switcher {
-        position: fixed;
-        right: 0;
-        bottom: 0;
-        margin: 1em;
-      }
   </style>
   </head>
 
   <body>
 
-  <div id="style-switcher">
+  <div class="style-switcher">
     <button onclick="Redsift.StyleSwitcher.use('light');return false;" class="danger">Light Theme</button>
     <button onclick="Redsift.StyleSwitcher.use('dark');return false;" class="danger">Dark Theme</button>
   </div>
