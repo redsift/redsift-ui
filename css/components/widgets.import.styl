@@ -1,25 +1,43 @@
 @import 'animation.import'
 
-$padding = 16px;
+setup-widget__down-arrow($customSettings = {}) {
+	/*
+   * Default settings:
+   */
+	$defaultSettings = {
+    background-image: url("https://static.redsift.io/assets/icons/down-arrow-white-1.0.svg"),
+    width: 20px,
+    height: 30px,
+    padding: 1em,
+    opacity: 0.6,
+    transitionCurve: $curveRedsift,
+    transitionTime: $timeRedsift
+	}
 
-.down-arrow {
+	$settings = merge($defaultSettings, $customSettings);
+
+  /*
+   * Breakpoint setup:
+   */
+  .down-arrow {
     display: block;
-    width: 20px;
-    height: 30px;
+    width: $settings.width;
+    height: $settings.height ;
     margin-right: auto;
     margin-left: auto;
-    padding: $padding;
+    padding: $settings.padding;
     float: none;
     clear: none;
-    background-image: url("https://static.redsift.io/assets/icons/down-arrow-white-1.0.svg");
+    background-image: $settings['background-image'];
     background-position: 50% 50%;
-    background-size: 30px 30px;
+    background-size: $settings.height $settings.width;
     background-repeat: no-repeat;
-    opacity: 0.6;
+    opacity: $settings.opacity;
     background-color: transparent;
-    transition: opacity $curveRedsift $timeRedsift;
-}
+    transition: opacity $settings.transitionCurve $settings.transitionTime;
+  }
 
-.down-arrow:hover {
-    opacity: 1;
+  .down-arrow:hover {
+      opacity: 1;
+  }
 }
