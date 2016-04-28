@@ -2,7 +2,6 @@
 
 var gulp = require('gulp');
 var stylus = require('gulp-stylus');
-var rupture = require('rupture');
 var concat = require('gulp-concat');
 var minifyCss = require('gulp-cssnano');
 var sourcemaps = require('gulp-sourcemaps');
@@ -50,28 +49,24 @@ gulp.task('js', function() {
 });
 
 function makeCss(name) {
-    var stylusOptions = {
-        use: [ rupture({ implicit: false }) ]
-    };
-
     return gulp.src([
             './node_modules/normalize.css/**.css',
             './css/' + name + '.styl',
             './css/**.css'
         ])
         .pipe(plumber())
-        // .pipe(sourcemaps.init())
-        .pipe(stylus(stylusOptions))
+        .pipe(sourcemaps.init())
+        .pipe(stylus())
         .pipe(concat(name + '.css'))
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
         }))
-        // .pipe(sourcemaps.write())
+        .pipe(sourcemaps.write())
         .pipe(gulp.dest('./distribution/css'))
         .pipe(rename({suffix: '.min'}))
         .pipe(minifyCss({compatibility: '*', roundingPrecision: 4, keepSpecialComments: 0}))
-        // .pipe(sourcemaps.write('../../distribution/maps'))
+        .pipe(sourcemaps.write('../../distribution/maps'))
         .pipe(gulp.dest('./distribution/css'))
         .pipe(browserSync.stream())
         .on('error', function (e) {
@@ -86,7 +81,7 @@ function makeCss(name) {
 // }
 // where the given path is a folder which meteor will reload automatically on a
 // file change.
-function meteorRefresh() {
+function appRefresh() {
   var fs = require('fs'),
       path = require('path');
 
@@ -127,7 +122,7 @@ gulp.task('css-xtra', function () {
 });
 
 gulp.task('css', ['css-light', 'css-dark', 'css-xtra'], function() {
-  return meteorRefresh();
+  return appRefresh();
 });
 
 gulp.task('browser-sync', function() {
