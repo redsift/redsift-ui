@@ -34,6 +34,8 @@ setup-hero($customSettings = {}) {
 	}
 
   .hero-sticky-header {
+		visibility: hidden;
+
 		position: fixed;
 		top: 0;
 		left: 0;
@@ -42,6 +44,10 @@ setup-hero($customSettings = {}) {
 		background-position: 50% 50%;
 		background-repeat: no-repeat;
 		background-size: cover;
+	}
+
+	.hero-sticky-header > * {
+		visibility: hidden;
 	}
 
 	.hero {
@@ -61,24 +67,25 @@ setup-hero($customSettings = {}) {
 		text-align: center;
 	}
 
-	.hero.-effect-darken::before {
-		content: " ";
-		background-color: black;
-		opacity: 0.2;
-		width: 100%;
-		height: $settings.height;
+	.hero.-effect-darken::before,
+	.hero.-effect-lighten::before
+	 {
 		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
 		z-index: 0;
+		content: " ";
+		opacity: 0.2;
+	}
+
+	.hero.-effect-darken::before {
+		background-color: black;
 	}
 
 	.hero.-effect-lighten::before {
-		content: " ";
 		background-color: white;
-		opacity: 0.2;
-		width: 100%;
-		height: $settings.height;
-		position: absolute;
-		z-index: 0;
 	}
 
 	.hero__header {
@@ -120,30 +127,27 @@ setup-hero($customSettings = {}) {
 		min-height: ($settings.height - 2*$settings.padding - 2*$settings.content.borderWidth);
 	}
 
+	/* iPhone [portrait + landscape] */
+	+above('mobile-landscape') {
+		.hero-sticky-header {
+			visibility: visible;
+		}
+
+		.hero-sticky-header > * {
+			visibility: visible;
+		}
+	}
+
 	/* iPad [portrait + landscape] */
   +between(768px, 1024px) {
 		.hero {
 	    background-attachment: scroll;
 		}
 
-		.hero__header {
+		.hero-sticky-header {
+			visibility: visible;
 			background-position: 50% 100%;
 	    background-attachment: scroll;
-		}
-	}
-
-	/* iPhone [portrait + landscape] */
-	+below('mobile-portrait') {
-		.hero {
-			background-attachment: scroll;
-		}
-
-		.hero__header {
-			visibility: hidden;
-		}
-
-		.hero__header > * {
-			visibility: hidden;
 		}
 	}
 }
