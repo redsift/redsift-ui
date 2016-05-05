@@ -5,5 +5,5 @@ export default {
     entry: 'src/index.js',
     format: 'cjs',
     plugins: [json(), babel()],
-    dest: 'dist/bundle.js'
+    dest: 'dist/redsift-ui.umd.js'
 };

@@ -39,8 +39,8 @@ class RedsiftRadialChart extends HTMLElement {
   _createInlineStyles() {
     // generate some styles
     var css = Redsift.D3.Tools.createCSSRuleSheet();
-    css('.d3-rc .band circle', 'stroke: ' + this.BAND + ';');
-    css('.d3-rc .segment-bg', 'fill:' + this.SEGMENT_BG + ';');
+    css('.d3-rc .band circle', 'stroke: ' + this.BAND + ';', 0);
+    css('.d3-rc .segment-bg', 'fill:' + this.SEGMENT_BG + ';', 0);
 
     // generate some patterns
     var P_A = 45;
