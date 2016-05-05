@@ -45,7 +45,7 @@ var Tools = {
   redsiftEasing: function() {
     var f = this.redsiftBezier();
     return function(t) {
-      return f.get(t);
+      return f(t);
     }
   },
   redsiftBezier: function() {
