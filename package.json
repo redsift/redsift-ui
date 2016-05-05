@@ -1,7 +1,7 @@
 {
   "name": "redsift-ui",
-  "version": "1.0.0",
-  "description": "Common CSS and JS for Sifts and Apps",
+  "version": "0.5.0",
+  "description": "Ready-to-use web components to build Sifts fast.",
   "repository": "https://github.com/Redsift/redsift-ui",
   "dependencies": {
     "babel-polyfill": "^6.0.16",
@@ -34,8 +34,15 @@
     "vinyl-source-stream": "*"
   },
   "scripts": {
+    "build": "mkdir -p dist && rollup -c",
     "test": "echo \"No test specified\" && exit 0",
     "postinstall": "./node_modules/bower/bin/bower install --allow-root",
     "serve": "node node_modules/gulp/bin/gulp.js serve"
+  },
+  "devDependencies": {
+    "babel-preset-es2015-rollup": "^1.1.1",
+    "rollup": "^0.26.2",
+    "rollup-plugin-babel": "^2.4.0",
+    "rollup-plugin-json": "^2.0.0"
   }
 }

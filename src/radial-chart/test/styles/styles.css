@@ -1,0 +1,33 @@
+.content__container {
+  padding: 1em;
+}
+
+rs-radial-chart {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* --- Chart customisation --- */
+.stripe {
+  mask: url(#mask-stripe);
+}
+/* --- Segment background hover  --- */
+
+.d3-rc .segment-bg {
+  transition: opacity cubic-bezier(0.175, 0.885, 0.335, 1.155) 800ms;
+}
+
+.d3-rc .segment-bg:not(:hover) {
+  opacity: 0.0;
+}
+
+.d3-rc .segment-bg:hover {
+  opacity: 1.0;
+}
+/* --- Average band and colour  --- */
+
+.d3-rc .band circle {
+  fill: none;
+  stroke-width: 16px;
+  stroke-opacity: 0.4;
+}
