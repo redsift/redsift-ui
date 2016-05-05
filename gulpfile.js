@@ -128,7 +128,7 @@ gulp.task('css', ['css-light', 'css-dark', 'css-xtra'], function() {
 gulp.task('browser-sync', function() {
     browserSync.init({
         server: {
-            baseDir: ['./samples', './distribution', './assets'],
+            baseDir: ['./samples', './distribution', './dist', './assets'],
             directory: true
         }
     });
