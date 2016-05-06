@@ -1,5 +1,7 @@
 'use strict'
 
+import styles from '../styles/styles.styl';
+
 class RedsiftRadialChart extends HTMLElement {
   attachedCallback() {
     this.chart = this.querySelector('#chart');
