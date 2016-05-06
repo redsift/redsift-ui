@@ -53,7 +53,7 @@ gulp.task('js', function() {
 });
 
 gulp.task('rollup', function() {
-    var child = spawn("rollup", ["-c"], {
+    var child = spawn("./node_modules/rollup/bin/rollup", ["-c"], {
         cwd: process.cwd()
     });
 
