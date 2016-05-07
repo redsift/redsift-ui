@@ -170,7 +170,7 @@ gulp.task('browser-sync', function() {
 
 gulp.task('serve', ['default', 'browser-sync'], function() {
     gulp.watch(['./css/**/*.{import.styl,styl,css}'], ['css']);
-    gulp.watch(['./src/**/*.{js,tmpl,styl}'], ['es6-watch']);
+    gulp.watch(['./components/**/*.{js,tmpl,styl}'], ['es6-watch']);
     gulp.watch(['./js/**/*.js'], ['js-watch']);
     gulp.watch('./samples/**/*.html').on('change', function() {
         browserSync.reload('*.html');

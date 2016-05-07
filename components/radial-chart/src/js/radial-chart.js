@@ -1,38 +1,10 @@
-'use strict'
-
 import styles from '../styles/styles.styl';
 
-class RedsiftRadialChart extends HTMLElement {
-  attachedCallback() {
-    this.chart = this.querySelector('#chart');
-    this.legend = this.querySelector('#legend');
+class RedsiftRadialChart {
+  constructor(el) {
+    this.chart = el.querySelector('#chart');
+    this.legend = el.querySelector('#legend');
     this._createInlineStyles();
-  }
-
-  //----------------------------------------------------------
-  // Attributes:
-  //----------------------------------------------------------
-  get segments() {
-    let a = this.getAttribute('segments');
-    return a ? JSON.parse(a) : [];
-  }
-
-  set segments(val) {
-    this.setAttribute('segments', JSON.stringify(val));
-  }
-
-  get data() {
-    let a = this.getAttribute('data');
-    return a ? JSON.parse(a) : [];
-  }
-
-  set data(val) {
-    this.setAttribute('data', JSON.stringify(val));
-
-    if (!this.segments) {
-      throw Error('Please define segments first!');
-    }
-    this._update()
   }
 
   //----------------------------------------------------------
@@ -62,7 +34,7 @@ class RedsiftRadialChart extends HTMLElement {
     d3.select(this.legend).datum(this.themes).call(legend);
   }
 
-  _update() {
+  update(data) {
     // start knobs
     var SEGMENTS = this.SEGMENTS = ["#edf8b1", "#7fcdbb", "#2c7fb8"];
     var SEGMENT_BG = this.SEGMENT_BG = "#FFDE00";
@@ -88,13 +60,13 @@ class RedsiftRadialChart extends HTMLElement {
     this._createLegend();
 
     var fmt = d3.format(",.0f");
-    var total = this.data.reduce(function(p, d) {
+    var total = data.reduce(function(p, d) {
       return p + d.value
     }, 0);
-    var avg = total / this.data.length;
+    var avg = total / data.length;
     var dataBand = "£" + fmt(avg) + "/m";
 
-    var max = d3.max(this.data.concat(this.data), function(d) {
+    var max = d3.max(data.concat(data), function(d) {
       return d.value;
     });
 
@@ -114,7 +86,7 @@ class RedsiftRadialChart extends HTMLElement {
         d3.select('#one-label').classed('hidden', false);
       });
 
-    d3.select(this.chart).datum(this.data).call(chart1);
+    d3.select(this.chart).datum(data).call(chart1);
 
     var count = 0;
     setInterval(function() {
@@ -131,4 +103,4 @@ class RedsiftRadialChart extends HTMLElement {
   }
 }
 
-export default () => { document.registerElement('rs-radial-chart', RedsiftRadialChart); }
+export default RedsiftRadialChart;

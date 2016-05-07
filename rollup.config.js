@@ -9,7 +9,7 @@ import path from 'path';
 const distRootPath = './dist'; // TODO: use 'config' package for central configuration
 
 export default {
-    entry: 'src/index.js',
+    entry: 'components/index.js',
     format: 'umd',
     plugins: [
         json(),
