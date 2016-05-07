@@ -1,41 +1,20 @@
 'use strict'
 
 import RedsiftHero from './lib.js';
-import tmpl from '../templates/hero.tmpl';
 
 class RedsiftHeroWebComponent extends HTMLElement {
 
-  //----------------------------------------------------------
+  //----------------------------------------------------------------------------
   // Lifecycle:
-  //----------------------------------------------------------
+  //----------------------------------------------------------------------------
 
   createdCallback() {
-    this.rsHero = new RedsiftHero();
-
-    this.userTmpl = this.innerHTML;
-    this.innerHTML = tmpl;
-
-    // NOTE: handle sticky header before caching, as this.$header is set
-    // differently depending this feature:
-    if (this.stickyHeader) {
-      this.rsHero.enableStickyHeader(true);
-    }
-
-    this.rsHero.cacheElements(this.stickyHeader);
-
-    if (this.header) {
-      this.rsHero.setHeader(this.header);
-    }
-
-    if (this.bgClass) {
-      this.rsHero.setBgClass(this.bgClass);
-    }
-
-    if (this.scrollTarget) {
-      this.rsHero.enableScrollFeature(true, this.scrollTarget);
-    }
-
-    this.rsHero.setContent(this.userTmpl);
+    this.rsHero = new RedsiftHero(this, {
+      stickyHeader: this.stickyHeader,
+      header: this.header,
+      bgClass: this.bgClass,
+      scrollTarget: this.scrollTarget
+    });
   }
 
   attributeChangedCallback(attributeName, oldValue, newValue) {
@@ -60,9 +39,9 @@ class RedsiftHeroWebComponent extends HTMLElement {
     }
   }
 
-  //----------------------------------------------------------
+  //----------------------------------------------------------------------------
   // Attributes:
-  //----------------------------------------------------------
+  //----------------------------------------------------------------------------
 
   get header() {
     return this.getAttribute('header');

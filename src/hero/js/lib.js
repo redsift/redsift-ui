@@ -1,5 +1,7 @@
+import heroTmpl from '../templates/hero.tmpl';
+
 class RedsiftHero {
-  constructor() {
+  constructor(el, opts) {
     this.locators = {
       hero: '.hero',
       heroContainer: '.hero__container',
@@ -13,21 +15,8 @@ class RedsiftHero {
 
     this.downArrowHtml = '<div class="down-arrow"></div>';
     this.hasStickyHeader = false;
-  }
 
-  // TODO: implement generic caching functionality, e.g. this.querySelector(selector, useCache)
-  // FIXXME: make private!
-  cacheElements(hasStickyHeader) {
-    this.$hero = document.querySelector(this.locators.hero);
-    if (hasStickyHeader) {
-      this.$header = document.querySelector(this.locators.heroStickyHeader);
-    } else {
-      this.$header = document.querySelector(this.locators.heroHeader);
-    }
-    this.$headerContent = document.querySelector(this.locators.heroHeaderContent);
-    this.$container = document.querySelector(this.locators.heroContainer);
-    this.$content = document.querySelector(this.locators.heroContent);
-    this.$scrollFeature = undefined;
+    this._setupElement(el, heroTmpl, opts);
   }
 
   setHeader(text) {
@@ -36,10 +25,6 @@ class RedsiftHero {
 
   setBgClass(bgClass) {
     this.$hero.className += ` ${bgClass}`;
-  }
-
-  setContent(tmpl) {
-    this.$content.innerHTML = tmpl;
   }
 
   enableStickyHeader(flag) {
@@ -98,6 +83,37 @@ class RedsiftHero {
   //----------------------------------------------------------
   // Private API:
   //----------------------------------------------------------
+
+  _setupElement(el, heroTmpl, opts) {
+    // Get the user provided inner block of the element, replace the elements
+    // content with the hero tree and insert the content at the correct place.
+    let userTmpl = el.innerHTML;
+    el.innerHTML = heroTmpl;
+
+    let content = document.querySelector(this.locators.heroContent);
+    content.innerHTML = userTmpl;
+
+    // NOTE: handle sticky header before caching, as this.$header is set
+    // differently depending this feature:
+    if (opts.stickyHeader) {
+      this.enableStickyHeader(true);
+    }
+
+    this._cacheElements(opts.stickyHeader);
+
+    if (opts.header) {
+      this.setHeader(opts.header);
+    }
+
+    if (opts.bgClass) {
+      this.setBgClass(opts.bgClass);
+    }
+
+    if (opts.scrollTarget) {
+      this.enableScrollFeature(true, this.scrollTarget);
+    }
+  }
+
   _createScrollFeatureElement(scrollTarget) {
     let a = document.createElement('a');
 
@@ -113,6 +129,20 @@ class RedsiftHero {
 
   _getStickyHeaderHeight() {
     return (this.hasStickyHeader) ? this.$header.getBoundingClientRect().height : 0;
+  }
+
+  // TODO: implement generic caching functionality, e.g. this.querySelector(selector, useCache)
+  _cacheElements(hasStickyHeader) {
+    this.$hero = document.querySelector(this.locators.hero);
+    if (hasStickyHeader) {
+      this.$header = document.querySelector(this.locators.heroStickyHeader);
+    } else {
+      this.$header = document.querySelector(this.locators.heroHeader);
+    }
+    this.$headerContent = document.querySelector(this.locators.heroHeaderContent);
+    this.$container = document.querySelector(this.locators.heroContainer);
+    this.$content = document.querySelector(this.locators.heroContent);
+    this.$scrollFeature = undefined;
   }
 }
 
