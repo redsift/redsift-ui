@@ -1,5 +1,5 @@
-import registerHero from './hero/js/index';
-import registerRadialChart from './radial-chart/js/index';
+import registerHeroElement from './hero/index';
+import registerRadialChartElement from './radial-chart/js/index';
 
-registerHero();
-registerRadialChart();
+registerHeroElement();
+registerRadialChartElement();

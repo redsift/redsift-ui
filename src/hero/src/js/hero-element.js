@@ -1,6 +1,6 @@
 'use strict'
 
-import RedsiftHero from './lib.js';
+import RedsiftHero from './hero.js';
 
 class RedsiftHeroWebComponent extends HTMLElement {
 
