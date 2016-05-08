@@ -18,6 +18,7 @@ var browserSync = require('browser-sync').create();
 var plumber = require('gulp-plumber');
 var streamqueue = require('streamqueue');
 var spawn = require('child_process').spawn;
+var path = require('path');
 
 
 // Clean
@@ -68,17 +69,21 @@ gulp.task('rollup', function() {
     });
 });
 
-function makeCss(name) {
+function makeCss(bundleName, file) {
     // return gulp.src([
     //         './node_modules/normalize.css/**.css',
-    //         './css/' + name + '.styl',
+    //         './css/' + files + '.styl',
     //         './css/**.css'
     //     ])
-    return gulp.src([name + '.styl'])
+
+console.log('[makeCss] processing file: ' + file);
+    var filebase = path.basename(file);
+
+    return gulp.src([file])
         .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(stylus())
-        .pipe(concat(name + '.css'))
+        .pipe(concat(filebase + '.css'))
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false
@@ -95,7 +100,7 @@ function makeCss(name) {
             keepSpecialComments: 0
         }))
         // .pipe(sourcemaps.write('./dist/maps'))
-        .pipe(sourcemaps.write('./dist'))
+        .pipe(sourcemaps.write())
         // .pipe(gulp.dest('./dist/css'))
         .pipe(gulp.dest('./dist'))
         .pipe(browserSync.stream())
@@ -183,6 +188,24 @@ gulp.task('serve', ['default', 'browser-sync'], function() {
 
 gulp.task('default', ['css', 'rollup', 'js']);
 
+var paths = {
+  dest: './dist'
+}
+
+function compileStylus(bundleName, file) {
+  return gulp.src([file])
+      .pipe(plumber())
+      .pipe(sourcemaps.init())
+      .pipe(stylus())
+      .pipe(concat(bundleName + '.css'))
+      .pipe(autoprefixer({
+          browsers: ['last 2 versions'],
+          cascade: false
+      }))
+      .pipe(sourcemaps.write())
+      .pipe(gulp.dest(paths.dest));
+}
+
 gulp.task('build', ['rollup'], function() {
-  makeCss('./bundles/full/redsift-light');
+  compileStylus('redsift-light', './bundles/full/redsift-light.styl');
 });
