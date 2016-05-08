@@ -49,7 +49,7 @@ After this setup each change in **redsift-ui** will trigger a file creation/upda
 
 ### Image optimization
 
-The repository contains the script `forweb.sh` to optimize images in size. It also takes care of generating an image version for high-dpi, retina displays.
+The repository contains the script `./scripts/forweb.sh` to optimize images in size. It also takes care of generating an image version for high-dpi, retina displays.
 
 #### Prerequisites (MacOS)
 
@@ -60,5 +60,5 @@ The repository contains the script `forweb.sh` to optimize images in size. It al
 After that run the script like so:
 
 ```
-./forweb.sh path/to/image outputpath/basename
+./scripts/forweb.sh path/to/image outputpath/basename
 ```

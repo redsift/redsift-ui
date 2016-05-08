@@ -1,4 +1,4 @@
-import styles from '../styles/styles.styl';
+// import styles from '../styles/styles.styl';
 
 class RedsiftRadialChart {
   constructor(el) {

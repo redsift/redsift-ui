@@ -22,7 +22,7 @@ var spawn = require('child_process').spawn;
 
 // Clean
 gulp.task('clean', function() {
-    return del(['distribution/**']);
+    return del(['dist/**']);
 });
 
 gulp.task('js', function() {
@@ -36,20 +36,20 @@ gulp.task('js', function() {
         .pipe(buffer())
         .pipe(concat('redsift-global.js'))
         .pipe(plumber())
-        .pipe(gulp.dest('./distribution/js'))
+        .pipe(gulp.dest('./dist/js'))
         .pipe(babel({
             presets: ['es2015']
         }))
         .pipe(rename({
             suffix: '.es5'
         }))
-        .pipe(gulp.dest('./distribution/js'))
+        .pipe(gulp.dest('./dist/js'))
         .pipe(closureCompiler({
             compilerPath: 'bower_components/closure-compiler/compiler.jar',
             fileName: 'redsift-global.es5.min.js',
             continueWithWarnings: true
         }))
-        .pipe(gulp.dest('./distribution/js'));
+        .pipe(gulp.dest('./dist/js'));
 });
 
 gulp.task('rollup', function() {
@@ -69,11 +69,12 @@ gulp.task('rollup', function() {
 });
 
 function makeCss(name) {
-    return gulp.src([
-            './node_modules/normalize.css/**.css',
-            './css/' + name + '.styl',
-            './css/**.css'
-        ])
+    // return gulp.src([
+    //         './node_modules/normalize.css/**.css',
+    //         './css/' + name + '.styl',
+    //         './css/**.css'
+    //     ])
+    return gulp.src([name + '.styl'])
         .pipe(plumber())
         .pipe(sourcemaps.init())
         .pipe(stylus())
@@ -83,7 +84,8 @@ function makeCss(name) {
             cascade: false
         }))
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest('./distribution/css'))
+        // .pipe(gulp.dest('./dist/css'))
+        .pipe(gulp.dest('./dist'))
         .pipe(rename({
             suffix: '.min'
         }))
@@ -92,8 +94,10 @@ function makeCss(name) {
             roundingPrecision: 4,
             keepSpecialComments: 0
         }))
-        .pipe(sourcemaps.write('../../distribution/maps'))
-        .pipe(gulp.dest('./distribution/css'))
+        // .pipe(sourcemaps.write('./dist/maps'))
+        .pipe(sourcemaps.write('./dist'))
+        // .pipe(gulp.dest('./dist/css'))
+        .pipe(gulp.dest('./dist'))
         .pipe(browserSync.stream())
         .on('error', function(e) {
             console.error(e.message);
@@ -162,7 +166,7 @@ gulp.task('es6-watch', ['rollup'], function() {
 gulp.task('browser-sync', function() {
     browserSync.init({
         server: {
-            baseDir: ['./samples', './distribution', './dist', './assets'],
+            baseDir: ['./samples', './dist', './assets'],
             directory: true
         }
     });
@@ -178,3 +182,7 @@ gulp.task('serve', ['default', 'browser-sync'], function() {
 });
 
 gulp.task('default', ['css', 'rollup', 'js']);
+
+gulp.task('build', ['rollup'], function() {
+  makeCss('./bundles/full/redsift-light');
+});

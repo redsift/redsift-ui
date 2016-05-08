@@ -1,0 +1,66 @@
+/*
+ * Style setup for redsift-ui based sifts.
+ *
+ * - Provides:
+ *   . ready-to-use UI components
+ *   . responsive type system
+ *   . breakpoint setup (via 'rupture')
+ *   . common functionality like reset, patterns and fonts
+ *
+ * - Used by:
+ *   . redsift-light
+ *   . redsift-dark
+ *
+ * - Folder structure:
+ *
+ *   ./lib        -> mixin and function library
+ *   ./common     -> CSS setup and common classes
+ *   ./components -> UI components
+ */
+
+/*
+ * Mixin/functions library
+ *
+ * Common mixins and functions used by redsift-ui.
+ */
+@import './css/lib/cards.import'
+@import './css/lib/gradients.import'
+
+/*
+ * Base configuration and common classes:
+ *
+ * CSS base setup and common CSS classes.
+ */
+@import './css/common/reset.import'
+@import './css/common/fonts.import'
+@import './css/common/patterns.import'
+@import './css/common/breakpoints.import'
+@import './css/common/selection.import'
+@import './css/common/animation.import'
+@import './css/common/base.import'
+@import './css/common/types.import'
+
+setup-types()
+disable-selection() // FIXXME: only disable on mobile?
+create-cards('cards', false)
+
+/*
+ * UI components:
+ *
+ * Each UI component is encapsulated within a setup function which takes an
+ * opitional settings hash. If omitted the default settings available in the
+ * respective component file are used. This allows a (theme) developer to
+ * customize components for their own sifts and projects.
+ */
+@import './css/components/inputs.import'
+@import './css/components/sliders.import'
+@import './css/components/widgets.import'
+@import './css/components/colour.import'
+@import './css/components/style-switcher.import'
+/* FIXXME: refactor into components! */
+@import './css/components/d3.import'
+
+setup-inputs()
+setup-sliders()
+setup-widget__down-arrow()
+setup-style-switcher()

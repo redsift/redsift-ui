@@ -1,7 +1,7 @@
 import json from 'rollup-plugin-json';
 // import babel from 'rollup-plugin-babel';
 import buble from 'rollup-plugin-buble';
-import stylusCssModules from 'rollup-plugin-stylus-css-modules';
+// import stylusCssModules from 'rollup-plugin-stylus-css-modules';
 import string from 'rollup-plugin-string';
 
 import path from 'path';
@@ -9,13 +9,13 @@ import path from 'path';
 const distRootPath = './dist'; // TODO: use 'config' package for central configuration
 
 export default {
-    entry: 'components/index.js',
+    entry: './bundles/full/index.js',
     format: 'umd',
     plugins: [
         json(),
-        stylusCssModules({
-            output: path.join(distRootPath, 'redsift-ui.css')
-        }),
+        // stylusCssModules({
+        //     output: path.join(distRootPath, 'redsift-ui.css')
+        // }),
         string({
             extensions: ['.tmpl']
         }),
