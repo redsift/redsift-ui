@@ -1,20 +1,21 @@
-import { components } from './components.js';
+import { Tools } from './tools.js';
 
 // Special CSS under this size
 var SMALL_TH = 200;
+var radialChartIndex = 0;
 
 // Adapted from: http://bl.ocks.org/bricedev/8aaef92e64007f882267
 // Uses Bostock's Reusable Chart Convention http://bost.ocks.org/mike/chart/
 function radialChart() {
-  var inst = index++;
+  var inst = radialChartIndex++;
 
   var width = 300,
     height = width,
     labelDistance = 8,
     animationDelay = 0,
     animationSegmentDelay = 100,
-    animationDuration = tools.redsiftDuration(),
-    animation = tools.redsiftEasing(),
+    animationDuration = Tools.redsiftDuration(),
+    animation = Tools.redsiftEasing(),
     prefix = "",
     spokeOverhang = 14,
     labelOrient = "left",
@@ -52,7 +53,7 @@ function radialChart() {
       var create = false;
       if (svg.empty()) {
         create = true;
-        svg = tools.svgRoot(this, svgWidth, height);
+        svg = Tools.svgRoot(this, svgWidth, height);
         g = svg.append("g")
           .attr('class', cpfx + (small ? ' d3-small' : ''))
           .attr("transform", "translate(" + (width / 2 + axisSize) + "," + height / 2 + ")");

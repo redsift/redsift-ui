@@ -8,7 +8,7 @@
     <meta name="description" content="A hero component.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
+    <link rel="stylesheet" type="text/css" href="/full/css/redsift-light.min.css" title="light">
 
     <style>
         .-bg-taxi {
@@ -40,10 +40,13 @@
         </div>
     </div>
 
-    <script src="../js/redsift-global.es5.js"></script>
-    <script src="../redsift-ui.umd.js"></script>
+    <script src="/full/js/redsift.umd.js"></script>
 
     <script>
+        // Mandatory: register custom element:
+        Redsift.registerHeroElement();
+
+        // Testing:
         var $hero = document.querySelector('rs-hero');
 
         setTimeout(function() {

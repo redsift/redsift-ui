@@ -1,4 +1,4 @@
-import { components } from './components.js';
+import { Tools } from './tools.js';
 
 function pieChart() {
   var outerRadius = 100,
@@ -6,8 +6,8 @@ function pieChart() {
     classed = 'pie',
     fill = null,
     animationEnd = null,
-    animationDuration = tools.redsiftDuration(),
-    animation = tools.redsiftEasing();
+    animationDuration = Tools.redsiftDuration(),
+    animation = Tools.redsiftEasing();
 
   function impl(selection) {
     var arc = d3.svg.arc()

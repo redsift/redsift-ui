@@ -8,7 +8,7 @@
     <meta name="description" content="A radial chart component.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
+    <link rel="stylesheet" type="text/css" href="/full/css/redsift-light.min.css" title="light">
 
     <style>
         .content__container {
@@ -59,10 +59,13 @@
     </div>
 
     <script src="//d3js.org/d3.v3.min.js"></script>
-    <script src="../js/redsift-global.es5.js"></script>
-    <script src="../redsift-ui.umd.js"></script>
+    <script src="/full/js/redsift.umd.js"></script>
 
     <script>
+        // Mandatory: register custom element:
+        Redsift.registerRadialChartElement();
+
+        // Setup components:
         function _dummyData(range, segments) {
             var color = d3.scale.category20(); // FIXXME: use segments!
 
@@ -88,15 +91,15 @@
         // web components polyfill enable the following event listener:
         // (see https://www.polymer-project.org/1.0/docs/migration.html#polymer-ready)
         // window.addEventListener('WebComponentsReady', function(e) {
-            var chart = document.querySelector('rs-radial-chart');
+        var chart = document.querySelector('rs-radial-chart');
 
-            if (chart) {
-                var segments = ["#edf8b1", "#7fcdbb", "#2c7fb8"];
+        if (chart) {
+            var segments = ["#edf8b1", "#7fcdbb", "#2c7fb8"];
 
-                // Setup radial chart via public API
-                chart.segments = segments;
-                chart.data = _dummyData(200, segments);
-            }
+            // Setup radial chart via public API
+            chart.segments = segments;
+            chart.data = _dummyData(200, segments);
+        }
         // });
     </script>
 </body>
