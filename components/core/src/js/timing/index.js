@@ -1,7 +1,5 @@
-'use strict';
-
 var Timing = {
-  now: function() {
+  now() {
     var performance = window.performance;
     if (performance === undefined) {
       this.now = function() {
@@ -22,11 +20,9 @@ var Timing = {
         throw new Error('unknown window.performance impl');
       }
     }
-  
+
     return this.now();
   }
 };
 
-if (typeof module !== 'undefined' && module.exports) { module.exports = Timing; } // CommonJs export
-if (typeof define === 'function' && define.amd) { define([], function () { return Timing; }); } // AMD
-  
+export { Timing };
