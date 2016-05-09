@@ -33,6 +33,7 @@ var paths = {
 
 var bundles = [{
     name: 'redsift-light',
+    moduleName: 'RedsiftUI',
     formats: ['umd', 'es6'],
     indexFileJS: './bundles/full/index.js',
     indexFileStyle: './bundles/full/redsift-light.styl',
@@ -85,6 +86,7 @@ gulp.task('bundle-js', function() {
 
         for (var i = 0; i < config.formats.length; i++) {
             var format = config.formats[i],
+            moduleName = config.moduleName,
             dest = null;
 
             if (format === 'es6') {
@@ -92,7 +94,7 @@ gulp.task('bundle-js', function() {
                 bundleES6(config.indexFileJS, dest);
             } else {
                 dest = path.join(config.outputFolder, 'js', 'redsift-ui.' + format + '.js');
-                transpileES6(config.indexFileJS, dest, format);
+                transpileES6(config.indexFileJS, dest, format, moduleName);
             }
         }
     };
@@ -178,7 +180,7 @@ function bundleES6(indexFile, dest) {
     });
 }
 
-function transpileES6(indexFile, dest, format) {
+function transpileES6(indexFile, dest, format, moduleName) {
     rollup.rollup({
         entry: indexFile,
         plugins: [
@@ -195,6 +197,7 @@ function transpileES6(indexFile, dest, format) {
     }).then(function(bundle) {
         bundle.write({
             format: format,
+            moduleName: moduleName,
             dest: dest
         });
     }).catch(function(err) {
@@ -223,6 +226,7 @@ function transpileES6(indexFile, dest, format) {
 
         bundle.write({
             format: format,
+            moduleName: moduleName,
             dest: destMin
         });
     }).catch(function(err) {
