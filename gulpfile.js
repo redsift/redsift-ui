@@ -85,11 +85,13 @@ gulp.task('bundle-js', function() {
 
         for (var i = 0; i < config.formats.length; i++) {
             var format = config.formats[i],
-                dest = path.join(config.outputFolder, 'js', 'redsift-ui.' + format + '.js');
+            dest = null;
 
             if (format === 'es6') {
+                dest = path.join(config.outputFolder, 'js', 'redsift-ui.es2015.js');
                 bundleES6(config.indexFileJS, dest);
             } else {
+                dest = path.join(config.outputFolder, 'js', 'redsift-ui.' + format + '.js');
                 transpileES6(config.indexFileJS, dest, format);
             }
         }
