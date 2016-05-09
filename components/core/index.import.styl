@@ -23,22 +23,22 @@
  *
  * Common mixins and functions used by redsift-ui.
  */
-@import './css/lib/cards.import'
-@import './css/lib/gradients.import'
+@import './src/styles/lib/cards.import'
+@import './src/styles/lib/gradients.import'
 
 /*
  * Base configuration and common classes:
  *
  * CSS base setup and common CSS classes.
  */
-@import './css/common/reset.import'
-@import './css/common/fonts.import'
-@import './css/common/patterns.import'
-@import './css/common/breakpoints.import'
-@import './css/common/selection.import'
-@import './css/common/animation.import'
-@import './css/common/base.import'
-@import './css/common/types.import'
+@import './src/styles/common/reset.import'
+@import './src/styles/common/fonts.import'
+@import './src/styles/common/patterns.import'
+@import './src/styles/common/breakpoints.import'
+@import './src/styles/common/selection.import'
+@import './src/styles/common/animation.import'
+@import './src/styles/common/base.import'
+@import './src/styles/common/types.import'
 
 setup-types()
 disable-selection() // FIXXME: only disable on mobile?
@@ -52,13 +52,13 @@ create-cards('cards', false)
  * respective component file are used. This allows a (theme) developer to
  * customize components for their own sifts and projects.
  */
-@import './css/components/inputs.import'
-@import './css/components/sliders.import'
-@import './css/components/widgets.import'
-@import './css/components/colour.import'
-@import './css/components/style-switcher.import'
+@import './src/styles/components/inputs.import'
+@import './src/styles/components/sliders.import'
+@import './src/styles/components/widgets.import'
+@import './src/styles/components/colour.import'
+@import './src/styles/components/style-switcher.import'
 /* FIXXME: refactor into components! */
-@import './css/components/d3.import'
+@import './src/styles/components/d3.import'
 
 setup-inputs()
 setup-sliders()
