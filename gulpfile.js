@@ -19,12 +19,27 @@ var plumber = require('gulp-plumber');
 var streamqueue = require('streamqueue');
 var spawn = require('child_process').spawn;
 var path = require('path');
-
+var rollup = require('rollup');
+var json = require('rollup-plugin-json');
+// var babel = require('rollup-plugin-babel');
+var buble = require('rollup-plugin-buble');
+var string = require('rollup-plugin-string');
+var filesize = require('rollup-plugin-filesize');
+var uglify = require('rollup-plugin-uglify');
 
 var paths = {
     dest: './dist'
 }
 
+var bundles = [{
+    name: 'redsift-light',
+    formats: ['umd', 'es6'],
+    // formats: ['es6'],
+    indexFileJS: './bundles/full/index.js',
+    indexFileStyle: './bundles/full/redsift-light.styl',
+    outputFolder: path.join(paths.dest, 'full'),
+    mapsDest: '.'
+}];
 
 // Clean
 gulp.task('clean', function() {
@@ -59,19 +74,20 @@ gulp.task('js', function() {
 });
 
 gulp.task('bundle-js', function() {
-    var child = spawn("./node_modules/rollup/bin/rollup", ["-c"], {
-        cwd: process.cwd()
-    });
+    for (var idx = 0; idx < bundles.length; idx++) {
+        var config = bundles[idx];
 
-    child.stdout.setEncoding('utf8');
-    child.stdout.on('data', function(data) {
-        console.log(data.toString());
-    });
+        for (var i = 0; i < config.formats.length; i++) {
+            var format = config.formats[i],
+                dest = path.join(config.outputFolder, 'js', 'redsift-ui.' + format + '.js');
 
-    child.stderr.setEncoding('utf8');
-    child.stderr.on('data', function(data) {
-        console.log(data.toString());
-    });
+            if (format === 'es6') {
+                bundleES6(config.indexFileJS, dest);
+            } else {
+                transpileES6(config.indexFileJS, dest, format);
+            }
+        }
+    };
 });
 
 gulp.task('css-light', function() {
@@ -117,17 +133,90 @@ gulp.task('serve', ['default', 'browser-sync'], function() {
 });
 
 gulp.task('bundle-css', function() {
-  makeCssBundle({
-      name: 'redsift-light',
-      dest: path.join(paths.dest, 'full', 'css'),
-      indexFile: './bundles/full/redsift-light.styl',
-      mapsDest: '.'
-  });
+    makeCssBundle({
+        name: 'redsift-light',
+        dest: path.join(paths.dest, 'full'),
+        indexFile: './bundles/full/redsift-light.styl',
+        mapsDest: '.'
+    });
 });
 
 gulp.task('build', ['bundle-js', 'bundle-css']);
 
 gulp.task('default', ['css', 'bundle-js', 'js']);
+
+
+function bundleES6(indexFile, dest) {
+    rollup.rollup({
+        entry: indexFile,
+        plugins: [
+            json(),
+            string({
+                extensions: ['.tmpl']
+            }),
+            filesize()
+        ]
+    }).then(function(bundle) {
+        bundle.write({
+            format: 'es6',
+            dest: dest
+        });
+    }).catch(function(err) {
+        console.log('rollup err: ' + err);
+    });
+}
+
+function transpileES6(indexFile, dest, format) {
+    rollup.rollup({
+        entry: indexFile,
+        plugins: [
+            json(),
+            string({
+                extensions: ['.tmpl']
+            }),
+            // CAUTION: make sure to initialize all additional plugins BEFORE babel()
+            // buble(). Otherwise the transpiler will consume the imported files first.
+            // babel(),
+            buble(),
+            filesize()
+        ]
+    }).then(function(bundle) {
+        bundle.write({
+            format: format,
+            dest: dest
+        });
+    }).catch(function(err) {
+        console.log('rollup err: ' + err);
+    });
+
+    // FIXXME: use standalone gulp-uglify on concatenated js file to not run through rollup again!
+    rollup.rollup({
+        entry: indexFile,
+        plugins: [
+            json(),
+            string({
+                extensions: ['.tmpl']
+            }),
+            // CAUTION: make sure to initialize all additional plugins BEFORE babel()
+            // buble(). Otherwise the transpiler will consume the imported files first.
+            // babel(),
+            buble(),
+            filesize(),
+            uglify()
+        ]
+    }).then(function(bundle) {
+        var dirname = path.dirname(dest),
+            basename = path.basename(dest),
+            destMin = path.join(dirname, basename) + '.min.js';
+
+        bundle.write({
+            format: format,
+            dest: destMin
+        });
+    }).catch(function(err) {
+        console.log('rollup err: ' + err);
+    });
+}
 
 function makeCss(name) {
     return gulp.src([
@@ -175,7 +264,7 @@ function makeCssBundle(opts) {
             cascade: false
         }))
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest(opts.dest))
+        .pipe(gulp.dest(path.join(opts.dest, 'css')))
         .pipe(rename({
             suffix: '.min'
         }))
@@ -185,7 +274,7 @@ function makeCssBundle(opts) {
             keepSpecialComments: 0
         }))
         .pipe(sourcemaps.write(opts.mapsDest))
-        .pipe(gulp.dest(opts.dest))
+        .pipe(gulp.dest(path.join(opts.dest, 'css')))
         .pipe(browserSync.stream())
         .on('error', function(e) {
             console.error(e.message);
