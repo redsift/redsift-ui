@@ -1,48 +1,44 @@
-/* global d3 */
-
-'use strict';
-
-var tools = require('./tools.js');
+import { components } from './components.js';
 
 function pieChart() {
-  var outerRadius = 100, 
-    innerRadius = 0, 
-    classed = 'pie', 
+  var outerRadius = 100,
+    innerRadius = 0,
+    classed = 'pie',
     fill = null,
     animationEnd = null,
     animationDuration = tools.redsiftDuration(),
     animation = tools.redsiftEasing();
-  
+
   function impl(selection) {
     var arc = d3.svg.arc()
                 .outerRadius(outerRadius)
                 .innerRadius(innerRadius);
-    
 
-                            
+
+
     selection.each(function(data) {
-               
+
         var p = d3.select(this).selectAll('path.'+classed)
             .data(data);
-            
+
         p.enter().append('path')
             .attr('class', classed);
         p.exit().remove();
-        
+
         if (animation) {
             p.transition().ease(animation).duration(animationDuration).attr('d', arc).each('end', function() {
                 if (animationEnd) {
                     animationEnd();
                 }
-            });     
+            });
         } else {
-            p.attr('d', arc);     
+            p.attr('d', arc);
         }
-            
-        
+
+
         if (fill) {
             p.style('fill', fill);
-        }      
+        }
     });
   }
 
@@ -51,7 +47,7 @@ function pieChart() {
     animationEnd = value;
     return impl;
   };
-  
+
   impl.animation = function(value) {
     if (!arguments.length) return animation;
     animation = value;
@@ -68,28 +64,27 @@ function pieChart() {
     if (!arguments.length) return fill;
     fill = value;
     return impl;
-  }; 
+  };
 
   impl.classed = function(value) {
     if (!arguments.length) return classed;
     classed = value;
     return impl;
-  }; 
+  };
 
   impl.outerRadius = function(value) {
     if (!arguments.length) return outerRadius;
     outerRadius = value;
     return impl;
-  };  
-  
+  };
+
   impl.innerRadius = function(value) {
     if (!arguments.length) return innerRadius;
     innerRadius = value;
     return impl;
-  };    
-  
+  };
+
   return impl;
 }
 
-if (typeof module !== 'undefined' && module.exports) { module.exports = pieChart; } // CommonJs export
-if (typeof define === 'function' && define.amd) { define([], function () { return pieChart; }); } // AMD
+export { pieChart };

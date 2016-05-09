@@ -8,4 +8,5 @@ export {
 	Sliders,
 	StyleSwitcher
 } from './src/js/widgets/index';
-export { Xkcd } from './src/js/xkcd/index'
+export { Xkcd } from './src/js/xkcd/index';
+export { D3 } from './src/js/d3/index';

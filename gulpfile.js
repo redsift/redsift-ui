@@ -184,13 +184,15 @@ function bundleES6(indexFile, dest) {
 function transpileES6(indexFile, dest, format, moduleName) {
     rollup.rollup({
         entry: indexFile,
+        external: [ 'bezier-easing' ],
         plugins: [
             json(),
             string({
                 extensions: ['.tmpl']
             }),
-            // CAUTION: make sure to initialize all additional plugins BEFORE babel()
-            // buble(). Otherwise the transpiler will consume the imported files first.
+            // CAUTION: make sure to initialize all file transforming additional plugins
+            // BEFORE babel() or buble(). Otherwise the transpiler will consume the
+            //imported files first.
             // babel(),
             buble(),
             filesize()
@@ -199,7 +201,10 @@ function transpileES6(indexFile, dest, format, moduleName) {
         bundle.write({
             format: format,
             moduleName: moduleName,
-            dest: dest
+            dest: dest,
+            globals: {
+                'bezier-easing': 'BezierEasing',
+            }
         });
     }).catch(function(err) {
         console.log('rollup err: ' + err);
@@ -208,13 +213,15 @@ function transpileES6(indexFile, dest, format, moduleName) {
     // FIXXME: use standalone gulp-uglify on concatenated js file to not run through rollup again!
     rollup.rollup({
         entry: indexFile,
+        external: [ 'bezier-easing' ],
         plugins: [
             json(),
             string({
                 extensions: ['.tmpl']
             }),
-            // CAUTION: make sure to initialize all additional plugins BEFORE babel()
-            // buble(). Otherwise the transpiler will consume the imported files first.
+            // CAUTION: make sure to initialize all file transforming additional plugins
+            // BEFORE babel() or buble(). Otherwise the transpiler will consume the
+            //imported files first.
             // babel(),
             buble(),
             filesize(),
@@ -228,7 +235,10 @@ function transpileES6(indexFile, dest, format, moduleName) {
         bundle.write({
             format: format,
             moduleName: moduleName,
-            dest: destMin
+            dest: destMin,
+            globals: {
+                'bezier-easing': 'BezierEasing',
+            }
         });
     }).catch(function(err) {
         console.log('rollup err: ' + err);
