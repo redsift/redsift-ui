@@ -1,7 +1,4 @@
-/* global d3 */
-'use strict';
-
-var BezierEasing = require('../../node_modules/bezier-easing/dist/bezier-easing.js');
+import { BezierEasing } from 'bezier-easing';
 
 function circle(start, end, step, l, cx, cy, sx, sy) {
     if (cx === undefined) cx = 0;
@@ -9,22 +6,22 @@ function circle(start, end, step, l, cx, cy, sx, sy) {
     if (sx === undefined) sx = 0;
     if (sy === undefined) sy = 0;
 
-    var circle = [];
-    for (var i=start; i<=end; i+=step) {
-        var rad = (i / 360) * 2 * Math.PI - (Math.PI / 2);
+    let circle = [];
+    for (let i=start; i<=end; i+=step) {
+        let rad = (i / 360) * 2 * Math.PI - (Math.PI / 2);
 
-        var sr = Math.sin(rad);
-        var cr = Math.cos(rad);
-        var x = l * cr + (sx * cr);
-        var y = l * sr + (sy * sr);
+        let sr = Math.sin(rad);
+        let cr = Math.cos(rad);
+        let x = l * cr + (sx * cr);
+        let y = l * sr + (sy * sr);
         circle.push([x + cx, y + cy]);
     }
     return circle;
 }
 
-var Tools = {
-  svgRoot: function (parent, width, height, classed) {
-    var svg = d3.select(parent).append("svg")
+let Tools = {
+  svgRoot(parent, width, height, classed) {
+    let svg = d3.select(parent).append("svg")
           .attr("version", "1.1")
           .attr("xmlns", "http://www.w3.org/2000/svg")
           .attr("width", width)
@@ -39,28 +36,28 @@ var Tools = {
 
     return svg;
   },
-  redsiftDuration: function() {
+  redsiftDuration() {
     return 400;
   },
-  redsiftEasing: function() {
-    var f = this.redsiftBezier();
+  redsiftEasing() {
+    let f = this.redsiftBezier();
     return function(t) {
       return f(t);
     }
   },
-  redsiftBezier: function() {
+  redsiftBezier() {
     return BezierEasing(0.175, 0.885, 0.335, 1.155);
   },
-  preconnectTo: function(url) {
+  preconnectTo(url) {
     // taken from https://www.igvita.com/2015/08/17/eliminating-roundtrips-with-preconnect/
-    var hint = document.createElement("link");
+    let hint = document.createElement("link");
     hint.rel = "preconnect";
     hint.href = url;
     document.head.appendChild(hint);
   },
-  createCSSRuleSheet: function(media) {
+  createCSSRuleSheet(media) {
     // Create the <style> tag
-    var style = document.createElement("style");
+    let style = document.createElement("style");
 
     if (media) {
       style.setAttribute("media", media)
@@ -72,7 +69,7 @@ var Tools = {
 
     // Add the <style> element to the page
     document.head.appendChild(style);
-    var sheet = style.sheet;
+    let sheet = style.sheet;
 
     return function addCSSRule(selector, rules, index) {
       if("insertRule" in sheet) {
@@ -83,7 +80,7 @@ var Tools = {
       }
     }
   },
-  createShadowFilter: function (defs, fname, morphRadius, shadowColour, blurRadius, padding) {
+  createShadowFilter(defs, fname, morphRadius, shadowColour, blurRadius, padding) {
     if (morphRadius === undefined) {
       morphRadius = 1;
     }
@@ -99,7 +96,7 @@ var Tools = {
       padding = "10px";
     }
 
-    var filter = defs
+    let filter = defs
       .append("filter")
       .attr("id", fname)
       .attr("x", "-" + padding)
@@ -127,23 +124,23 @@ var Tools = {
       .attr('stdDeviation', blurRadius)
       .attr('result', 'BG');
 
-    var merge = filter.append('feMerge');
+    let merge = filter.append('feMerge');
     merge.append('feMergeNode').attr('in', "BG");
     merge.append('feMergeNode').attr('in', "SourceGraphic");
   },
-  createDefs: function(parent) {
+  createDefs(parent) {
     if (parent === undefined) {
       parent = 'body';
     }
-     var defs = d3.select(parent)
+     let defs = d3.select(parent)
       .append("svg")
       .attr("style", "display: block; width: 0px; height: 0px;")
       .append("defs");
 
      return defs;
   },
-  createMask: function(defs, id, fill) {
-    var m = defs.append('mask')
+  createMask(defs, id, fill) {
+    let m = defs.append('mask')
             .attr('id', id);
 
     m.append('rect')
@@ -155,7 +152,7 @@ var Tools = {
 
     return m;
   },
-  createDiagonal: function(defs, id, ang, w, h, s) {
+  createDiagonal(defs, id, ang, w, h, s) {
     if (ang == null) {
       ang = 45;
     } else if (typeof ang  === 'object') {
@@ -173,7 +170,7 @@ var Tools = {
     if (s === undefined) {
       s = 4;
     }
-    var p = defs.append('pattern')
+    let p = defs.append('pattern')
             .attr('id', id)
             .attr('width', s)
             .attr('height', s)
@@ -194,19 +191,18 @@ var Tools = {
     return p;
   },
   createCircle: circle,
-  arcLine: function() {
-
-      var interpolation = null, degreeSteps = 1, outerRadius = 100;
+  arcLine() {
+      let interpolation = null, degreeSteps = 1, outerRadius = 100;
 
       function impl(d) {
-          var line = d3.svg.line();
+          let line = d3.svg.line();
           if (interpolation) {
               line = line.interpolate(interpolation);
           }
 
-          var start = d.startAngle * 180 / Math.PI;
-          var end = d.endAngle * 180 / Math.PI;
-          var seg = circle(start, end, degreeSteps, outerRadius);
+          let start = d.startAngle * 180 / Math.PI;
+          let end = d.endAngle * 180 / Math.PI;
+          let seg = circle(start, end, degreeSteps, outerRadius);
           return line(seg);
       }
 
@@ -230,12 +226,11 @@ var Tools = {
 
       return impl;
   },
-  scalePattern: function(x, s) {
+  scalePattern(x, s) {
       if ((s == null) || (s === 1)) return x;
 
       return { ang: x.ang, w: x.w*s, h: x.h*s, s: x.s*s };
   }
 };
 
-if (typeof module !== 'undefined' && module.exports) { module.exports = Tools; } // CommonJs export
-if (typeof define === 'function' && define.amd) { define([], function () { return Tools; }); } // AMD
+export { Tools };
