@@ -1,7 +1,10 @@
+export * from '../../components/core/index.js';
+
 export {
     registerHeroElement,
     RedsiftHero
 } from '../../components/hero/index.js';
+
 export {
     registerRadialChartElement,
     RedsiftRadialChart

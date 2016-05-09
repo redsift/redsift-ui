@@ -35,16 +35,17 @@ var bundles = [{
     name: 'redsift-light',
     moduleName: 'RedsiftUI',
     formats: ['umd', 'es6'],
-    indexFileJS: './bundles/full/index.js',
-    indexFileStyle: './bundles/full/redsift-light.styl',
-    outputFolder: path.join(paths.dest, 'full'),
-    mapsDest: '.'
-},{
-    name: 'redsift-light',
-    formats: ['umd', 'es6'],
     indexFileJS: './bundles/core/index.js',
     indexFileStyle: './bundles/core/redsift-light.styl',
     outputFolder: path.join(paths.dest, 'core'),
+    mapsDest: '.'
+}, {
+    name: 'redsift-light',
+    moduleName: 'RedsiftUI',
+    formats: ['umd', 'es6'],
+    indexFileJS: './bundles/full/index.js',
+    indexFileStyle: './bundles/full/redsift-light.styl',
+    outputFolder: path.join(paths.dest, 'full'),
     mapsDest: '.'
 }];
 
@@ -86,8 +87,8 @@ gulp.task('bundle-js', function() {
 
         for (var i = 0; i < config.formats.length; i++) {
             var format = config.formats[i],
-            moduleName = config.moduleName,
-            dest = null;
+                moduleName = config.moduleName,
+                dest = null;
 
             if (format === 'es6') {
                 dest = path.join(config.outputFolder, 'js', 'redsift-ui.es2015.js');
@@ -101,16 +102,16 @@ gulp.task('bundle-js', function() {
 });
 
 gulp.task('bundle-css', function() {
-  for (var idx = 0; idx < bundles.length; idx++) {
-    var config = bundles[idx];
+    for (var idx = 0; idx < bundles.length; idx++) {
+        var config = bundles[idx];
 
-    makeCssBundle({
-        name: config.name,
-        dest: path.join(config.outputFolder, 'css'),
-        indexFile: config.indexFileStyle,
-        mapsDest: config.mapsDest
-    });
-  }
+        makeCssBundle({
+            name: config.name,
+            dest: path.join(config.outputFolder, 'css'),
+            indexFile: config.indexFileStyle,
+            mapsDest: config.mapsDest
+        });
+    }
 });
 
 gulp.task('css-light', function() {
