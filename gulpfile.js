@@ -33,7 +33,7 @@ var paths = {
 
 var bundles = [{
     name: 'redsift-light',
-    moduleName: 'RedsiftUI',
+    moduleName: 'Redsift',
     formats: ['umd', 'es6'],
     indexFileJS: './bundles/core/index.js',
     indexFileStyle: './bundles/core/redsift-light.styl',
@@ -41,7 +41,7 @@ var bundles = [{
     mapsDest: '.'
 }, {
     name: 'redsift-light',
-    moduleName: 'RedsiftUI',
+    moduleName: 'Redsift',
     formats: ['umd', 'es6'],
     indexFileJS: './bundles/full/index.js',
     indexFileStyle: './bundles/full/redsift-light.styl',

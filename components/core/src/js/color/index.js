@@ -1,11 +1,9 @@
-'use strict';
-
 // Start: Adapted from https://github.com/MoOx/color-convert
 // MIT : https://github.com/MoOx/color-convert/blob/master/LICENSE
 // Copyright (c) 2011 Heather Arthur <fayearthur@gmail.com>
 
 function rgb2xyz(rgb) {
-  var r = rgb[0] / 255,
+  let r = rgb[0] / 255,
       g = rgb[1] / 255,
       b = rgb[2] / 255;
 
@@ -14,15 +12,15 @@ function rgb2xyz(rgb) {
   g = g > 0.04045 ? Math.pow(((g + 0.055) / 1.055), 2.4) : (g / 12.92);
   b = b > 0.04045 ? Math.pow(((b + 0.055) / 1.055), 2.4) : (b / 12.92);
 
-  var x = (r * 0.4124) + (g * 0.3576) + (b * 0.1805);
-  var y = (r * 0.2126) + (g * 0.7152) + (b * 0.0722);
-  var z = (r * 0.0193) + (g * 0.1192) + (b * 0.9505);
+  let x = (r * 0.4124) + (g * 0.3576) + (b * 0.1805);
+  let y = (r * 0.2126) + (g * 0.7152) + (b * 0.0722);
+  let z = (r * 0.0193) + (g * 0.1192) + (b * 0.9505);
 
   return [x * 100, y *100, z * 100];
 }
 
 function rgb2lab(rgb) {
-  var xyz = rgb2xyz(rgb),
+  let xyz = rgb2xyz(rgb),
         x = xyz[0],
         y = xyz[1],
         z = xyz[2],
@@ -46,12 +44,12 @@ function rgb2lab(rgb) {
 // End : Adapted from https://github.com/MoOx/color-convert
 
 function hexToRgb(hex) {
-  var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
   hex = hex.replace(shorthandRegex, function(m, r, g, b) {
     return r + r + g + g + b + b;
   });
 
-  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   if (!result) {
     console.log('Could not parse color', hex);
     return [0, 0, 0];
@@ -63,52 +61,58 @@ function hexToRgb(hex) {
     ];
 }
 
-var TEXT_WHITE = '#fff';
-var TEXT_BLACK = '#000';
-var BG_RS = [ '#ed154f', '#ED1651', '#C82254', '#A62A57', '#842F59', '#842F59', '#35355C', '#231F20'];
-var L_TH = 64;
+const TEXT_WHITE = '#fff';
+const TEXT_BLACK = '#000';
+const BG_RS = [ '#ed154f', '#ED1651', '#C82254', '#A62A57', '#842F59', '#842F59', '#35355C', '#231F20'];
+const L_TH = 64;
 
-var ColorTools = {
-  randomTheme: function() {
+class ColorTools {
+  constructor() {
+    this.themes = {
+      value: BG_RS,
+      writable: false,
+      enumerable: true,
+      configurable: false
+    }
+  }
+  randomTheme() {
     return BG_RS[Math.floor(Math.random()*BG_RS.length)];
-  },
-  textColorFor: function(c) {
+  }
+
+  textColorFor() {
     if (typeof c === 'string' || c instanceof String) {
       c = hexToRgb(c);
     }
-    var lab = rgb2lab(c);
+    let lab = rgb2lab(c);
     console.log(lab);
     if (lab[0] < L_TH) {
       return TEXT_WHITE;
     }
     return TEXT_BLACK;
-  },
-  lightnessSort: function(colors) {
-    var lab = colors.map(function(c) {
-      var a = c;
+  }
+
+  lightnessSort() {
+    let lab = colors.map(function(c) {
+      let a = c;
       if (!Array.isArray(c)) {
         a = hexToRgb(c);
       }
-      
+
       return [rgb2lab(a), c];
     });
-    
-    var sort = lab.sort(function(a, b) {
+
+    let sort = lab.sort(function(a, b) {
       if (a[0][0] < b[0][0]) return -1;
       if (a[0][0] > b[0][0]) return -1;
       return 0;
     });
-    
+
     return sort.map(function (a) { return a[1]; });
+  }
+
+  themes() {
+
   }
 };
 
-Object.defineProperty(ColorTools, 'themes', {
-  value: BG_RS,
-  writable: false,
-  enumerable: true,
-  configurable: false
-});
-
-if (typeof module !== 'undefined' && module.exports) { module.exports = ColorTools; } // CommonJs export
-if (typeof define === 'function' && define.amd) { define([], function () { return ColorTools; }); } // AMD
+export { ColorTools };
