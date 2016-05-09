@@ -17,7 +17,6 @@ var closureCompiler = require('gulp-closure-compiler');
 var browserSync = require('browser-sync').create();
 var plumber = require('gulp-plumber');
 var streamqueue = require('streamqueue');
-var spawn = require('child_process').spawn;
 var path = require('path');
 var rollup = require('rollup');
 var json = require('rollup-plugin-json');
@@ -32,54 +31,46 @@ var paths = {
 }
 
 var bundles = [{
-    name: 'redsift-light',
-    moduleName: 'Redsift',
+    name: 'core',
     formats: ['umd', 'es6'],
-    indexFileJS: './bundles/core/index.js',
-    indexFileStyle: './bundles/core/redsift-light.styl',
+    moduleNameJS: 'Redsift',
     outputFolder: path.join(paths.dest, 'core'),
+    mainJS: {
+        name: 'redsift',
+        indexFile: './bundles/core/index.js'
+    },
+    styles: [{
+        name: 'redsift-light',
+        indexFile: './bundles/core/redsift-light.styl'
+    }, {
+        name: 'redsift-dark',
+        indexFile: './bundles/core/redsift-dark.styl'
+    }, {
+        name: 'redsift-xtra',
+        indexFile: './bundles/core/redsift-xtra.styl'
+    }],
     mapsDest: '.'
 }, {
-    name: 'redsift-light',
-    moduleName: 'Redsift',
+    name: 'full',
     formats: ['umd', 'es6'],
-    indexFileJS: './bundles/full/index.js',
-    indexFileStyle: './bundles/full/redsift-light.styl',
+    moduleNameJS: 'Redsift',
     outputFolder: path.join(paths.dest, 'full'),
+    mainJS: {
+        name: 'redsift',
+        indexFile: './bundles/full/index.js'
+    },
+    styles: [{
+        name: 'redsift-light',
+        indexFile: './bundles/full/redsift-light.styl'
+    }, {
+        name: 'redsift-dark',
+        indexFile: './bundles/full/redsift-dark.styl'
+    }, {
+        name: 'redsift-xtra',
+        indexFile: './bundles/full/redsift-xtra.styl'
+    }],
     mapsDest: '.'
 }];
-
-// Clean
-gulp.task('clean', function() {
-    return del(['dist/**']);
-});
-
-gulp.task('js', function() {
-    return streamqueue({
-                objectMode: true
-            },
-            gulp.src('./node_modules/babel-polyfill/browser.js'),
-            browserify(['./js/redsift.js'])
-            .bundle()
-            .pipe(source('./js/redsift-browserify.js')))
-        .pipe(buffer())
-        .pipe(concat('redsift-global.js'))
-        .pipe(plumber())
-        .pipe(gulp.dest('./dist/js'))
-        .pipe(babel({
-            presets: ['es2015']
-        }))
-        .pipe(rename({
-            suffix: '.es5'
-        }))
-        .pipe(gulp.dest('./dist/js'))
-        .pipe(closureCompiler({
-            compilerPath: 'bower_components/closure-compiler/compiler.jar',
-            fileName: 'redsift-global.es5.min.js',
-            continueWithWarnings: true
-        }))
-        .pipe(gulp.dest('./dist/js'));
-});
 
 gulp.task('bundle-js', function() {
     for (var idx = 0; idx < bundles.length; idx++) {
@@ -87,15 +78,15 @@ gulp.task('bundle-js', function() {
 
         for (var i = 0; i < config.formats.length; i++) {
             var format = config.formats[i],
-                moduleName = config.moduleName,
+                moduleName = config.moduleNameJS,
                 dest = null;
 
             if (format === 'es6') {
-                dest = path.join(config.outputFolder, 'js', 'redsift-ui.es2015.js');
-                bundleES6(config.indexFileJS, dest);
+                dest = path.join(config.outputFolder, 'js', config.mainJS.name + '.es2015.js');
+                bundleES6(config.mainJS.indexFile, dest);
             } else {
-                dest = path.join(config.outputFolder, 'js', 'redsift-ui.' + format + '.js');
-                transpileES6(config.indexFileJS, dest, format, moduleName);
+                dest = path.join(config.outputFolder, 'js', config.mainJS.name + '.' + format + '.js');
+                transpileES6(config.mainJS.indexFile, dest, format, moduleName);
             }
         }
     };
@@ -105,38 +96,40 @@ gulp.task('bundle-css', function() {
     for (var idx = 0; idx < bundles.length; idx++) {
         var config = bundles[idx];
 
-        makeCssBundle({
-            name: config.name,
-            dest: path.join(config.outputFolder, 'css'),
-            indexFile: config.indexFileStyle,
-            mapsDest: config.mapsDest
-        });
+        for (var i = 0; i < config.styles.length; i++) {
+            let style = config.styles[i]
+
+            makeCssBundle({
+                name: style.name,
+                dest: path.join(config.outputFolder, 'css'),
+                indexFile: style.indexFile,
+                mapsDest: config.mapsDest
+            });
+        }
     }
 });
 
-gulp.task('css-light', function() {
-    return makeCss('redsift-light');
-});
-
-gulp.task('css-dark', function() {
-    return makeCss('redsift-dark');
-});
-
-gulp.task('css-xtra', function() {
-    return makeCss('redsift-xtra');
-});
-
-gulp.task('css', ['css-light', 'css-dark', 'css-xtra'], function() {
+gulp.task('css-watch', ['css-light', 'css-dark', 'css-xtra'], function() {
     return appRefresh();
-});
-
-gulp.task('js-watch', ['js'], function() {
     browserSync.reload('*.js');
 });
 
-gulp.task('es6-watch', ['bundle-js'], function() {
+gulp.task('js-watch', ['bundle-js'], function() {
     browserSync.reload('*.js');
 });
+
+gulp.task('serve', ['default', 'browser-sync'], function() {
+    gulp.watch(['./components/**/*.{import.styl,styl,css}'], ['css-watch']);
+    gulp.watch(['./components/**/*.{js,tmpl}'], ['js-watch']);
+    gulp.watch(['./js/**/*.js'], ['js-watch']);
+    gulp.watch('./samples/**/*.html').on('change', function() {
+        browserSync.reload('*.html');
+    });
+});
+
+gulp.task('default', ['bundle-css', 'bundle-js']);
+
+gulp.task('build', ['default']);
 
 gulp.task('browser-sync', function() {
     browserSync.init({
@@ -147,19 +140,9 @@ gulp.task('browser-sync', function() {
     });
 });
 
-gulp.task('serve', ['default', 'browser-sync'], function() {
-    gulp.watch(['./css/**/*.{import.styl,styl,css}'], ['css']);
-    gulp.watch(['./components/**/*.{js,tmpl,styl}'], ['es6-watch']);
-    gulp.watch(['./js/**/*.js'], ['js-watch']);
-    gulp.watch('./samples/**/*.html').on('change', function() {
-        browserSync.reload('*.html');
-    });
+gulp.task('clean', function() {
+    return del(['dist/**']);
 });
-
-gulp.task('build', ['bundle-js', 'bundle-css']);
-
-gulp.task('default', ['css', 'bundle-js', 'js']);
-
 
 function bundleES6(indexFile, dest) {
     rollup.rollup({
@@ -184,7 +167,7 @@ function bundleES6(indexFile, dest) {
 function transpileES6(indexFile, dest, format, moduleName) {
     rollup.rollup({
         entry: indexFile,
-        external: [ 'bezier-easing' ],
+        external: ['bezier-easing'],
         plugins: [
             json(),
             string({
@@ -210,10 +193,16 @@ function transpileES6(indexFile, dest, format, moduleName) {
         console.log('rollup err: ' + err);
     });
 
-    // FIXXME: use standalone gulp-uglify on concatenated js file to not run through rollup again!
+    // FIXXME: use closure compiler to minify JS!
+    // .pipe(closureCompiler({
+    //     compilerPath: 'bower_components/closure-compiler/compiler.jar',
+    //     fileName: 'redsift-global.es5.min.js',
+    //     continueWithWarnings: true
+    // }))
+
     rollup.rollup({
         entry: indexFile,
-        external: [ 'bezier-easing' ],
+        external: ['bezier-easing'],
         plugins: [
             json(),
             string({
@@ -245,40 +234,8 @@ function transpileES6(indexFile, dest, format, moduleName) {
     });
 }
 
-function makeCss(name) {
-    return gulp.src([
-            './node_modules/normalize.css/**.css',
-            './css/' + name + '.styl',
-            './css/**.css'
-        ])
-        .pipe(plumber())
-        .pipe(sourcemaps.init())
-        .pipe(stylus())
-        .pipe(concat(name + '.css'))
-        .pipe(autoprefixer({
-            browsers: ['last 2 versions'],
-            cascade: false
-        }))
-        .pipe(sourcemaps.write())
-        .pipe(gulp.dest('./dist/css'))
-        .pipe(rename({
-            suffix: '.min'
-        }))
-        .pipe(minifyCss({
-            compatibility: '*',
-            roundingPrecision: 4,
-            keepSpecialComments: 0
-        }))
-        .pipe(sourcemaps.write('../../dist/maps'))
-        .pipe(gulp.dest('./dist/css'))
-        .pipe(browserSync.stream())
-        .on('error', function(e) {
-            console.error(e.message);
-        });
-}
-
 function makeCssBundle(opts) {
-    return gulp.src([
+    gulp.src([
             './node_modules/normalize.css/**.css',
             opts.indexFile
         ])
