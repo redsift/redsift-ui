@@ -34,10 +34,16 @@ var paths = {
 var bundles = [{
     name: 'redsift-light',
     formats: ['umd', 'es6'],
-    // formats: ['es6'],
     indexFileJS: './bundles/full/index.js',
     indexFileStyle: './bundles/full/redsift-light.styl',
     outputFolder: path.join(paths.dest, 'full'),
+    mapsDest: '.'
+},{
+    name: 'redsift-light',
+    formats: ['umd', 'es6'],
+    indexFileJS: './bundles/core/index.js',
+    indexFileStyle: './bundles/core/redsift-light.styl',
+    outputFolder: path.join(paths.dest, 'core'),
     mapsDest: '.'
 }];
 
@@ -90,6 +96,19 @@ gulp.task('bundle-js', function() {
     };
 });
 
+gulp.task('bundle-css', function() {
+  for (var idx = 0; idx < bundles.length; idx++) {
+    var config = bundles[idx];
+
+    makeCssBundle({
+        name: config.name,
+        dest: path.join(config.outputFolder, 'css'),
+        indexFile: config.indexFileStyle,
+        mapsDest: config.mapsDest
+    });
+  }
+});
+
 gulp.task('css-light', function() {
     return makeCss('redsift-light');
 });
@@ -129,15 +148,6 @@ gulp.task('serve', ['default', 'browser-sync'], function() {
     gulp.watch(['./js/**/*.js'], ['js-watch']);
     gulp.watch('./samples/**/*.html').on('change', function() {
         browserSync.reload('*.html');
-    });
-});
-
-gulp.task('bundle-css', function() {
-    makeCssBundle({
-        name: 'redsift-light',
-        dest: path.join(paths.dest, 'full'),
-        indexFile: './bundles/full/redsift-light.styl',
-        mapsDest: '.'
     });
 });
 
@@ -264,7 +274,7 @@ function makeCssBundle(opts) {
             cascade: false
         }))
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest(path.join(opts.dest, 'css')))
+        .pipe(gulp.dest(opts.dest))
         .pipe(rename({
             suffix: '.min'
         }))
@@ -274,7 +284,7 @@ function makeCssBundle(opts) {
             keepSpecialComments: 0
         }))
         .pipe(sourcemaps.write(opts.mapsDest))
-        .pipe(gulp.dest(path.join(opts.dest, 'css')))
+        .pipe(gulp.dest(opts.dest))
         .pipe(browserSync.stream())
         .on('error', function(e) {
             console.error(e.message);
