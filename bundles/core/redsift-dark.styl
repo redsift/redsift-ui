@@ -1,5 +1,6 @@
 @import '../../components/core/index.import';
 @import '../../components/core/src/styles/brand.import';
+@import '../../components/hero/index.import';
 
 $textColour = $brandWhite;
 $lineColour = $brandWhite;
@@ -16,4 +17,12 @@ $coloursLight = {
 }
 setup-colour-system($coloursLight)
 
-radial-chart($textColour, $lineColour)
+$heroSettings = {
+	padding: 1em,
+	height: 500px,
+	content: {
+		borderWidth: 1px,
+		borderColor: $brandGrey
+	}
+}
+setup-hero($heroSettings);
