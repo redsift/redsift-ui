@@ -110,7 +110,7 @@ class RedsiftHero {
     }
 
     if (opts.scrollTarget) {
-      this.enableScrollFeature(true, this.scrollTarget);
+      this.enableScrollFeature(true, opts.scrollTarget);
     }
   }
 
