@@ -13,7 +13,7 @@ function useTheme(title) {
 }
 
 let StyleSwitcher = {
-    use() {
+    use(title) {
         let themes = document.getElementsByTagName('link');
         for (let idx = 0; idx < themes.length; idx++) {
             let theme = themes[idx];
