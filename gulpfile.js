@@ -67,7 +67,7 @@ gulp.task('bundle-css', function() {
     }
 });
 
-gulp.task('css-watch', ['css-light', 'css-dark', 'css-xtra'], function() {
+gulp.task('css-watch', ['bundle-css'], function() {
     return appRefresh();
     browserSync.reload('*.js');
 });
@@ -77,8 +77,8 @@ gulp.task('js-watch', ['bundle-js'], function() {
 });
 
 gulp.task('serve', ['default', 'browser-sync'], function() {
-    gulp.watch(['./components/**/*.{import.styl,styl,css}'], ['css-watch']);
-    gulp.watch(['./components/**/*.{js,tmpl}'], ['js-watch']);
+    gulp.watch(['./components/**/*.{import.styl,styl,css}', './bundles/**/*.{import.styl,styl,css}'], ['css-watch']);
+    gulp.watch(['./components/**/*.{js,tmpl}', './bundles/**/*.{js,tmpl}'], ['js-watch']);
     gulp.watch(['./js/**/*.js'], ['js-watch']);
     gulp.watch('./samples/**/*.html').on('change', function() {
         browserSync.reload('*.html');
@@ -125,7 +125,6 @@ function bundleES6(indexFile, dest) {
 function transpileES6(indexFile, dest, format, moduleName) {
     rollup.rollup({
       entry: indexFile,
-      external: ['bezier-easing'],
       plugins: [
         json(),
         string({
@@ -156,7 +155,6 @@ function transpileES6(indexFile, dest, format, moduleName) {
 
     rollup.rollup({
         entry: indexFile,
-        external: ['bezier-easing'],
         plugins: [
             json(),
             string({
