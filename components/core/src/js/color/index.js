@@ -71,12 +71,11 @@ let ColorTools = {
         return BG_RS[Math.floor(Math.random() * BG_RS.length)];
     },
 
-    textColorFor() {
+    textColorFor(c) {
         if (typeof c === 'string' || c instanceof String) {
             c = hexToRgb(c);
         }
         let lab = rgb2lab(c);
-        console.log(lab);
         if (lab[0] < L_TH) {
             return TEXT_WHITE;
         }
@@ -104,12 +103,7 @@ let ColorTools = {
         });
     },
 
-    themes: {
-        value: BG_RS,
-        writable: false,
-        enumerable: true,
-        configurable: false
-    }
+    themes: BG_RS
 };
 
 export { ColorTools };
