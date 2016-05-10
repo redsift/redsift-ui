@@ -1,4 +1,4 @@
-import { BezierEasing } from 'bezier-easing';
+import { BezierEasing } from '../../../../../vendor/bezier-easing/index';
 
 function circle(start, end, step, l, cx, cy, sx, sy) {
     if (cx === undefined) cx = 0;
