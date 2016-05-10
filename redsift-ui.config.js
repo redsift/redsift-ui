@@ -57,8 +57,6 @@ var bundles = [
   merge(defaultConfig, fullConfig)
 ];
 
-console.log('bundles: ' + JSON.stringify(bundles, null, 4));
-
 module.exports = bundles;
 
 function merge(obj1, obj2) {
