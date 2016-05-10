@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" type="text/css" href="/full/css/redsift-light.min.css" title="light">
+    <link rel="alternate stylesheet" type="text/css" href="/full/css/redsift-dark.min.css" title="dark">
 
     <style>
         .-bg-taxi {
@@ -21,7 +22,9 @@
             background-image: url('//static.redsift.io/assets/images/taxi-1.jpg');
         }
 
+        /* Set height to demonstrate sticky header functionality: */
         .content__container {
+            padding: 2em;
             min-height: 2000px;
         }
     </style>
@@ -38,6 +41,11 @@
             <h2>Say something</h2>
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
         </div>
+    </div>
+
+    <div class="style-switcher">
+      <button onclick="Redsift.StyleSwitcher.use('light');return false;" class="danger">Light Theme</button>
+      <button onclick="Redsift.StyleSwitcher.use('dark');return false;" class="danger">Dark Theme</button>
     </div>
 
     <script src="/full/js/redsift.umd.js"></script>

@@ -1,7 +1,7 @@
 <html>
 <head>
-  <link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
-  <link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
+  <link rel="stylesheet" type="text/css" href="/full/css/redsift-light.min.css" title="light">
+  <link rel="alternate stylesheet" type="text/css" href="/full/css/redsift-dark.min.css" title="dark">
   <style>
 	/* --- Chart layout --- */
 
@@ -78,7 +78,7 @@
   	</div>
 
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script src="/js/redsift-global.es5.min.js"></script>
+    <script src="/full/js/redsift.umd.js"></script>
     <script>
 		// start knobs
 		var SEGMENTS = ["#edf8b1", "#7fcdbb", "#2c7fb8"];
@@ -189,7 +189,6 @@
 
 			d3.select('#two').datum(newData).call(chart2);
 		}, 2000);
-
 
 	</script>
   </body>

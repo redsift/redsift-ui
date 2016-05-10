@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" type="text/css" href="/full/css/redsift-light.min.css" title="light">
+    <link rel="alternate stylesheet" type="text/css" href="/full/css/redsift-dark.min.css" title="dark">
 
     <style>
         .content__container {
@@ -48,6 +49,12 @@
 </head>
 
 <body>
+
+    <div class="style-switcher">
+      <button onclick="Redsift.StyleSwitcher.use('light');return false;" class="danger">Light Theme</button>
+      <button onclick="Redsift.StyleSwitcher.use('dark');return false;" class="danger">Dark Theme</button>
+    </div>
+
     <div class="content">
         <div class="content__container">
             <h3>Radial Chart</h3>

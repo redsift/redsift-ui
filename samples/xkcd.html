@@ -1,12 +1,14 @@
 <html>
 <head>
-  <link rel="stylesheet" type="text/css" href="/css/redsift-xtra.min.css" title="light">
+  <link rel="stylesheet" type="text/css" href="/full/css/redsift-light.min.css" title="light">
+  <link rel="alternate stylesheet" type="text/css" href="/full/css/redsift-dark.min.css" title="dark">
+  <link rel="stylesheet" type="text/css" href="/full/css/redsift-xtra.min.css">
   <style>
 
     body {
         margin: 1em;
-    } 
-	
+    }
+
     path.say {
         fill: black;
     }
@@ -15,7 +17,7 @@
         fill: white;
         font-size: 22px;
     }
-    
+
     path.line1 {
         stroke: red;
     }
@@ -23,88 +25,92 @@
     path.line2 {
         stroke: blue;
     }
-    
+
     #fills text {
         font-size: 0.66em;
     }
-    
+
     pattern rect.foreground {
         fill: black;
     }
-    
+
     path.pie-straight {
         stroke: none;
     }
-    
+
     path.spokes {
         stroke: gray;
     }
-    
+
     path.baseline {
         stroke: lightgrey;
     }
 
     .row.even {
         font-size: x-large;
-    }  
+    }
 
     path.row-0 {
         stroke: none;
-    }  
+    }
     path.row.end {
         stroke: none;
-    } 
+    }
     path.column-0 {
         stroke: none;
-    }  
+    }
     path.column.end {
         stroke: none;
-    }         
+    }
   </style>
   </head>
 
   <body>
-	<div class="xkcd">
-		<h1>Heading 1</h1>
-		<h2>Heading 2</h2>
-		<h3>Heading 3</h3>
-		<h4>Heading 4</h4>
-        <div class="panel">
-	    <code>
+    <div class="style-switcher">
+      <button onclick="Redsift.StyleSwitcher.use('light');return false;" class="danger">Light Theme</button>
+      <button onclick="Redsift.StyleSwitcher.use('dark');return false;" class="danger">Dark Theme</button>
+    </div>
+
+  	<div class="xkcd">
+  		<h1>Heading 1</h1>
+  		<h2>Heading 2</h2>
+  		<h3>Heading 3</h3>
+  		<h4>Heading 4</h4>
+      <div class="panel">
+	      <code>
             int getRandomNumber()</br>
             {</br>
             &emsp;    return 4;   // chosen by fair dice roll.</br>
             &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;                // guaranteed to be random.</br>
             }
-        </code> 
-        </div>
-
-        <p>xkcd matrix</p>
-        <div id="matrix"></div>
-        
-        <p>xkcd text boxes</p>
-        <div id="boxes"></div>
-
-        <p>xkcd radial</p>
-        <div id="radial"></div>
-
-        <p>xkcd pie</p>
-        <div id="pie"></div>
-        
-        <p>xkcd fills</p>
-        <div id="fills"></div>
-
-        <p>xkcd chart</p>
-        <div id="chart"></div>
-        
-        <p>xkcd clock</p>
-        <div id="say"></div>
-        <div id="arrows"></div>
-
+        </code>
       </div>
-    
+
+      <p>xkcd matrix</p>
+      <div id="matrix"></div>
+
+      <p>xkcd text boxes</p>
+      <div id="boxes"></div>
+
+      <p>xkcd radial</p>
+      <div id="radial"></div>
+
+      <p>xkcd pie</p>
+      <div id="pie"></div>
+
+      <p>xkcd fills</p>
+      <div id="fills"></div>
+
+      <p>xkcd chart</p>
+      <div id="chart"></div>
+
+      <p>xkcd clock</p>
+      <div id="say"></div>
+      <div id="arrows"></div>
+    </div>
+
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script src="/js/redsift-global.es5.min.js"></script>
+    <script src="/full/js/redsift.umd.js"></script>
     <script>
         // https://static.redsift.io/ui/latest/css/redsift-xtra.min.css
         // https://static.redsift.io/ui/latest/js/redsift-global.es5.min.js
@@ -127,30 +133,30 @@
                 [],
                 [undefined, '89 hours', '3 days, 6 hours'],
             ];
-            
+
             var el = Redsift.D3.Tools.svgRoot('#matrix', 800+margin*2, height+margin*2)
                                     .append('g')
                                     .attr('transform', 'translate(' + margin + ', '
-                                                                    + margin + ')');                                   
-            
+                                                                    + margin + ')');
+
             var t = new Intl.DateTimeFormat(navigator.language);
-            
+
             function formatter(d) {
                 if (typeof d === 'number' && !Number.isInteger(d)) {
                     return d.toPrecision(2);
                 }
-                
+
                 if (d instanceof Date) {
                     return t.format(d);
                 }
-                
+
                 return d;
-            }                                       
-                                                            
+            }
+
             var sheet = Redsift.D3.Reusable.matrix().formatter(formatter).tx(20).ty(10).grid(el);
-            
-            function doit() {                                                     
-                el.selectAll('.' + sheet.rowClassed()).data(dataSummary).call(sheet);  
+
+            function doit() {
+                el.selectAll('.' + sheet.rowClassed()).data(dataSummary).call(sheet);
                 if (dataSummary.length) {
                     var row = dataSummary[dataSummary.length - 1];
                     if (row.length) {
@@ -159,154 +165,154 @@
                         dataSummary.pop();
                     }
                     setTimeout(doit, 1000);
-                }    
-            }   
-            
-            doit();                                                        
+                }
+            }
+
+            doit();
         }
         matrix();
-        
+
         function boxes() {
             var xl = 750;
-            
+
             var el = Redsift.D3.Tools.svgRoot('#boxes', xl+margin*2, height+margin*2)
                                     .append('g')
                                     .attr('transform', 'translate(' + margin + ', '
                                                                     + margin + ')');
 
-            var x = 0;            
+            var x = 0;
             var offset = 20;
             var y = height - offset;
             var xmid = (xl - x) / 2;
-            
+
             // Y
             var liney = Redsift.D3.Components.line().classed('baseline y').interpolation(style);
-            el.datum([[xmid, 0], [xmid, y - offset ]]).call(liney);    
-            
-            [   
-                { t: 'XY', span: 30 }, 
-                { t: 'ty=16', ty: 16, tx: 0, span: 50 }, 
-                { t: 'tx=16', tx: 16, span: 50 }, 
-                { t: 'ty=-16', ty: -16, tx: 0, span: 30 },                
+            el.datum([[xmid, 0], [xmid, y - offset ]]).call(liney);
+
+            [
+                { t: 'XY', span: 30 },
+                { t: 'ty=16', ty: 16, tx: 0, span: 50 },
+                { t: 'tx=16', tx: 16, span: 50 },
+                { t: 'ty=-16', ty: -16, tx: 0, span: 30 },
                 { t: 'middle', a: 'middle', span: 30 },
-                { t: 'middle,true', a: 'middle', f: true, span: 30 },                
+                { t: 'middle,true', a: 'middle', f: true, span: 30 },
                 { t: 'middle,tx=16', a: 'middle', tx: 16, span: 30 },
                 { t: 'middle,tx=16,true', a: 'middle', tx: 16, f: true, span: 30 },
                 { t: 'end', a: 'end', span: 30 },
-                { t: 'end,tx=16', a: 'end', tx: 16, span: 30 },                
+                { t: 'end,tx=16', a: 'end', tx: 16, span: 30 },
             ].forEach(function (l, i) {
                 var box = Redsift.D3.Components.box()
                             .classed('label y-'+i)
                             .interpolation(style)
                             .bound(l.f);
-                            
+
                 if (l.a) box.anchor(l.a);
-                
+
                 el.datum({
                         x: xmid,
                         y: offset,
                         t: l.t,
                         ty: l.ty,
                         tx: l.tx
-                    }).call(box);                
+                    }).call(box);
 
                 offset += l.span;
-            });            
-            
-            // X                                               
+            });
+
+            // X
             var linex = Redsift.D3.Components.line().classed('baseline x').interpolation(style);
-            el.datum([[x, y], [xl, y]]).call(linex);               
+            el.datum([[x, y], [xl, y]]).call(linex);
 
             offset = 20;
-            [   { t: 'XY', span: 30 }, 
-                { t: 'ty=16', ty: 16, tx: 0, span: 50 }, 
-                { t: 'tx=16', tx: 16, span: 80 }, 
+            [   { t: 'XY', span: 30 },
+                { t: 'ty=16', ty: 16, tx: 0, span: 50 },
+                { t: 'tx=16', tx: 16, span: 80 },
                 { t: 'ty=-16', ty: -16, tx: 0, span: 50 },
                 { t: 'alphabetic', b: 'alphabetic', span: 80 },
                 { t: 'ideographic', b: 'ideographic', span: 90 },
                 { t: 'mathematical', b: 'mathematical', span: 100 },
                 { t: 'middle', b: 'middle', span: 60 },
-                { t: 'central', b: 'central', span: 60 }, 
-                { t: 't-a-e', b: 'text-after-edge', span: 50 }, 
-                { t: 't-b-e', b: 'text-before-edge', span: 50 },                
+                { t: 'central', b: 'central', span: 60 },
+                { t: 't-a-e', b: 'text-after-edge', span: 50 },
+                { t: 't-b-e', b: 'text-before-edge', span: 50 },
             ].forEach(function (l, i) {
                 var box = Redsift.D3.Components.box()
                             .classed('label x-'+i)
                             .interpolation(style);
                 if (l.b) box.baseline(l.b);
-                
+
                 el.datum({
                         x: offset,
                         y: y,
                         t: l.t,
                         ty: l.ty,
                         tx: l.tx
-                    }).call(box);                
+                    }).call(box);
 
                 offset += l.span;
             });
 
 
         }
-        
+
         boxes();
-        
+
         function radial() {
             var radius = Math.min(width, height) / 2;
-            
+
             var el = Redsift.D3.Tools.svgRoot('#radial', width + margin * 2, height + margin * 2)
                         .append('g')
                             .attr('transform', 'translate(' + (width+margin)/2 + ',' + (height+margin)/2 + ')');
-            
+
             var outline = Redsift.D3.Components.radial().radius(radius).interpolation(style);
             var points = 1;
-                            
-            function draw() {    
+
+            function draw() {
                 outline.points(points).endAngle(Math.PI);
                 points = points + 1;
                 if (points > 200) points = 1;
                 el.call(outline);
             }
             draw();
-            
+
             // setInterval(draw, 1000);
         }
-        
+
         radial();
-        
+
         function pie() {
             var radius = Math.min(width, height) / 2;
 
             var data = [ 18, 2, 3, 5, 8 ];
-            
+
             var el = Redsift.D3.Tools.svgRoot('#pie', width + margin * 2, height + margin * 2)
             .append('g')
                 .attr('transform', 'translate(' + (width+margin)/2 + ',' + (height+margin)/2 + ')');
-            
+
             el.append('title').text('Oh Hai');
-                
+
             var fills = d3.scale.ordinal()
-                .range(['url(#pattern-stripe-diagonal3)', 
-                        'url(#pattern-stripe-redsift)', 
+                .range(['url(#pattern-stripe-diagonal3)',
+                        'url(#pattern-stripe-redsift)',
                         'url(#pattern-stripe-diagonal2)',
-                        'url(#pattern-stripe-blocks)', 
+                        'url(#pattern-stripe-blocks)',
                         'url(#pattern-stripe-diagonal1)',
                         'url(#pattern-stripe-crosshatch1)']);
-         
+
             var pie = Redsift.D3.Reusable.pieChart()
                 .classed('pie-straight').outerRadius(radius)
-                .fill(function (d, i) { 
-                    return fills(i); 
+                .fill(function (d, i) {
+                    return fills(i);
                 });
-            
+
             var outline = Redsift.D3.Components.radial().radius(radius).interpolation(style);
-            
+
             var spokes = Redsift.D3.Components.spokes().radius(radius).interpolation(style);
-            
+
             var pieLayout = d3.layout.pie()
                 .sort(null);
-            
-            function draw() {    
+
+            function draw() {
                 // todo: Blows up between 19 and 25
                 // console.log(data);
                 el.datum(pieLayout(data)).call(pie).call(spokes);
@@ -315,21 +321,21 @@
                 el.call(outline);
             }
             draw();
-            
+
             // setInterval(draw, 2000);
         }
-        
+
         pie();
 
         var fills =  Redsift.D3.Constants.Patterns;
-                        
+
         function patterns() {
             var defs = Redsift.D3.Tools.createDefs();
             Object.keys(fills).forEach(function (k) {
-                Redsift.D3.Tools.createDiagonal(defs, 'pattern-stripe-' + k, Redsift.D3.Tools.scalePattern(fills[k], 1.2));                
+                Redsift.D3.Tools.createDiagonal(defs, 'pattern-stripe-' + k, Redsift.D3.Tools.scalePattern(fills[k], 1.2));
             });
         }
-        patterns();            
+        patterns();
 
 
         // xkcd fills
@@ -338,52 +344,52 @@
                                     .append('g')
                                     .attr('transform', 'translate(' + margin + ', '
                                                                     + margin + ')');
-            var x = 30, y = 100, w = 20, h = 70, span = 80;    
-            Object.keys(fills).forEach(function (k, i) {                                                    
+            var x = 30, y = 100, w = 20, h = 70, span = 80;
+            Object.keys(fills).forEach(function (k, i) {
                 var bar = Redsift.D3.Components.box().classed(k).baseline('ideographic').anchor('middle')
                             .styleBox('fill: url(#pattern-stripe-' + k + ');').interpolation(style);
-                el.datum({x: x + i*span, y: y - h, height: h, width: w, t: k, ty: -6, tx: (w/2)}).call(bar);   
-            });                                                          
+                el.datum({x: x + i*span, y: y - h, height: h, width: w, t: k, ty: -6, tx: (w/2)}).call(bar);
+            });
         }
         samples();
-        
+
         // xkcd chart
         function chart() {
             var el = Redsift.D3.Tools.svgRoot('#chart', width+margin*2, height+margin*2)
                                     .append('g')
                                     .attr('transform', 'translate(' + margin + ', '
                                                                     + margin + ')');
-            
-            // axis                                               
+
+            // axis
             var axisx = Redsift.D3.Components.line().classed('axisx').interpolation(style);
             var axisy = Redsift.D3.Components.line().classed('axisy').interpolation(style);
 
-            var x = 50;            
+            var x = 50;
             var xl = width;
             var y = 100;
             var yl = height;
-            
-            el.datum([[x, 0], [x, yl]]).call(axisy);            
+
+            el.datum([[x, 0], [x, yl]]).call(axisy);
             el.datum([[0, y], [xl, y]]).call(axisx);
-            
-            // axis labels        
-                                                
+
+            // axis labels
+
 
             // bars
             function draw() {
                 var va = 50 * Math.random();
                 var barA = Redsift.D3.Components.box().classed('bara').baseline('ideographic').interpolation(null);
-                el.datum({x: 100, y: y - va, height: va, t: 'A', ty: -6, tx: 6}).call(barA); 
+                el.datum({x: 100, y: y - va, height: va, t: 'A', ty: -6, tx: 6}).call(barA);
 
                 var vb = 100 * Math.random();
                 var barB = Redsift.D3.Components.box().classed('barb').baseline('ideographic').interpolation(style);
-                el.datum({x: 140, y: y - vb, height: vb, t: 'B', ty: -6, tx: 6}).call(barB); 
+                el.datum({x: 140, y: y - vb, height: vb, t: 'B', ty: -6, tx: 6}).call(barB);
             }
-            
+
             draw();
 
             setInterval(draw, 2000);
-                    
+
             // line, generate some data.
             function f1(x) {
                 return Math.exp(-0.5 * (x - 1) * (x - 1)) * Math.sin(x + 0.2) + 0.05;
@@ -392,7 +398,7 @@
             function f2(x) {
                 return 0.5 * Math.cos(x - 0.5) + 0.1;
             }
-            
+
             var xmin = -1.0,
             xmax = 7,
             N = 100,
@@ -410,7 +416,7 @@
                     y: f2(d)
                 };
             });
-            
+
             var line1 = Redsift.D3.Components.line().classed('line1').bgline('line1bg').interpolation(style).xscale(xscale).yscale(yscale).arrowStart(false).arrowEnd(false);
             el.datum(data1).call(line1);
 
@@ -418,60 +424,60 @@
             el.datum(data2).call(line2);
 
         }
-        
+
         chart();
-        
-        // xkcd clock        
-        function clock() {    
+
+        // xkcd clock
+        function clock() {
             var svg = Redsift.D3.Tools.svgRoot('#say', width+margin*2, textHeight+margin*2);
             var tl = svg.append('g')
                         .attr('transform', 'translate(' + margin + ', '
                                                         + margin + ')');
-                                                        
-            var box = Redsift.D3.Components.box().classed('say').interpolation(style);  
+
+            var box = Redsift.D3.Components.box().classed('say').interpolation(style);
 
 
             var ml = width / 2.5;
             var hl = ml / 1.618;
-            
+
             var el = Redsift.D3.Tools.svgRoot('#arrows', width+margin*2, height+margin*2)
                         .append('g')
                         .attr('transform', 'translate(' + margin + ', '
                                                         + margin + ')');
-            
+
             var m = 0;
-            var h = 0;        
+            var h = 0;
             var cx = width / 2;
             var cy = height / 2;
 
-            
-            // make the circle of the clock using a line                                
+
+            // make the circle of the clock using a line
             var face = Redsift.D3.Components.line().classed('face').interpolation(style).arrowStart(false).arrowEnd(false);
             // create the points on the line from 0 -> 360 deg in steps of 2 deg vectors centered
             // at cx and cy with a slight oval shape in the y axis
             var circle = Redsift.D3.Tools.createCircle(0, 360, 2, ml + margin, cx, cy, 0, height/18);
             // bind the data to el and create the path
             el.datum(circle).call(face);
-            
+
             // make another line for the hands
             var hands = Redsift.D3.Components.line().interpolation(style);
-                    
+
             function update() {
                 // Calculate the position of the hands
                 var mRad = m * 2/60 * Math.PI - (Math.PI / 2);
-                var mx = ml * Math.cos(mRad); 
+                var mx = ml * Math.cos(mRad);
                 var my = ml * Math.sin(mRad);
-                
+
                 var hRad = h * 2/24 * Math.PI - (Math.PI / 2);
-                var hx = hl * Math.cos(hRad); 
-                var hy = hl * Math.sin(hRad);            
-                
+                var hx = hl * Math.cos(hRad);
+                var hy = hl * Math.sin(hRad);
+
                 // update the hands
                 el.datum([[cx + hx, cy + hy], [cx, cy], [cx + mx, cy + my]]).call(hands);
-                
-                // update the text    
-                tl.datum({x: 0, y: 0, t: "Randall's time " + (h < 10 ? ('0' + h) : h) + ':' + (m < 10 ? ('0' + m) : m), ty: 6, tx: 6}).call(box);                                                 
-        
+
+                // update the text
+                tl.datum({x: 0, y: 0, t: "Randall's time " + (h < 10 ? ('0' + h) : h) + ':' + (m < 10 ? ('0' + m) : m), ty: 6, tx: 6}).call(box);
+
                 m++;
                 if (m > 60) {
                     m = 0;
@@ -479,16 +485,16 @@
                     if (h > 24) {
                         h = 0;
                     }
-                }    
+                }
             }
             update();
-                    
+
             // increment every 200ms
             setInterval(update, 200);
         }
-        
+
         clock();
-        
+
 	</script>
   </body>
 
