@@ -38,10 +38,10 @@ gulp.task('bundle-js', function() {
                 dest = null;
 
             if (format === 'es6') {
-                dest = path.join(config.outputFolder, 'js', config.mainJS.name + '.es2015.js');
+                dest = path.join(config.outputFolder, 'js', config.name, config.mainJS.name + '.es2015.js');
                 bundleES6(config.mainJS.indexFile, dest);
             } else {
-                dest = path.join(config.outputFolder, 'js', config.mainJS.name + '.' + format + '.js');
+                dest = path.join(config.outputFolder, 'js', config.name, config.mainJS.name + '.' + format + '.js');
                 transpileES6(config.mainJS.indexFile, dest, format, moduleName);
             }
         }
@@ -57,7 +57,7 @@ gulp.task('bundle-css', function() {
 
             makeCssBundle({
                 name: style.name,
-                dest: path.join(config.outputFolder, 'css'),
+                dest: path.join(config.outputFolder, 'css', config.name),
                 indexFile: style.indexFile,
                 mapsDest: config.mapsDest
             });
@@ -168,7 +168,7 @@ function transpileES6(indexFile, dest, format, moduleName) {
         ]
     }).then(function(bundle) {
         var dirname = path.dirname(dest),
-            basename = path.basename(dest),
+            basename = path.basename(dest, '.js'),
             destMin = path.join(dirname, basename) + '.min.js';
 
         bundle.write({

@@ -1,33 +1,35 @@
-machine: 
+machine:
   node:
     version: 4.1.1
-  environment: 
+  environment:
     S3_BUCKET: redsift-static
 
-checkout: 
-  post: 
+checkout:
+  post:
     - git fetch --tags
     - npm install
   pre:
     - sudo pip install awscli
 
-dependencies: 
+dependencies:
   override:
-    - node node_modules/gulp/bin/gulp.js 
-    - mv ./distribution ${CIRCLE_ARTIFACTS}/distribution
+    - node node_modules/gulp/bin/gulp.js
+    - mv ./dist ${CIRCLE_ARTIFACTS}/dist
 
 test:
   override:
-    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/distribution/css/redsift-light.min.css ]"
-    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/distribution/js/redsift-global.es5.min.js ]"
-            
+    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/css/core/redsift-light.min.css ]"
+    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/css/full/redsift-light.min.css ]"
+    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/js/core/redsift.umd.min.js ]"
+    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/js/full/redsift.umd.min.js ]"
+
 deployment:
   production:
     branch: /release-.*/
     commands:
       - echo "Uploading to S3 bucket..."
-      - aws s3 cp ${CIRCLE_ARTIFACTS}/distribution s3://$S3_BUCKET/ui/latest --recursive --acl public-read
+      - aws s3 cp ${CIRCLE_ARTIFACTS}/dist s3://$S3_BUCKET/ui/latest --recursive --acl public-read
       - |
          VERSION=$(git describe --exact-match --tags 2>/dev/null || git rev-parse --short HEAD)
-         aws s3 cp ${CIRCLE_ARTIFACTS}/distribution s3://$S3_BUCKET/ui/$VERSION --recursive --acl public-read
+         aws s3 cp ${CIRCLE_ARTIFACTS}/dist s3://$S3_BUCKET/ui/$VERSION --recursive --acl public-read
       - echo "S3 upload complete."

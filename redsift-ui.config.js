@@ -8,7 +8,7 @@ var bundles = [{
     name: 'core',
     formats: ['es6', 'umd'],
     moduleNameJS: 'Redsift',
-    outputFolder: path.join(paths.dest, 'core'),
+    outputFolder: paths.dest,
     mainJS: {
         name: 'redsift',
         indexFile: './bundles/core/index.js'
@@ -28,7 +28,7 @@ var bundles = [{
     name: 'full',
     formats: ['es6', 'umd'],
     moduleNameJS: 'Redsift',
-    outputFolder: path.join(paths.dest, 'full'),
+    outputFolder: paths.dest,
     mainJS: {
         name: 'redsift',
         indexFile: './bundles/full/index.js'
