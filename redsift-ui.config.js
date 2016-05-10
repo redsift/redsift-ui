@@ -53,13 +53,17 @@ var fullConfig = {
 }
 
 var bundles = [
-  extend(defaultConfig, coreConfig),
-  extend(defaultConfig, fullConfig)
+  merge(defaultConfig, coreConfig),
+  merge(defaultConfig, fullConfig)
 ];
+
+console.log('bundles: ' + JSON.stringify(bundles, null, 4));
 
 module.exports = bundles;
 
-function extend(obj, src) {
-    Object.keys(src).forEach(function(key) { obj[key] = src[key]; });
-    return obj;
+function merge(obj1, obj2) {
+  var newObj = JSON.parse(JSON.stringify(obj1));
+  Object.keys(obj1).forEach(function(key) { newObj[key] = obj1[key]; });
+  Object.keys(obj2).forEach(function(key) { newObj[key] = obj2[key]; });
+  return newObj;
 }
