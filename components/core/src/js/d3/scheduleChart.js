@@ -2,8 +2,8 @@ import { tspanWrap } from './tspanWrap';
 import svg from '../../../../d3-rs-svg/src/svg';
 import { scaleTime } from 'd3-scale';
 import { axisBottom } from 'd3-axis';
-import { formatLocale } from 'd3-format';
-import { timeMinutes } from 'd3-time';
+import { timeFormat } from 'd3-time-format';
+import { timeMinute } from 'd3-time';
 
 var CSS = "text { font: 10px sans-serif; } \n";
 
@@ -112,8 +112,8 @@ function scheduleChart() {
 
         var xAxis = axisBottom()
             .scale(x)
-            .tickFormat(formatLocale('%Hh'))
-            .ticks(timeMinutes, 30)
+            .tickFormat(timeFormat('%Hh'))
+            .ticks(timeMinute, 30)
             .tickPadding(4)
             .tickSize(-height, 0);
 
@@ -159,7 +159,7 @@ function scheduleChart() {
             .attr('y', textTop)
             .attr('width', (d) => x(d.end) - x(d.start) - textLeft - textRight)
             .attr('height', eventHeight - textTop - textBottom)
-            .text((d) => d.summary)
+            .text((d) => { console.log('d: ' + JSON.stringify(d, null, 4)); return d.summary})
             .call(wrap);
 
 

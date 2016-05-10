@@ -11,7 +11,7 @@ var defaultConfig = {
     'd3-selection': 'd3',
     'd3-scale': 'd3',
     'd3-axis': 'd3',
-    'd3-format': 'd3',
+    'd3-time-format': 'd3',
     'd3-time': 'd3'
   }
 }
