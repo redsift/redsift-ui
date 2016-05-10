@@ -1,37 +1,8 @@
-// import styles from '../styles/styles.styl';
-
 class RedsiftRadialChart {
   constructor(el) {
     this.chart = el.querySelector('#chart');
     this.legend = el.querySelector('#legend');
     this._createInlineStyles();
-  }
-
-  //----------------------------------------------------------
-  // Internal API
-  //----------------------------------------------------------
-  _createInlineStyles() {
-    // generate some styles
-    var css = Redsift.D3.Tools.createCSSRuleSheet();
-    css('.d3-rc .band circle', 'stroke: ' + this.BAND + ';', 0);
-    css('.d3-rc .segment-bg', 'fill:' + this.SEGMENT_BG + ';', 0);
-
-    // generate some patterns
-    var P_A = 45;
-    var P_X = 3;
-    var P_Y = 4;
-    var P_S = 5;
-
-    var defs = Redsift.D3.Tools.createDefs();
-    Redsift.D3.Tools.createDiagonal(defs, 'pattern-stripe', P_A, P_X, P_Y, P_S);
-    Redsift.D3.Tools.createMask(defs, 'mask-stripe', 'url(#pattern-stripe)');
-    Redsift.D3.Tools.createShadowFilter(defs, 'text-bg', 1.0, 'rgba(230,230,230,0.25)', 2.5);
-  }
-
-  _createLegend() {
-    // create legend
-    var legend = Redsift.D3.Reusable.legendChart().width(400).sample(20);
-    d3.select(this.legend).datum(this.themes).call(legend);
   }
 
   update(data) {
@@ -87,19 +58,33 @@ class RedsiftRadialChart {
       });
 
     d3.select(this.chart).datum(data).call(chart1);
+  }
 
-    var count = 0;
-    setInterval(function() {
-      var dataUp = _dummyData((Math.random() * 400) + 20);
-      var max = d3.max(dataUp, function(d) {
-        return d.value;
-      });
-      count++;
-      var avg = (max / 2) + (Math.random() * 20) - 10;
-      chart1.band(avg, '#' + count + ', £' + fmt(avg), -3);
+  //----------------------------------------------------------
+  // Internal API
+  //----------------------------------------------------------
+  _createInlineStyles() {
+    // generate some styles
+    var css = Redsift.D3.Tools.createCSSRuleSheet();
+    css('.d3-rc .band circle', 'stroke: ' + this.BAND + ';', 0);
+    css('.d3-rc .segment-bg', 'fill:' + this.SEGMENT_BG + ';', 0);
 
-      d3.select(this.chart).datum(dataUp).call(chart1);
-    }.bind(this), 2500);
+    // generate some patterns
+    var P_A = 45;
+    var P_X = 3;
+    var P_Y = 4;
+    var P_S = 5;
+
+    var defs = Redsift.D3.Tools.createDefs();
+    Redsift.D3.Tools.createDiagonal(defs, 'pattern-stripe', P_A, P_X, P_Y, P_S);
+    Redsift.D3.Tools.createMask(defs, 'mask-stripe', 'url(#pattern-stripe)');
+    Redsift.D3.Tools.createShadowFilter(defs, 'text-bg', 1.0, 'rgba(230,230,230,0.25)', 2.5);
+  }
+
+  _createLegend() {
+    // create legend
+    var legend = Redsift.D3.Reusable.legendChart().width(400).sample(20);
+    d3.select(this.legend).datum(this.themes).call(legend);
   }
 }
 

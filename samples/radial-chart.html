@@ -106,6 +106,21 @@
             // Setup radial chart via public API
             chart.segments = segments;
             chart.data = _dummyData(200, segments);
+
+            var count = 0;
+            setInterval(function() {
+              var dataUp = _dummyData((Math.random() * 400) + 20);
+              var max = d3.max(dataUp, function(d) {
+                return d.value;
+              });
+              count++;
+              var avg = (max / 2) + (Math.random() * 20) - 10;
+
+              // chart1.band(avg, '#' + count + ', £' + fmt(avg), -3);
+              // d3.select(this.chart).datum(dataUp).call(chart1);
+
+                chart.data = dataUp;
+            }.bind(this), 2500);
         }
         // });
     </script>
