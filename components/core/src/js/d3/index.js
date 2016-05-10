@@ -6,7 +6,6 @@ import { legendChart } from './legendChart';
 import { pieChart } from './pieChart';
 import { scheduleChart } from './scheduleChart';
 import { matrix } from './matrix';
-import { svg } from './svg';
 import { tspanWrap } from './tspanWrap';
 
 let Reusable = {
@@ -15,7 +14,6 @@ let Reusable = {
   pieChart: pieChart,
   scheduleChart: scheduleChart,
   matrix: matrix,
-  svg: svg,
   tspanWrap: tspanWrap
 }
 

@@ -1,5 +1,9 @@
 import { tspanWrap } from './tspanWrap';
-import { svg } from './svg';
+import svg from '../../../../d3-rs-svg/src/svg';
+import { scaleTime } from 'd3-scale';
+import { axisBottom } from 'd3-axis';
+import { formatLocale } from 'd3-format';
+import { timeMinutes } from 'd3-time';
 
 var CSS = "text { font: 10px sans-serif; } \n";
 
@@ -102,15 +106,14 @@ function scheduleChart() {
             return d;
         });
 
-        var x = d3.time.scale()
+        var x = scaleTime()
             .domain(extent)
             .rangeRound([0, width]);
 
-        var xAxis = d3.svg.axis()
+        var xAxis = axisBottom()
             .scale(x)
-            .orient('bottom')
-            .tickFormat(d3.time.format('%Hh'))
-            .ticks(d3.time.minutes, 30)
+            .tickFormat(formatLocale('%Hh'))
+            .ticks(timeMinutes, 30)
             .tickPadding(4)
             .tickSize(-height, 0);
 
@@ -227,11 +230,11 @@ function scheduleChart() {
                     .width(width)
                     .height(height)
                     .scale(scale)
-                    .css(CSS);
+                    .style(CSS);
 
       impl
-        .width(frame.innerWidth())
-        .height(frame.innerHeight());
+        .width(frame.childWidth())
+        .height(frame.childHeight());
 
       var div = selection.call(frame);
       div.select(frame.child()).datum(data).call(impl);

@@ -24,7 +24,7 @@ module.exports = function setupTask(gulp, bundles) {
           bundleES6(config.mainJS.indexFile, dest);
         } else {
           dest = path.join(config.outputFolder, 'js', config.name, config.mainJS.name + '.' + format + '.js');
-          transpileES6(config.mainJS.indexFile, dest, format, moduleName);
+          transpileES6(config.mainJS.indexFile, dest, format, moduleName, config.externalMappings);
         }
       }
     }
@@ -56,7 +56,7 @@ function bundleES6(indexFile, dest) {
   });
 }
 
-function transpileES6(indexFile, dest, format, moduleName) {
+function transpileES6(indexFile, dest, format, moduleName, externalMappings) {
   rollup.rollup({
     entry: indexFile,
     plugins: [
@@ -75,6 +75,7 @@ function transpileES6(indexFile, dest, format, moduleName) {
     bundle.write({
       format: format,
       moduleName: moduleName,
+      globals: externalMappings,
       dest: dest
     });
   }).catch(function(err) {
@@ -111,6 +112,7 @@ function transpileES6(indexFile, dest, format, moduleName) {
     bundle.write({
       format: format,
       moduleName: moduleName,
+      globals: externalMappings,
       dest: destMin
     });
   }).catch(function(err) {

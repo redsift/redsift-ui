@@ -1,0 +1,3 @@
+[submodule "components/d3-rs-svg"]
+	path = components/d3-rs-svg
+	url = https://github.com/Redsift/d3-rs-svg.git
