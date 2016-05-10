@@ -25,52 +25,10 @@ var buble = require('rollup-plugin-buble');
 var string = require('rollup-plugin-string');
 var filesize = require('rollup-plugin-filesize');
 var uglify = require('rollup-plugin-uglify');
+var nodeResolve = require('rollup-plugin-node-resolve');
+var commonjs = require('rollup-plugin-commonjs');
 
-var paths = {
-    dest: './dist'
-}
-
-var bundles = [{
-    name: 'core',
-    formats: ['umd', 'es6'],
-    moduleNameJS: 'Redsift',
-    outputFolder: path.join(paths.dest, 'core'),
-    mainJS: {
-        name: 'redsift',
-        indexFile: './bundles/core/index.js'
-    },
-    styles: [{
-        name: 'redsift-light',
-        indexFile: './bundles/core/redsift-light.styl'
-    }, {
-        name: 'redsift-dark',
-        indexFile: './bundles/core/redsift-dark.styl'
-    }, {
-        name: 'redsift-xtra',
-        indexFile: './bundles/core/redsift-xtra.styl'
-    }],
-    mapsDest: '.'
-}, {
-    name: 'full',
-    formats: ['umd', 'es6'],
-    moduleNameJS: 'Redsift',
-    outputFolder: path.join(paths.dest, 'full'),
-    mainJS: {
-        name: 'redsift',
-        indexFile: './bundles/full/index.js'
-    },
-    styles: [{
-        name: 'redsift-light',
-        indexFile: './bundles/full/redsift-light.styl'
-    }, {
-        name: 'redsift-dark',
-        indexFile: './bundles/full/redsift-dark.styl'
-    }, {
-        name: 'redsift-xtra',
-        indexFile: './bundles/full/redsift-xtra.styl'
-    }],
-    mapsDest: '.'
-}];
+var bundles = require('./redsift-ui.config.js');
 
 gulp.task('bundle-js', function() {
     for (var idx = 0; idx < bundles.length; idx++) {
@@ -166,28 +124,24 @@ function bundleES6(indexFile, dest) {
 
 function transpileES6(indexFile, dest, format, moduleName) {
     rollup.rollup({
-        entry: indexFile,
-        external: ['bezier-easing'],
-        plugins: [
-            json(),
-            string({
-                extensions: ['.tmpl']
-            }),
-            // CAUTION: make sure to initialize all file transforming additional plugins
-            // BEFORE babel() or buble(). Otherwise the transpiler will consume the
-            //imported files first.
-            // babel(),
-            buble(),
-            filesize()
-        ]
-    }).then(function(bundle) {
+      entry: indexFile,
+      external: ['bezier-easing'],
+      plugins: [
+        json(),
+        string({
+            extensions: ['.tmpl']
+        }),
+        // CAUTION: make sure to initialize all file transforming additional plugins
+        // BEFORE babel() or buble(). Otherwise the transpiler will consume the
+        //imported files first.
+        // babel(),
+        buble(),
+        filesize()
+    ]}).then(function(bundle) {
         bundle.write({
             format: format,
             moduleName: moduleName,
-            dest: dest,
-            globals: {
-                'bezier-easing': 'BezierEasing',
-            }
+            dest: dest
         });
     }).catch(function(err) {
         console.log('rollup err: ' + err);
@@ -224,10 +178,7 @@ function transpileES6(indexFile, dest, format, moduleName) {
         bundle.write({
             format: format,
             moduleName: moduleName,
-            dest: destMin,
-            globals: {
-                'bezier-easing': 'BezierEasing',
-            }
+            dest: destMin
         });
     }).catch(function(err) {
         console.log('rollup err: ' + err);
