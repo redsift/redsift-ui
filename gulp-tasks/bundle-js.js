@@ -3,17 +3,14 @@ var rollup = require('rollup'),
   //  babel = require('rollup-plugin-babel'),
   buble = require('rollup-plugin-buble'),
   string = require('rollup-plugin-string'),
-  filesize = require('rollup-plugin-filesize'),
+  // filesize = require('rollup-plugin-filesize'),
   uglify = require('rollup-plugin-uglify'),
   path = require('path');
 
 // var closureCompiler = require('gulp-closure-compiler');
 
 module.exports = function setupTask(gulp, bundles) {
-  // NOTE: To not execute a task each time the gulpfile defines a task with
-  // gulp.task('task-name', ...) we return a function here, which gets called
-  // eventually when calling a task via gulp.
-  return function execTask() {
+  function task() {
     for (var idx = 0; idx < bundles.length; idx++) {
       var config = bundles[idx];
 
@@ -32,6 +29,11 @@ module.exports = function setupTask(gulp, bundles) {
       }
     }
   }
+
+  // NOTE: To not execute a task each time the gulpfile defines a task with
+  // gulp.task('task-name', ...) we return a function here, which gets called
+  // eventually when calling a task via gulp.
+  return task;
 }
 
 function bundleES6(indexFile, dest) {
@@ -42,7 +44,7 @@ function bundleES6(indexFile, dest) {
       string({
         extensions: ['.tmpl']
       }),
-      filesize()
+      // filesize()
     ]
   }).then(function(bundle) {
     bundle.write({
@@ -67,7 +69,7 @@ function transpileES6(indexFile, dest, format, moduleName) {
       //imported files first.
       // babel(),
       buble(),
-      filesize()
+      // filesize()
     ]
   }).then(function(bundle) {
     bundle.write({
@@ -98,7 +100,7 @@ function transpileES6(indexFile, dest, format, moduleName) {
       //imported files first.
       // babel(),
       buble(),
-      filesize(),
+      // filesize(),
       uglify()
     ]
   }).then(function(bundle) {

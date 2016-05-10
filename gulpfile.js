@@ -1,9 +1,9 @@
 'use strict';
 
 var gulp = require('gulp'),
-  bundleConfig = require('./redsift-ui.config.js'),
+  browserSync = require('browser-sync').create(),
   del = require('del'),
-  browserSync = require('browser-sync').create();
+  bundleConfig = require('./redsift-ui.config.js');
 
 function getTask(task) {
   return require('./gulp-tasks/' + task)(gulp, bundleConfig);
@@ -28,9 +28,13 @@ gulp.task('serve', ['default', 'browser-sync'], function() {
   });
 });
 
-gulp.task('default', ['build']);
-
 gulp.task('build', ['bundle-js', 'bundle-css']);
+
+gulp.task('clean', function() {
+  return del(['dist/**']);
+});
+
+gulp.task('default', ['build']);
 
 gulp.task('browser-sync', function() {
   browserSync.init({
@@ -39,8 +43,4 @@ gulp.task('browser-sync', function() {
       directory: true
     }
   });
-});
-
-gulp.task('clean', function() {
-  return del(['dist/**']);
 });

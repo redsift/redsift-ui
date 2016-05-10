@@ -9,10 +9,7 @@ var stylus = require('gulp-stylus'),
   mergeStream = require('merge-stream');
 
 module.exports = function setupTask(gulp, bundles) {
-  // NOTE: To not execute a task each time the gulpfile defines a task with
-  // gulp.task('task-name', ...) we return a function here, which gets called
-  // eventually when calling a task via gulp.
-  return function execTask() {
+  function task() {
     var gulpStream = mergeStream(); // creates a new stream
 
     for (var idx = 0; idx < bundles.length; idx++) {
@@ -33,6 +30,11 @@ module.exports = function setupTask(gulp, bundles) {
 
     return gulpStream.isEmpty() ? null : gulpStream;
   }
+
+  // NOTE: To not execute a task each time the gulpfile defines a task with
+  // gulp.task('task-name', ...) in the gulpfile we return a function here,
+  // which gets called eventually when executing a task via gulp.
+  return task;
 }
 
 function bundleStyles(gulp, opts) {
