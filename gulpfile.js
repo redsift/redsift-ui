@@ -25,8 +25,6 @@ var buble = require('rollup-plugin-buble');
 var string = require('rollup-plugin-string');
 var filesize = require('rollup-plugin-filesize');
 var uglify = require('rollup-plugin-uglify');
-var nodeResolve = require('rollup-plugin-node-resolve');
-var commonjs = require('rollup-plugin-commonjs');
 
 var bundles = require('./redsift-ui.config.js');
 
