@@ -15,6 +15,10 @@ module.exports = function setupTask(gulp, bundles) {
     for (var idx = 0; idx < bundles.length; idx++) {
       var config = bundles[idx];
 
+      if (!config.styles) {
+        continue;
+      }
+      
       for (var i = 0; i < config.styles.length; i++) {
         var style = config.styles[i];
 
