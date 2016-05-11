@@ -1,4 +1,4 @@
-import { Scroll as RedsiftScroll } from '../../../core/index';
+import { Scroll as RedsiftScroll } from '../../../core/src/js/scroll/index';
 import heroTmpl from '../templates/hero.tmpl';
 
 class RedsiftHero {
