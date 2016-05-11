@@ -1,3 +1,4 @@
+import { Scroll as RedsiftScroll } from '../../../core/index';
 import heroTmpl from '../templates/hero.tmpl';
 
 class RedsiftHero {
@@ -43,7 +44,7 @@ class RedsiftHero {
         // TODO: change toggleClass signature to provide element list instead of selector
         //       for '.content' to be more flexible (i.e. provide first element after hero
         //       without having to know the name)
-        Redsift.Scroll.toggleClass(
+        RedsiftScroll.toggleClass(
           this.locators.heroStickyHeader,
           this.locators.heroStickyHeaderActive.substr(1),
           // FIXXME: replace hardcoded '.content' with something appropriate (based on aboves TODO)!
@@ -74,7 +75,7 @@ class RedsiftHero {
       this.$container.appendChild(this.$scrollFeature);
 
       let offset = this._getStickyHeaderHeight();
-      Redsift.Scroll.initSmooth(this.locators.scrollDownArrow, -offset);
+      RedsiftScroll.initSmooth(this.locators.scrollDownArrow, -offset);
     } else if (this.$scrollFeature && this.$scrollFeature.parentNode) {
       this.$scrollFeature.parentNode.removeChild(this.$scrollFeature);
     }
