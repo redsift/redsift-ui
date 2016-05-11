@@ -34,6 +34,24 @@ var coreConfig = {
   }]
 };
 
+var siftConfig = {
+  name: 'sift',
+  mainJS: {
+    name: 'redsift',
+    indexFile: './bundles/sift/index.js'
+  },
+  styles: [{
+    name: 'redsift-light',
+    indexFile: './bundles/sift/redsift-light.styl'
+  }, {
+    name: 'redsift-dark',
+    indexFile: './bundles/sift/redsift-dark.styl'
+  }, {
+    name: 'redsift-xtra',
+    indexFile: './bundles/sift/redsift-xtra.styl'
+  }],
+}
+
 var fullConfig = {
   name: 'full',
   mainJS: {
@@ -54,6 +72,7 @@ var fullConfig = {
 
 var bundles = [
   merge(defaultConfig, coreConfig),
+  merge(defaultConfig, siftConfig),
   merge(defaultConfig, fullConfig)
 ];
 
