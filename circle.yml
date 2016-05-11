@@ -26,6 +26,7 @@ test:
     - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/js/core/redsift.umd.min.js ]"
     - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/js/sift/redsift.umd.min.js ]"
     - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/js/full/redsift.umd.min.js ]"
+    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/js/crx/redsift.umd.min.js ]"
 
 deployment:
   production:

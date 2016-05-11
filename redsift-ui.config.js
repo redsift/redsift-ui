@@ -80,9 +80,9 @@ var crxConfig = {
 }
 
 var bundles = [
-  // merge(defaultConfig, coreConfig),
-  // merge(defaultConfig, siftConfig),
-  // merge(defaultConfig, fullConfig),
+  merge(defaultConfig, coreConfig),
+  merge(defaultConfig, siftConfig),
+  merge(defaultConfig, fullConfig),
   merge(defaultConfig, crxConfig)
 ];
 
