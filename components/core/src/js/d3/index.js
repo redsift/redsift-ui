@@ -1,7 +1,5 @@
 import { Tools } from './tools';
 import { Components } from './components';
-
-import { radialChart } from './radialChart';
 import { legendChart } from './legendChart';
 import { pieChart } from './pieChart';
 import { scheduleChart } from './scheduleChart';
@@ -9,7 +7,6 @@ import { matrix } from './matrix';
 import { tspanWrap } from './tspanWrap';
 
 let Reusable = {
-  radialChart: radialChart,
   legendChart: legendChart,
   pieChart: pieChart,
   scheduleChart: scheduleChart,
