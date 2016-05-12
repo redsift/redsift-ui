@@ -79,11 +79,21 @@ var crxConfig = {
   externalMappings: []
 }
 
+var sdkConfig = {
+  name: 'sdk',
+  mainJS: {
+    name: 'redsift',
+    indexFile: './bundles/sdk/index.js'
+  },
+  externalMappings: []
+}
+
 var bundles = [
   merge(defaultConfig, coreConfig),
   merge(defaultConfig, siftConfig),
   merge(defaultConfig, fullConfig),
-  merge(defaultConfig, crxConfig)
+  merge(defaultConfig, crxConfig),
+  merge(defaultConfig, sdkConfig)
 ];
 
 module.exports = bundles;
