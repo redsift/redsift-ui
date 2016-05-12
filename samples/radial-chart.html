@@ -66,12 +66,9 @@
     </div>
 
     <script src="//d3js.org/d3.v3.min.js"></script>
-    <script src="/js/full/redsift.umd.min.js"></script>
+    <script src="/js/full/redsift.umd.js"></script>
 
     <script>
-        // Mandatory: register custom element:
-        Redsift.registerRadialChartElement();
-
         // Setup components:
         function _dummyData(range, segments) {
             var color = d3.scale.category20(); // FIXXME: use segments!
