@@ -82,5 +82,9 @@ class RedsiftHeroWebComponent extends HTMLElement {
 }
 
 export default () => {
-  document.registerElement('rs-hero', RedsiftHeroWebComponent);
+    try {
+        document.registerElement('rs-hero', RedsiftHeroWebComponent);
+    } catch (e) {
+        console.log('[redsift-ui] Element already exists: ', e);
+    }
 }

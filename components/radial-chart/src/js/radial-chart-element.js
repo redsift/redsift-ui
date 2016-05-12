@@ -35,5 +35,9 @@ class RedsiftRadialChartElement extends HTMLElement {
 }
 
 export default () => {
-  document.registerElement('rs-radial-chart', RedsiftRadialChartElement);
+    try {
+      document.registerElement('rs-radial-chart', RedsiftRadialChartElement);
+    } catch (e) {
+        console.log('[redsift-ui] Element already exists: ', e);
+    }
 }
