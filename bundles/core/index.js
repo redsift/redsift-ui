@@ -1,2 +1,2 @@
 export * from '../../components/core/index.js';
-export { svg } from '../../components/d3-rs-svg/index'
+export { html as svg } from '@redsift/d3-rs-svg';

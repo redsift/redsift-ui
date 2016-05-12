@@ -1,5 +1,5 @@
 import { tspanWrap } from './tspanWrap';
-import svg from '../../../../d3-rs-svg/src/svg';
+import { html as svg } from '@redsift/d3-rs-svg';
 import { scaleTime } from 'd3-scale';
 import { axisBottom } from 'd3-axis';
 import { timeFormat } from 'd3-time-format';

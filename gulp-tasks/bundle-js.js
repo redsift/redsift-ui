@@ -1,13 +1,22 @@
 var rollup = require('rollup'),
   json = require('rollup-plugin-json'),
-  //  babel = require('rollup-plugin-babel'),
   buble = require('rollup-plugin-buble'),
+  //  babel = require('rollup-plugin-babel'),
   string = require('rollup-plugin-string'),
   // filesize = require('rollup-plugin-filesize'),
   uglify = require('rollup-plugin-uglify'),
-  path = require('path');
+  nodeResolve = require('rollup-plugin-node-resolve'),
+  includePaths = require('rollup-plugin-includepaths'),
+  path = require('path'),
+  _ = require('lodash');
 
 // var closureCompiler = require('gulp-closure-compiler');
+
+var includePathOptions = {
+    paths: ['./components'],
+    external: [],
+    extensions: ['.js']
+};
 
 module.exports = function setupTask(gulp, bundles) {
   function task() {
@@ -21,7 +30,7 @@ module.exports = function setupTask(gulp, bundles) {
 
         if (format === 'es6') {
           dest = path.join(config.outputFolder, 'js', config.name, config.mainJS.name + '.es2015.js');
-          bundleES6(config.mainJS.indexFile, dest);
+          bundleES6(config.mainJS.indexFile, dest, config.externalMappings);
         } else {
           dest = path.join(config.outputFolder, 'js', config.name, config.mainJS.name + '.' + format + '.js');
           transpileES6(config.mainJS.indexFile, dest, format, moduleName, config.externalMappings);
@@ -36,13 +45,26 @@ module.exports = function setupTask(gulp, bundles) {
   return task;
 }
 
-function bundleES6(indexFile, dest) {
+function bundleES6(indexFile, dest, externalMappings) {
+  // All external mappings have to be skipped by the nodeResolve plugin. Otherwise
+  // the plugin would search for them in node_modules and complain if they are not found.
+  var nodeResolveSkips = _.map(externalMappings, function(value, key) {
+    return key;
+  });
+
   rollup.rollup({
     entry: indexFile,
+    external: [],
     plugins: [
       json(),
       string({
         extensions: ['.tmpl']
+      }),
+      includePaths(includePathOptions),
+      nodeResolve({
+        jsnext: true,
+        main: false, // only allow the import of jsnext enabled modules
+        skip: nodeResolveSkips
       }),
       // filesize()
     ]
@@ -57,12 +79,25 @@ function bundleES6(indexFile, dest) {
 }
 
 function transpileES6(indexFile, dest, format, moduleName, externalMappings) {
+  // All external mappings have to be skipped by the nodeResolve plugin. Otherwise
+  // the plugin would search for them in node_modules and complain if they are not found.
+  var nodeResolveSkips = _.map(externalMappings, function(value, key) {
+    return key;
+  });
+
   rollup.rollup({
     entry: indexFile,
+    external: [],
     plugins: [
       json(),
       string({
         extensions: ['.tmpl']
+      }),
+      includePaths(includePathOptions),
+      nodeResolve({
+        jsnext: true,
+        main: false, // only allow the import of jsnext enabled modules
+        skip: nodeResolveSkips
       }),
       // CAUTION: make sure to initialize all file transforming additional plugins
       // BEFORE babel() or buble(). Otherwise the transpiler will consume the
@@ -91,10 +126,17 @@ function transpileES6(indexFile, dest, format, moduleName, externalMappings) {
 
   rollup.rollup({
     entry: indexFile,
+    external: [],
     plugins: [
       json(),
       string({
         extensions: ['.tmpl']
+      }),
+      includePaths(includePathOptions),
+      nodeResolve({
+        jsnext: true,
+        main: false, // only allow the import of jsnext enabled modules
+        skip: nodeResolveSkips
       }),
       // CAUTION: make sure to initialize all file transforming additional plugins
       // BEFORE babel() or buble(). Otherwise the transpiler will consume the
