@@ -1,5 +1,5 @@
 import { tspanWrap } from './tspanWrap';
-import { html as svg } from '@redsift/d3-rs-svg';
+import * as svg from '@redsift/d3-rs-svg';
 import { scaleTime } from 'd3-scale';
 import { axisBottom } from 'd3-axis';
 import { timeFormat } from 'd3-time-format';
@@ -226,7 +226,7 @@ function scheduleChart() {
           width = Math.round(height * ratio);
       }
 
-      var frame = svg()
+      var frame = svg.html()
                     .width(width)
                     .height(height)
                     .scale(scale)
