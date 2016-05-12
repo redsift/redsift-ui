@@ -1,0 +1,51 @@
+/*
+ * mixins for setting up types
+ */
+
+define-type(name, settings)
+	{name}
+		{block}
+
+jsonToCss(json)
+	for key, value in json
+		{key}: value
+
+create-types(types)
+	for type, settings in types
+		+define-type(type, settings) {
+			jsonToCss(settings)
+		}
+
+/*
+ * create-type-code()
+ *
+ * Prepares 'code', 'pre' and 'p' for code display.
+ */
+ create-type-code($font, $settings) {
+	 code {
+	   font-family: $font;
+	   white-space: nowrap;
+	 }
+
+	 pre code {
+	   white-space: pre-wrap;
+	 }
+
+	 p code {
+	   padding: 0;
+	   padding-top: $settings.padding;
+	   padding-bottom: $settings.padding;
+	   border-radius: $settings.radius;
+	 }
+
+	 p code::before,
+	 p code::after {
+	   letter-spacing: -($settings.padding);
+	   content: "\00a0";
+	 }
+
+	 pre {
+	   border-radius: $settings.radius;
+	   padding: 1em;
+	 }
+ }

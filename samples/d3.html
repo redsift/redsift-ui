@@ -1,10 +1,10 @@
 <html>
 <head>
-  <link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
-  <link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
+  <link rel="stylesheet" type="text/css" href="/css/full/redsift-light.min.css" title="light">
+  <link rel="alternate stylesheet" type="text/css" href="/css/full/redsift-dark.min.css" title="dark">
   <style>
 	/* --- Chart layout --- */
-	
+
     div.chart {
 		margin: 1em;
 		display: flex;
@@ -12,49 +12,53 @@
 	}
 	div.chart h3 {
 		text-align: left;
-	}	
-	
+	}
+
 	/* --- Chart customisation --- */
 
 	.stripe {
   		mask: url(#mask-stripe);
 	}
-	
+
 	/* --- DISABLED: Text shadow --- */
 	/*
 	.overlayed,
 	.d3-rc .axis text {
     	filter: url(#text-bg);
 	}
-	 */	
-	 	
-	/* --- Segment background hover  --- */	 
+	 */
+
+	/* --- Segment background hover  --- */
 	.d3-rc .segment-bg {
-		transition: opacity cubic-bezier(0.175, 0.885, 0.335, 1.155) 800ms;  
+		transition: opacity cubic-bezier(0.175, 0.885, 0.335, 1.155) 800ms;
 	}
 
 	.d3-rc .segment-bg:not(:hover) {
-		opacity: 0.0;  	
+		opacity: 0.0;
 	}
-	
+
 	.d3-rc .segment-bg:hover {
 		opacity: 1.0;
 	}
 
-	/* --- Average band and colour  --- */	 
+	/* --- Average band and colour  --- */
 	.d3-rc .band circle {
 		fill: none;
 		stroke-width: 16px;
 		stroke-opacity: 0.4;
 	}
-	
-	/* --- Hide circular tick lines  --- */	 
 
-	
+	/* --- Hide circular tick lines  --- */
   </style>
   </head>
 
   <body>
+
+  <div class="style-switcher">
+    <button onclick="Redsift.StyleSwitcher.use('light');return false;" class="danger">Light Theme</button>
+    <button onclick="Redsift.StyleSwitcher.use('dark');return false;" class="danger">Dark Theme</button>
+  </div>
+
 	<div class="cards">
 		<div class="chart">
 			<h3 id="one-label" class="hidden animate-opacity">2015</h3>
@@ -72,9 +76,9 @@
 			<div id="theme"></div>
 		</div>
   	</div>
-    
+
     <script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script src="/js/redsift-global.es5.min.js"></script>
+    <script src="/js/full/redsift.umd.min.js"></script>
     <script>
 		// start knobs
 		var SEGMENTS = ["#edf8b1", "#7fcdbb", "#2c7fb8"];
@@ -85,7 +89,7 @@
 		var P_Y = 4;
 		var P_S = 5;
 		// end knobs
-			
+
 		var STRIPE_CLASS = "stripe";
 		var themes = [
 			{ color: SEGMENTS, title: 'Segments (range)' },
@@ -96,16 +100,16 @@
 
 		// generate some styles
 		var css = Redsift.D3.Tools.createCSSRuleSheet();
-		css('.d3-rc .band circle', 'stroke: ' + BAND + ';');
-		css('.d3-rc .segment-bg', 'fill:' + SEGMENT_BG + ';');
-	
+		css('.d3-rc .band circle', 'stroke: ' + BAND + ';', 0);
+		css('.d3-rc .segment-bg', 'fill:' + SEGMENT_BG + ';', 0);
+
 		// generate some patterns
 		var defs = Redsift.D3.Tools.createDefs();
 		Redsift.D3.Tools.createDiagonal(defs, 'pattern-stripe', P_A, P_X, P_Y, P_S);
 		Redsift.D3.Tools.createMask(defs, 'mask-stripe', 'url(#pattern-stripe)');
-	    Redsift.D3.Tools.createShadowFilter(defs, 'text-bg', 1.0, 'rgba(230,230,230,0.25)', 2.5);	
+	    Redsift.D3.Tools.createShadowFilter(defs, 'text-bg', 1.0, 'rgba(230,230,230,0.25)', 2.5);
 
-		// create legend						
+		// create legend
 		var legend = Redsift.D3.Reusable.legendChart().width(400).sample(20);
 		d3.select('#theme').datum(themes).call(legend);
 
@@ -115,18 +119,18 @@
 		var fmt = d3.format(",.0f");
 		var total = data1.reduce(function(p, d) { return p + d.value }, 0);
 		var avg = total/data1.length;
-		var data1Band = "£" + fmt(avg) + "/m";	
+		var data1Band = "£" + fmt(avg) + "/m";
 
 
 		var max = d3.max(data1.concat(data2), function(d) { return d.value; });
-		
+
 		var color = d3.scale.linear()
 			.domain([0, (max/2), max])
 			.range(SEGMENTS);
 
 		function _dummyData(range) {
 			var r = Redsift.Lang.localShortMonths();
-			r = r.concat(Redsift.Lang.localShortMonths(), Redsift.Lang.localShortMonths());		
+			r = r.concat(Redsift.Lang.localShortMonths(), Redsift.Lang.localShortMonths());
 			return r.map(function(m, i) {
 				var v = Math.random() * range;
 				return {
@@ -151,7 +155,7 @@
 			});
 
 		d3.select('#one').datum(data1).call(chart1);
-		
+
 		var chart2 = radialChart()
 			.width(150)
 			.prefix('£')
@@ -160,11 +164,11 @@
 			.animationEnd(function() {
 				d3.select('.hidden').classed('hidden', false);
 			});
-		
+
 		d3.select('#two').datum(data2).call(chart2);
 		d3.select('#three').datum(data2).call(chart2);
-		
-		
+
+
 		var count = 0;
 		setInterval(function() {
 			var dataUp = _dummyData((Math.random() * 400) + 20);
@@ -172,21 +176,20 @@
 			count++;
 			var avg = (max / 2) + (Math.random() * 20) - 10;
 			chart1.band(avg, '#' + count + ', £' + fmt(avg), -3);
-			
+
 			d3.select('#one').datum(dataUp).call(chart1);
 		}, 2500);
-		
+
 		setInterval(function() {
 			var newData = data2.map(function(d) {
 				d.animateFrom = d.value;
 				d.value = d.value + (Math.random() * 20) - 10;
 				return d;
 			});
-			
+
 			d3.select('#two').datum(newData).call(chart2);
 		}, 2000);
-		
-		
+
 	</script>
   </body>
 

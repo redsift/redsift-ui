@@ -1,94 +1,80 @@
+<!doctype html>
 <html>
+
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <link rel="stylesheet" type="text/css" href="/css/redsift-light.min.css" title="light">
-  <link rel="alternate stylesheet" type="text/css" href="/css/redsift-dark.min.css" title="dark">
-  <style>
-    .hero-1 {
-      /* Specify an image for the hero section, the default res image is the safest bet */
-      background-image: url('//static.redsift.io/assets/images/taxi-1.jpg');
-      
-      /* Also specify a BG color for the hero section to keep text readable, could use http://pieroxy.net/blog/pages/color-finder/demo.html */
-      background-color: rgb(42, 24, 22);
-      /* Optional: specify a set of hero images based on screen DPI */
-      background-image: -webkit-image-set(
-          url('//static.redsift.io/assets/images/taxi-1.jpg') 1x,
-          url('//static.redsift.io/assets/images/taxi-1_2x.jpg') 2x
-      ); 
-    }
-    
-    .bar {
-      box-shadow: 0px 0px 2px 2px rgba(0,0,0,0.15);
-      background-image: url('//static.redsift.io/assets/images/taxi-1.jpg');
-      background-image: -webkit-image-set(
-          url('//static.redsift.io/assets/images/taxi-1.jpg') 1x,
-          url('//static.redsift.io/assets/images/taxi-1_2x.jpg') 2x
-      ); 
-    }
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Hero</title>
+    <meta name="description" content="A hero component.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    .hero-2 {
-      /* Or you can just specify this and skip the quality and performance benefits of the additional markup */
-      background-image: url("//static.redsift.io/assets/images/phones-1.jpg");
-      background-color: rgb(167, 167, 167);
-    }
-    
-  </style>
-  </head>
+    <link rel="stylesheet" type="text/css" href="/css/full/redsift-light.min.css" title="light">
+    <link rel="alternate stylesheet" type="text/css" href="/css/full/redsift-dark.min.css" title="dark">
 
-  <body>
-    <div class="hero darken hero-1">
-      <!-- Floating bars work poorly on mobile and are hidden by default -->
-      <div class="floating" id="heading"><h1>Taxi Sift</h1></div>
-      <div class="container center-third">
+    <style>
+        .-bg-taxi {
+            background-image: url('//static.redsift.io/assets/images/taxi-1.jpg');
+            background-color: rgb(42, 24, 22);
+        }
+
+        .hero-sticky-header--active {
+            box-shadow: 0px 0px 2px 2px rgba(0, 0, 0, 0.15);
+            background-image: url('//static.redsift.io/assets/images/taxi-1.jpg');
+        }
+
+        /* Set height to demonstrate sticky header functionality: */
+        .content__container {
+            padding: 2em;
+            min-height: 2000px;
+        }
+    </style>
+</head>
+
+<body>
+    <rs-hero header="Taxi Sift" bg-class="-bg-taxi -effect-darken" scroll-target="#scroll-anchor" sticky-header>
         <code class="fade-in">£17.50</code>
         <p class="fade-in delay">Your taxi bills from last week</p>
-        <a href="#data" id="smooth">
-          <div class="down-arrow"></div>
-        </a>
-      </div>
+    </rs-hero>
+
+    <div class="content" id="scroll-anchor">
+        <div class="content__container">
+            <h2>Say something</h2>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
+        </div>
     </div>
 
-    <div class="content" id="data">
-      <div class="container expand">
-        <h2>Say something</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-      </div>
+    <div class="style-switcher">
+      <button onclick="Redsift.StyleSwitcher.use('light');return false;" class="danger">Light Theme</button>
+      <button onclick="Redsift.StyleSwitcher.use('dark');return false;" class="danger">Dark Theme</button>
     </div>
 
-    <section class="hero lighten hero-2">
-      <div class="container">
-        <p>Just a message</p>
-        <div class="container center-third">
-            <button>Button</button>
-            <button class="danger">Danger</button>
-            <button disabled>Disabled</button>
-            <button class="danger" disabled>DD</button>
-        </div>    
-      </div>
-    </section>
+    <script src="/js/full/redsift.umd.min.js"></script>
 
-    <div class="content" id="data">
-      <div class="container expand">
-        <h2>Second content</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit</p>
-      </div>
-    </div>    
-  
-    <script src="/js/redsift-global.es5.min.js"></script>
     <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        // Specify an anchor link to setup as smooth scroll
-        // As we have a floating header the anchor is wrong due to
-        // the height of the header, hence offset the scroll 
-        // Note: this offset dance not work in the case of page load
-        var offset = document.getElementById("heading").getBoundingClientRect().height;
-        Redsift.Scroll.initSmooth("#smooth", -offset);
-        // Make the bar toggle the class on and off based on overlap with content
-        Redsift.Scroll.toggleClass(".floating", "bar", ".content");
-        this.removeEventListener("DOMContentLoaded", arguments.callee);
-      });
-      
+        // Mandatory: register custom element:
+        Redsift.registerHeroElement();
+
+        // Testing:
+        var $hero = document.querySelector('rs-hero');
+
+        setTimeout(function() {
+            $hero.removeAttribute('scroll-target');
+        }, 500);
+
+        setTimeout(function() {
+            $hero.setAttribute('scroll-target', '#scroll-anchor');
+            $hero.setAttribute('scroll-target', '#test');
+            $hero.scrollTarget = "#scroll-anchor";
+        }, 1000);
+
+        setTimeout(function() {
+            $hero.removeAttribute('sticky-header');
+        }, 3000);
+
+        setTimeout(function() {
+            $hero.setAttribute('sticky-header', '');
+        }, 4000);
     </script>
-  </body>
+</body>
 
 </html>

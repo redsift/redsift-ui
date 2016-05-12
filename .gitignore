@@ -1,12 +1,8 @@
-
 node_modules
-
 distribution
-
+dist
 bower_components
-
 npm-debug.log
-
 samples/sync.html
-
 assets/out/
+trigger-app-reload.json

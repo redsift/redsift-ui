@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Radial Chart</title>
+    <meta name="description" content="A radial chart component.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="/css/full/redsift-light.min.css" title="light">
+    <link rel="alternate stylesheet" type="text/css" href="/css/full/redsift-dark.min.css" title="dark">
+
+    <style>
+        .content__container {
+            padding: 1em;
+        }
+
+        rs-radial-chart {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        /* --- Chart customisation --- */
+
+        .stripe {
+            mask: url(#mask-stripe);
+        }
+        /* --- Segment background hover  --- */
+
+        .d3-rc .segment-bg {
+            transition: opacity cubic-bezier(0.175, 0.885, 0.335, 1.155) 800ms;
+        }
+
+        .d3-rc .segment-bg:not(:hover) {
+            opacity: 0.0;
+        }
+
+        .d3-rc .segment-bg:hover {
+            opacity: 1.0;
+        }
+        /* --- Average band and colour  --- */
+
+        .d3-rc .band circle {
+            fill: none;
+            stroke-width: 16px;
+            stroke-opacity: 0.4;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="style-switcher">
+      <button onclick="Redsift.StyleSwitcher.use('light');return false;" class="danger">Light Theme</button>
+      <button onclick="Redsift.StyleSwitcher.use('dark');return false;" class="danger">Dark Theme</button>
+    </div>
+
+    <div class="content">
+        <div class="content__container">
+            <h3>Radial Chart</h3>
+            <rs-radial-chart>
+                <div id="chart"></div>
+                <div id="legend"></div>
+            </rs-radial-chart>
+        </div>
+    </div>
+
+    <script src="//d3js.org/d3.v3.min.js"></script>
+    <script src="/js/full/redsift.umd.js"></script>
+
+    <script>
+        // Setup components:
+        function _dummyData(range, segments) {
+            var color = d3.scale.category20(); // FIXXME: use segments!
+
+            var r = Redsift.Lang.localShortMonths();
+            r = r.concat(Redsift.Lang.localShortMonths(), Redsift.Lang.localShortMonths());
+            return r.map(function(m, i) {
+                var v = Math.random() * range;
+                return {
+                    name: m,
+                    value: v,
+                    color: function() {
+                        return color(v)
+                    },
+                    classed: (i !== 1) ? undefined : 'stripe'
+                };
+            }).filter(function(d, i) {
+                return i < 12;
+            });
+        }
+
+        // With native web components support (e.g. chrome) the WebComponentsReady event will NOT fire.
+        // Web components upgrade synchronously, so there is no need for that. If you have to use the
+        // web components polyfill enable the following event listener:
+        // (see https://www.polymer-project.org/1.0/docs/migration.html#polymer-ready)
+        // window.addEventListener('WebComponentsReady', function(e) {
+        var chart = document.querySelector('rs-radial-chart');
+
+        if (chart) {
+            var segments = ["#edf8b1", "#7fcdbb", "#2c7fb8"];
+
+            // Setup radial chart via public API
+            chart.segments = segments;
+            chart.data = _dummyData(200, segments);
+
+            var count = 0;
+            setInterval(function() {
+              var dataUp = _dummyData((Math.random() * 400) + 20);
+              var max = d3.max(dataUp, function(d) {
+                return d.value;
+              });
+              count++;
+              var avg = (max / 2) + (Math.random() * 20) - 10;
+
+              // chart1.band(avg, '#' + count + ', £' + fmt(avg), -3);
+              // d3.select(this.chart).datum(dataUp).call(chart1);
+
+                chart.data = dataUp;
+            }.bind(this), 2500);
+        }
+        // });
+    </script>
+</body>
+
+</html>

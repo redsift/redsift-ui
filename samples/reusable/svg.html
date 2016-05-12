@@ -1,0 +1,56 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/css/full/redsift-light.min.css" title="light">
+  <link rel="alternate stylesheet" type="text/css" href="/css/full/redsift-dark.min.css" title="dark">
+  <style>
+	  text {
+          fill: white;
+          dominant-baseline: text-before-edge;
+      }
+      div:nth-child(odd) > svg {
+          background-color: #50AFFA;
+      }
+
+      div:nth-child(even) > svg {
+          background-color: #FFDF53
+      }
+  </style>
+  </head>
+
+  <body>
+
+  <div class="style-switcher">
+    <button onclick="Redsift.StyleSwitcher.use('light');return false;" class="danger">Light Theme</button>
+    <button onclick="Redsift.StyleSwitcher.use('dark');return false;" class="danger">Dark Theme</button>
+  </div>
+
+  <h1>SVG Demo</h2>
+  <div id="elm"></div>
+
+  <script src="https://d3js.org/d3.v4.0.0-alpha.35.min.js"></script>
+  <script src="/js/full/redsift.umd.js"></script>
+  <script>
+    'use strict';
+
+    var svg = Redsift.svg();
+
+    var el = d3.select('#elm');
+
+    svg.style('rect{fill: yellow;}');
+    el.call(svg).select(svg.child())
+      .append('rect')
+        .attr('width', svg.childWidth())
+        .attr('height', svg.childHeight());
+
+    setTimeout(function() {
+      el.transition().duration(1000).delay(1000)
+        .call(svg.scale(2.0).style('rect{fill: green;}'))
+      .on('end', function() {
+        el.transition().duration(333)
+          .call(svg.scale(1.0).margin({ top: 32, left: 32, bottom: 16, right: 16 }).style('rect{fill: red;}'));
+      });
+    }, 1000);
+</script>
+</body>
+
+</html>
