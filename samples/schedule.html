@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Schedule</title>
+    <meta name="description" content="A schedule component.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="/css/full/redsift-light.min.css" title="light">
+    <link rel="alternate stylesheet" type="text/css" href="/css/full/redsift-dark.min.css" title="dark">
+
+    <style>
+        .content__container {
+            padding: 1em;
+        }
+
+        /* FIXXME: fix error with black path covering the chart */
+        .domain {
+          display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="style-switcher">
+      <button onclick="Redsift.StyleSwitcher.use('light');return false;" class="danger">Light Theme</button>
+      <button onclick="Redsift.StyleSwitcher.use('dark');return false;" class="danger">Dark Theme</button>
+    </div>
+
+    <div class="content">
+        <div class="content__container">
+            <rs-schedule></rs-schedule>
+        </div>
+    </div>
+
+    <script src="//d3js.org/d3.v4.0.0-alpha.35.js"></script>
+    <script src="/js/full/redsift.umd.js"></script>
+
+    <script>
+        // With native web components support (e.g. chrome) the WebComponentsReady event will NOT fire.
+        // Web components upgrade synchronously, so there is no need for that. If you have to use the
+        // web components polyfill enable the following event listener:
+        // (see https://www.polymer-project.org/1.0/docs/migration.html#polymer-ready)
+        // window.addEventListener('WebComponentsReady', function(e) {
+        var data = [
+            {
+                "start": Date.parse("2016-04-13T14:30:00+01:00")
+            },
+            {
+                "end": Date.parse("2016-04-13T18:30:00+01:00")
+            },
+            {
+                "status":"confirmed",
+                "summary": "Confirmed overlap event",
+                "self": true,
+                "start": Date.parse("2016-04-13T16:30:00+01:00"),
+                "end": Date.parse("2016-04-13T18:30:00+01:00")
+            },
+            {
+                "status":"tentative",
+                "summary": "Tentative event",
+                "self": false,
+                "start": Date.parse("2016-04-13T15:00:00+01:00"),
+                "end": Date.parse("2016-04-13T16:00:00+01:00")
+            },
+            {
+                "status":"proposed",
+                "summary": "Suggested event of some significant length",
+                "self": false,
+                "start": Date.parse("2016-04-13T16:00:00+01:00"),
+                "end": Date.parse("2016-04-13T17:00:00+01:00")
+            },
+        ];
+
+        var chart = document.querySelector('rs-schedule');
+        chart.width = 600;
+        chart.data = data;
+        // });
+    </script>
+</body>
+
+</html>
