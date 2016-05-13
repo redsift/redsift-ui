@@ -6,7 +6,7 @@ class RedsiftRadialChartElement extends HTMLElement {
   createdCallback() {
     this.rsRadialChart = new RedsiftRadialChart(this);
   }
-
+  
   //----------------------------------------------------------
   // Attributes:
   //----------------------------------------------------------

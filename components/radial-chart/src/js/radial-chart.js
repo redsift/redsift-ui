@@ -2,9 +2,10 @@ import { D3 as RedsiftD3 } from '../../../core/src/js/d3/index';
 
 class RedsiftRadialChart {
   constructor(el) {
-    this.chart = el.querySelector('#chart');
-    this.legend = el.querySelector('#legend');
+    this.$chart = el.querySelector('#chart');
+    this.$legend = el.querySelector('#legend');
     this._createInlineStyles();
+    this._legendChart = null;
   }
 
   update(data) {
@@ -59,7 +60,7 @@ class RedsiftRadialChart {
         d3.select('#one-label').classed('hidden', false);
       });
 
-    d3.select(this.chart).datum(data).call(chart1);
+    d3.select(this.$chart).datum(data).call(chart1);
   }
 
   //----------------------------------------------------------
@@ -84,9 +85,15 @@ class RedsiftRadialChart {
   }
 
   _createLegend() {
-    // create legend
-    var legend = RedsiftD3.Reusable.legendChart().width(400).sample(20);
-    d3.select(this.legend).datum(this.themes).call(legend);
+    if (!this._legendChart) {
+      this._legendChart = RedsiftD3.Reusable.legendChart().width(400).sample(20);
+    } else {
+      while(this.$legend.firstChild){
+        this.$legend.removeChild(this.$legend.firstChild);
+      }
+    }
+
+    d3.select(this.$legend).datum(this.themes).call(this._legendChart);
   }
 }
 
