@@ -82,7 +82,7 @@ var crxConfig = {
 var sdkConfig = {
   name: 'sdk',
   mainJS: {
-    name: 'redsift',
+    name: 'color-tools',
     indexFile: './bundles/sdk/index.js'
   },
   externalMappings: []
