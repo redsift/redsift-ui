@@ -28,45 +28,51 @@ class RedsiftHero {
     this.$hero.className += ` ${bgClass}`;
   }
 
-  enableStickyHeader(flag) {
-    // NOTE: Do NOT use cached element here. For the first run these elements
-    // are only cached after this feature is handled!
+  enableStickyHeader(flag, triggerElSelector) {
+      // NOTE: Do NOT use cached element here. For the first run these elements
+      // are only cached after this feature is handled!
 
-    if (flag) {
-      let $header = document.querySelector(this.locators.heroHeader),
-        $hero = document.querySelector(this.locators.hero);
+      if (flag) {
+          let $header = document.querySelector(this.locators.heroHeader),
+              $hero = document.querySelector(this.locators.hero);
 
-      if ($header) {
-        $header.classList.toggle(this.locators.heroHeader.substr(1));
-        $header.classList.toggle(this.locators.heroStickyHeader.substr(1));
-        $hero.parentNode.parentNode.appendChild($header);
+          if ($header) {
+            $header.classList.remove(this.locators.heroHeader.substr(1));
+            $header.classList.add(this.locators.heroStickyHeader.substr(1));
+            $hero.parentNode.parentNode.appendChild($header);
+          } // else the sticky-header is already present on the page
 
-        // TODO: change toggleClass signature to provide element list instead of selector
-        //       for '.content' to be more flexible (i.e. provide first element after hero
-        //       without having to know the name)
-        RedsiftScroll.toggleClass(
-          this.locators.heroStickyHeader,
-          this.locators.heroStickyHeaderActive.substr(1),
-          // FIXXME: replace hardcoded '.content' with something appropriate (based on aboves TODO)!
-          '.content'
-        );
+          if (triggerElSelector && triggerElSelector != '') {
+              try {
+                  // TODO: change toggleClass signature to provide element list instead of selector
+                  //       for '.content' to be more flexible (i.e. provide first element after hero
+                  //       without having to know the name)
+                  RedsiftScroll.toggleClass(
+                      this.locators.heroStickyHeader,
+                      this.locators.heroStickyHeaderActive.substr(1),
+                      // FIXXME: replace hardcoded '.content' with something appropriate (based on aboves TODO)!
+                      triggerElSelector
+                  );
+              } catch (err) {
+                  console.log('[redsift-ui/hero] Error enabling sticky header. Did you specify a valid element name for the "sticky-header" attribute?');
+              }
+          }
 
-        this.hasStickyHeader = true;
+          this.hasStickyHeader = true;
+      } else {
+          let $header = document.querySelector(this.locators.heroStickyHeader),
+              $hero = document.querySelector(this.locators.hero);
+
+          if ($header) {
+              $header.classList.add(this.locators.heroHeader.substr(1));
+              $header.classList.remove(this.locators.heroStickyHeader.substr(1));
+              $hero.insertBefore($header, $hero.firstChild);
+
+              // TODO: remove toggleClass callback!
+
+              this.hasStickyHeader = false;
+          }
       }
-    } else {
-      let $header = document.querySelector(this.locators.heroStickyHeader),
-        $hero = document.querySelector(this.locators.hero);
-
-      if ($header) {
-        $header.classList.toggle(this.locators.heroHeader.substr(1));
-        $header.classList.toggle(this.locators.heroStickyHeader.substr(1));
-        $hero.insertBefore($header, $hero.firstChild);
-
-        // TODO: remove toggleClass callback!
-
-        this.hasStickyHeader = false;
-      }
-    }
   }
 
   enableScrollFeature(flag, scrollTarget) {
@@ -96,11 +102,11 @@ class RedsiftHero {
 
     // NOTE: handle sticky header before caching, as this.$header is set
     // differently depending this feature:
-    if (opts.stickyHeader) {
-      this.enableStickyHeader(true);
+    if (opts.hasStickyHeader) {
+      this.enableStickyHeader(true, opts.stickyHeaderTrigger);
     }
 
-    this._cacheElements(opts.stickyHeader);
+    this._cacheElements(opts.hasStickyHeader);
 
     if (opts.header) {
       this.setHeader(opts.header);
@@ -129,7 +135,15 @@ class RedsiftHero {
   }
 
   _getStickyHeaderHeight() {
-    return (this.hasStickyHeader) ? this.$header.getBoundingClientRect().height : 0;
+      let height = 0;
+
+      try {
+          if (this.hasStickyHeader) {
+              height = this.$header.getBoundingClientRect().height
+          }
+      } catch (err) {
+          console.log('[redsift-ui/hero] Error enabling sticky header. Did you specify a valid element name for the "sticky-header" attribute?');
+      }
   }
 
   // TODO: implement generic caching functionality, e.g. this.querySelector(selector, useCache)

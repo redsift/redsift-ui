@@ -31,7 +31,7 @@
 </head>
 
 <body>
-    <rs-hero header="Taxi Sift" bg-class="-bg-taxi -effect-darken" scroll-target="#scroll-anchor" sticky-header>
+    <rs-hero header="Taxi Sift" bg-class="-bg-taxi -effect-darken" scroll-target="#scroll-anchor" sticky-header=".content">
         <code class="fade-in">£17.50</code>
         <p class="fade-in delay">Your taxi bills from last week</p>
     </rs-hero>
@@ -48,12 +48,9 @@
       <button onclick="Redsift.StyleSwitcher.use('dark');return false;" class="danger">Dark Theme</button>
     </div>
 
-    <script src="/js/full/redsift.umd.min.js"></script>
+    <script src="/js/full/redsift.umd.js"></script>
 
     <script>
-        // Mandatory: register custom element:
-        Redsift.registerHeroElement();
-
         // Testing:
         var $hero = document.querySelector('rs-hero');
 
@@ -72,7 +69,7 @@
         }, 3000);
 
         setTimeout(function() {
-            $hero.setAttribute('sticky-header', '');
+            $hero.setAttribute('sticky-header', '.content');
         }, 4000);
     </script>
 </body>
