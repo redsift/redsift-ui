@@ -8,9 +8,12 @@ class RedsiftHeroWebComponent extends HTMLElement {
   // Lifecycle:
   //----------------------------------------------------------------------------
 
-  createdCallback() {
+  attachedCallback() {
+    let stickyHeaderTrigger = this.stickyHeader;
+
     this.rsHero = new RedsiftHero(this, {
-      stickyHeader: this.stickyHeader,
+      hasStickyHeader: this.hasStickyHeader,
+      stickyHeaderTrigger: stickyHeaderTrigger,
       header: this.header,
       bgClass: this.bgClass,
       scrollTarget: this.scrollTarget
@@ -29,10 +32,11 @@ class RedsiftHeroWebComponent extends HTMLElement {
     }
 
     if (attributeName === 'sticky-header') {
-      let added = ((newValue == '' || newValue) && !oldValue) ? true : false;
-
-      if (added) {
-        this.rsHero.enableStickyHeader(true);
+      if (this.hasStickyHeader) {
+        if (!newValue || newValue == '') {
+          console.log('[redsift-ui] WARNING: No selector specified with "sticky-header" attribute. No "hero-sticky-header--active" class will be added!');
+        }
+        this.rsHero.enableStickyHeader(true, this.stickyHeader);
       } else {
         this.rsHero.enableStickyHeader(false);
       }
@@ -59,13 +63,17 @@ class RedsiftHeroWebComponent extends HTMLElement {
     this.setAttribute('bg-class', val);
   }
 
-  get stickyHeader() {
+  get hasStickyHeader() {
     let a = this.getAttribute('sticky-header');
     if (a == '' || a) {
       return true;
     }
 
     return false;
+  }
+
+  get stickyHeader() {
+      return this.getAttribute('sticky-header');
   }
 
   set stickyHeader(val) {
