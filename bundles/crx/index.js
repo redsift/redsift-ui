@@ -1,9 +1,5 @@
-import { registerHeroElement } from '../../components/hero/index';
-
-registerHeroElement();
-
 export {
     registerHeroElement
-} from '../../components/hero/index.js';
+} from '@redsift/ui-rs-hero';
 
 export { Scroll, Sliders } from '@redsift/ui-rs-core';
