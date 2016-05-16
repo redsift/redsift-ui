@@ -21,10 +21,10 @@ test:
     - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/css/core/redsift-light.min.css ]"
     - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/css/sift/redsift-light.min.css ]"
     - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/css/full/redsift-light.min.css ]"
-    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/js/core/redsift.umd.min.js ]"
-    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/js/sift/redsift.umd.min.js ]"
-    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/js/full/redsift.umd.min.js ]"
-    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/js/crx/redsift.umd.min.js ]"
+    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/js/core/redsift.umd-es2015.min.js ]"
+    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/js/sift/redsift.umd-es2015.min.js ]"
+    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/js/full/redsift.umd-es2015.min.js ]"
+    - /bin/bash -c "[ -s ${CIRCLE_ARTIFACTS}/dist/js/crx/redsift.umd-es2015.min.js ]"
 
 deployment:
   production:
