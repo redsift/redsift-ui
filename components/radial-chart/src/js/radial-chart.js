@@ -1,4 +1,4 @@
-import { D3 as RedsiftD3 } from '../../../core/src/js/d3/index';
+import { D3 as RedsiftD3 } from '@redsift/d3-rs-core';
 
 class RedsiftRadialChart {
   constructor(el) {

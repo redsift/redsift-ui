@@ -1,3 +1,5 @@
+@import '../../../../node_modules/@redsift/ui-rs-core/src/styles/brand.import';
+
 setup-hero($customSettings = {}) {
 
 	/*
@@ -8,7 +10,7 @@ setup-hero($customSettings = {}) {
 		height: 500px,
 		content: {
 			borderWidth: 1px,
-			borderColor: #e0e0e0
+			borderColor: $brandGrey
 		}
 	}
 
@@ -39,7 +41,7 @@ setup-hero($customSettings = {}) {
 	.hero__header {
 		z-index: 100;
 		padding: $settings.padding;
-		color: #fff;
+		color: $brandWhite;
 		background-color: transparent;
 
 		h3 {

@@ -7,6 +7,7 @@ var rollup = require('rollup'),
   uglify = require('rollup-plugin-uglify'),
   nodeResolve = require('rollup-plugin-node-resolve'),
   includePaths = require('rollup-plugin-includepaths'),
+  commonjs = require('rollup-plugin-commonjs'),
   path = require('path'),
   _ = require('lodash');
 
@@ -63,9 +64,10 @@ function bundleES6(indexFile, dest, externalMappings) {
       includePaths(includePathOptions),
       nodeResolve({
         jsnext: true,
-        main: false, // only allow the import of jsnext enabled modules
+        main: true,
         skip: nodeResolveSkips
       }),
+      commonjs(),
       // filesize()
     ]
   }).then(function(bundle) {
@@ -96,9 +98,10 @@ function transpileES6(indexFile, dest, format, moduleName, externalMappings) {
       includePaths(includePathOptions),
       nodeResolve({
         jsnext: true,
-        main: false, // only allow the import of jsnext enabled modules
+        main: true,
         skip: nodeResolveSkips
       }),
+      commonjs(),
       // CAUTION: make sure to initialize all file transforming additional plugins
       // BEFORE babel() or buble(). Otherwise the transpiler will consume the
       //imported files first.
@@ -135,9 +138,10 @@ function transpileES6(indexFile, dest, format, moduleName, externalMappings) {
       includePaths(includePathOptions),
       nodeResolve({
         jsnext: true,
-        main: false, // only allow the import of jsnext enabled modules
+        main: true,
         skip: nodeResolveSkips
       }),
+      commonjs(),
       // CAUTION: make sure to initialize all file transforming additional plugins
       // BEFORE babel() or buble(). Otherwise the transpiler will consume the
       //imported files first.

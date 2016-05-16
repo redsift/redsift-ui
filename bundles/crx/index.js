@@ -6,5 +6,4 @@ export {
     registerHeroElement
 } from '../../components/hero/index.js';
 
-export { Scroll } from '../../components/core/src/js/scroll/index';
-export { Sliders } from '../../components/core/src/js/widgets/sliders';
+export { Scroll, Sliders } from '@redsift/ui-rs-core';
