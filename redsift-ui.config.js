@@ -14,7 +14,7 @@ var defaultConfig = {
     'd3-time-format': 'd3',
     'd3-time': 'd3'
   }
-}
+};
 
 var coreConfig = {
   name: 'core',
@@ -50,7 +50,7 @@ var siftConfig = {
     name: 'redsift-xtra',
     indexFile: './bundles/sift/redsift-xtra.styl'
   }]
-}
+};
 
 var fullConfig = {
   name: 'full',
@@ -68,7 +68,7 @@ var fullConfig = {
     name: 'redsift-xtra',
     indexFile: './bundles/full/redsift-xtra.styl'
   }]
-}
+};
 
 var crxConfig = {
   name: 'crx',
@@ -77,23 +77,13 @@ var crxConfig = {
     indexFile: './bundles/crx/index.js'
   },
   externalMappings: []
-}
-
-var sdkConfig = {
-  name: 'sdk',
-  mainJS: {
-    name: 'color-tools',
-    indexFile: './bundles/sdk/index.js'
-  },
-  externalMappings: []
-}
+};
 
 var bundles = [
   merge(defaultConfig, coreConfig),
   merge(defaultConfig, siftConfig),
   merge(defaultConfig, fullConfig),
-  merge(defaultConfig, crxConfig),
-  merge(defaultConfig, sdkConfig)
+  merge(defaultConfig, crxConfig)
 ];
 
 module.exports = bundles;
