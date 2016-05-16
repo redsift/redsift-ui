@@ -1,6 +1,6 @@
 import { D3 as RedsiftD3 } from '../../../core/src/js/d3/index';
 
-class RedsiftRadialChart {
+class RedsiftSchedule {
   constructor(el) {
     this.$el = el;
   }
@@ -13,4 +13,4 @@ class RedsiftRadialChart {
   }
 }
 
-export default RedsiftRadialChart;
+export default RedsiftSchedule;
