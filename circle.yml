@@ -13,7 +13,7 @@ checkout:
 
 dependencies:
   override:
-    - node run build
+    - npm run build
     - mv ./dist ${CIRCLE_ARTIFACTS}/dist
 
 test:
