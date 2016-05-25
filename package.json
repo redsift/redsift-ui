@@ -43,10 +43,12 @@
   "devDependencies": {
     "@redsift/d3-rs-core": "^0.1.3",
     "@redsift/d3-rs-svg": "^0.2.1",
+    "@redsift/redsift-bundler": "^0.1.4",
+    "@redsift/ui-rs-core": "^0.1.7",
     "@redsift/ui-rs-hero": "^0.1.2",
+    "@redsift/ui-rs-loader": "^0.1.3",
     "@redsift/ui-rs-radial-chart": "^0.1.0",
     "@redsift/ui-rs-schedule": "^0.1.0",
-    "@redsift/redsift-bundler": "^0.1.4",
     "babel-preset-es2015-rollup": "^1.1.1",
     "babel-runtime": "^6.6.1",
     "gulp-cleancss": "^0.2.2",

@@ -76,6 +76,10 @@ var crxConfig = {
     name: 'redsift',
     indexFile: './bundles/crx/index.js'
   },
+  styles: [{
+    name: 'redsift-light',
+    indexFile: './bundles/crx/redsift-light.styl'
+  }],
   externalMappings: []
 };
 
