@@ -38,7 +38,7 @@
     "build": "redsift-bundler -c ./redsift-ui.config.js",
     "test": "echo \"No test specified\" && exit 0",
     "postinstall": "./node_modules/bower/bin/bower install --allow-root",
-    "serve": "node ./node_modules/gulp/bin/gulp.js serve"
+    "serve": "redsift-serve -c ./redsift-ui.config.js"
   },
   "devDependencies": {
     "@redsift/d3-rs-core": "^0.1.3",
