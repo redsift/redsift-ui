@@ -1,64 +1,78 @@
-# Redsift UI
+# RedsiftUI
 
 [![Circle CI](https://circleci.com/gh/Redsift/redsift-ui.svg?style=svg)](https://circleci.com/gh/Redsift/redsift-ui)
 
-Common UI components for Sifts and Apps.
+RedsiftUI is a user interface library for rapid development of Sifts and other Red Sift applications. The documentation is available at [here](https://docs.redsift.io/docs/client-code-redsift-ui).
 
-## Development workflow
+This repository does not contain UI components itself. It contains logic to grab available Red Sift UI components from NPM and to bundle them into packages. Those packages are then served by our CDN as UMD modules. There are multiple bundles which you can use:
 
-### Interactive development
+###### `core` bundle
 
-	$ npm install
-	$ npm run serve
+Contains the Redsift theme in the *light* and *dark* flavour, as well as UI logic shared between components.
 
-### Development integration into your project
+To use the bundle add the following HTML to your project:
 
-To extend and update **redsift-ui** from within an application which uses the library you can do the following (the application has to be a git repository):
+```html
+<!-- in the <head> section -->
+<link rel="stylesheet" href="//static.redsift.io/ui/latest/css/core/redsift-light.min.css">
+<!-- or the dark theme: -->
+<link rel="stylesheet" href="//static.redsift.io/ui/latest/css/core/redsift-dark.min.css">
 
-```shell
-cd my-application
-git submodule add https://github.com/Redsift/redsift-ui.git
-(cd redsift-ui && npm install && sudo npm link)
-npm link redsift-ui
+<!-- in the <body> section -->
+<script src="//static.redsift.io/ui/latest/js/core/redsift.umd.min.js"></script>
 ```
 
-After these lines 'redsift-ui' is installed as npm module in *my-application* and you can import its files from 'npm_modules/redsift-ui'.
+###### `sift` bundle
 
-### Trigger application reload on redsift-ui change
+This is probably the most important one to start with Sift development. It contains the Redsift theme in the *light* and *dark* flavour, together with the `rs-hero` component.
 
-Gulp, Grunt, Meteor, etc. provide auto reload functionality when a file within the application tree is changing. Typically the `npm_modules` folder is not watched, therefore a change within the **redsift-ui** folder will not trigger a reload of the application.
+To use the bundle add the following HTML to your project:
 
-To enable this handy feature create a new file `./my-application/npm_modules/redsift-ui/trigger-app-reload.json` and add the following content:
+```html
+<!-- in the <head> section -->
+<link rel="stylesheet" href="//static.redsift.io/ui/latest/css/sift/redsift-light.min.css">
+<!-- or the dark theme: -->
+<link rel="stylesheet" href="//static.redsift.io/ui/latest/css/sift/redsift-dark.min.css">
 
-```JSON
-{
-  "watchedFolder": "/path/to/watched/folder"
-}
+<!-- in the <body> section -->
+<script src="//static.redsift.io/ui/latest/js/sift/redsift.umd.min.js"></script>
 ```
 
-Replace `/path/to/watched/folder` with a path suited for your application and restart the interactive development setup of **redsift-ui**:
+###### `full` bundle
 
-> CAUTION: Do **NOT** use `~` to specify a home folder, it is not supported!
+To get all the functionality provided by RedsiftUI use this bundle. It contains the Redsift theme in the *light* and *dark* flavour, together with the following (data visualization) components:
 
-```shell
-cd my-application/npm_modules/redsift-ui
-npm run serve
+* `rs-hero`: A hero unit for your Sift or app
+* `rs-radial-chart`: A radial chart for visualizing monthly data
+* `rs-schedule`: A scheduling component
+
+To use the bundle add the following HTML to your project:
+
+```html
+<!-- in the <head> section -->
+<link rel="stylesheet" href="//static.redsift.io/ui/latest/css/full/redsift-light.min.css">
+<!-- or the dark theme: -->
+<link rel="stylesheet" href="//static.redsift.io/ui/latest/css/full/redsift-dark.min.css">
+
+<!-- in the <body> section -->
+<script src="//static.redsift.io/ui/latest/js/full/redsift.umd.min.js"></script>
 ```
 
-After this setup each change in **redsift-ui** will trigger a file creation/update in the `watchedFolder` and reload the application, which in turn pulls in the updated **redsift-ui** files.
+## Development and Customization
 
-### Image optimization
+The bundles are provided to start quickly with developing your Sifts or applications. To have more control on which parts to include into your project you are encouraged to use the UI components directly. The components are develop in ES2015 for the Javascript and with the [Stylus](http://stylus-lang.com/) CSS preprocessor. It is easy to integrate and customize these components into your projects. Have a look at the `./bundles` folder to get an idea on how to integrate the functionality into your own projects. The following components are available as separate repositories and also als NPM modules:
 
-The repository contains the script `./scripts/forweb.sh` to optimize images in size. It also takes care of generating an image version for high-dpi, retina displays.
+* [ui-rs-core](https://github.com/Redsift/ui-rs-core) | [npm](https://www.npmjs.com/package/@redsift/ui-rs-core)
+* [ui-rs-hero](https://github.com/Redsift/ui-rs-hero) | [npm](https://www.npmjs.com/package/@redsift/ui-rs-hero)
+* [ui-rs-radial-chart](https://github.com/Redsift/ui-rs-radial-chart) | [npm](https://www.npmjs.com/package/@redsift/ui-rs-radial-chart)
+* [ui-rs-schedule](https://github.com/Redsift/ui-rs-schedule) | [npm](https://www.npmjs.com/package/@redsift/ui-rs-schedule)
 
-#### Prerequisites (MacOS)
+## Development Setup
 
-1. install [brew](http://brew.sh/)
-2. install [cwebp](https://developers.google.com/speed/webp/docs/precompiled#getting_cwebp_dwebp_and_the_webp_libraries) in copying the scripts in the `bin` folder to `/usr/local/bin`
-3. `brew install imagemagick`
+For development directly within this repository run
 
-After that run the script like so:
-
+```bash
+> npm run serve
 ```
-./scripts/forweb.sh path/to/image outputpath/basename
-```
+
+within the repository folder. It will start a web server serving the content of `./samples` and supports live-reloading when a source file is changed.
