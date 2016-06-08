@@ -1,14 +1,15 @@
 #!/bin/bash
 
 # Requires ImageMagick with WebP support
-# brew install imagemagick --with-jp2 --with-webp --with-hdri 
+# brew install imagemagick --with-jp2 --with-webp --with-hdri
 # If already installed, uninstall and re-install
 # Refs: https://even.li/imagemagick-sharp-web-sized-photographs/
 # http://www.imagemagick.org/script/command-line-options.php#quality
 
 set -e
 
-IM_FLAGS="-strip -units PixelsPerInch"
+
+IM_FLAGS="-intent relative -black-point-compensation -profile sRGB_v4_ICC_preference.icc -strip -units PixelsPerInch"
 WEBP_OPS="-define webp:auto-filter=true -define webp:method=6 -define webp:image-hint=photo"
 JPEG_OPS="-interlace Plane"
 
@@ -23,7 +24,7 @@ FORCE=0
 function usage {
    cat << EOF
 Usage: forweb.sh -h <file> <destination>
-	
+
 	-s 	Silent
 	-h	Print this message
 
@@ -31,22 +32,22 @@ Munges image for the web
 EOF
 }
 
-while getopts fsh option; do 
-	case "${option}" in 
+while getopts fsh option; do
+	case "${option}" in
 		h)
 			usage;
 			exit 1
 			;;
-		s) 
+		s)
 			SILENT=1
-			;; 		
-		f) 
+			;;
+		f)
 			FORCE=1
-			;; 				
+			;;
 		\?) echo "Option -$OPTARG is invalid" >&2
 			exit -1
-			;; 		
-	esac 
+			;;
+	esac
 done
 
 shift $(($OPTIND - 1))
@@ -60,7 +61,7 @@ then
 else
 	FIL=`basename "$DST"`
 	DST=`dirname "$DST"`
-	
+
 	echo "Using output folder $DST and base filename $FIL"
 fi
 
@@ -76,7 +77,7 @@ for i in ${!OUTPUTS[@]}; do
 	IMGOUT_J="$DST/$FNAME$OUT.jpg"
 	IMGOUT_P="$DST/$FNAME$OUT.webp"
 #	echo "$IMGOUT"
-	if [ $FORCE -ne 1 ]  
+	if [ $FORCE -ne 1 ]
 	then
 	if [ -e "$IMGOUT" ]
 	then
