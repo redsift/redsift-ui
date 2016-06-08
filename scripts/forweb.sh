@@ -10,7 +10,7 @@ set -e
 
 
 IM_FLAGS="-intent relative -black-point-compensation -profile sRGB_v4_ICC_preference.icc -strip -units PixelsPerInch"
-WEBP_OPS="-define webp:auto-filter=true -define webp:method=6 -define webp:image-hint=photo"
+WEBP_OPS="-define webp:auto-filter=true -define webp:method=6 -define webp:image-hint=photo -define webp:partitions=2 -define webp:preprocessing=2 -define webp:sns-strength=0"
 JPEG_OPS="-interlace Plane"
 
 OUTPUTS=("_c" "_c_2x" "" "_2x")
