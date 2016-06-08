@@ -14,7 +14,7 @@ WEBP_OPS="-define webp:auto-filter=true -define webp:method=6 -define webp:image
 JPEG_OPS="-interlace Plane"
 
 OUTPUTS=("_c" "_c_2x" "" "_2x")
-FILEFLAGS=("-resize 480 -unsharp 4x1.4+0.7+0 -quality 90" "-resize 960 -unsharp 3x0.6+0.7+0 -quality 85" "-resize 1024 -density 96 -unsharp 3x0.6+0.7+0 -quality 85" "-resize 2048 -density 300 -quality 90")
+FILEFLAGS=("-resize 480 -unsharp 4x1.4+0.7+0 -quality 90" "-resize 960 -unsharp 3x0.6+0.7+0 -quality 85" "-resize 1024 -density 96 -unsharp 3x0.6+0.7+0 -quality 90" "-resize 2048 -density 300 -quality 92")
 FILEFLAGS_J=("$JPEG_OPS" "$JPEG_OPS" "$JPEG_OPS" "$JPEG_OPS")
 FILEFLAGS_P=("$WEBP_OPS" "$WEBP_OPS" "$WEBP_OPS" "$WEBP_OPS")
 
